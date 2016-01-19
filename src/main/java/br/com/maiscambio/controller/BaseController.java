@@ -1,0 +1,242 @@
+package br.com.maiscambio.controller;
+
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.sun.syndication.io.impl.Base64;
+
+import br.com.maiscambio.Autenticacao;
+import br.com.maiscambio.Perfil;
+import br.com.maiscambio.WebMvcConfig;
+import br.com.maiscambio.model.entity.Usuario;
+import br.com.maiscambio.model.service.AutenticacaoService;
+import br.com.maiscambio.model.service.CidadeService;
+import br.com.maiscambio.model.service.EnderecoService;
+import br.com.maiscambio.model.service.EstabelecimentoService;
+import br.com.maiscambio.model.service.EstadoService;
+import br.com.maiscambio.model.service.LicencaService;
+import br.com.maiscambio.model.service.UsuarioService;
+import br.com.maiscambio.util.Constants;
+import br.com.maiscambio.util.DateHelper;
+import br.com.maiscambio.util.HttpException;
+import br.com.maiscambio.util.RepositoryQuery;
+import br.com.maiscambio.util.StringHelper;
+import br.com.maiscambio.util.View;
+
+public class BaseController
+{
+	@Autowired
+	private HttpServletRequest request;
+	
+	@Autowired
+	private AutenticacaoService autenticacaoService;
+	
+	@Autowired
+	private UsuarioService usuarioService;
+	
+	@Autowired
+	private EstadoService estadoService;
+	
+	@Autowired
+	private CidadeService cidadeService;
+	
+	@Autowired
+	private EnderecoService enderecoService;
+	
+	@Autowired
+	private EstabelecimentoService estabelecimentoService;
+	
+	@Autowired
+	private LicencaService licencaService;
+	
+	protected HttpServletRequest getRequest()
+	{
+		return request;
+	}
+	
+	protected AutenticacaoService getAutenticacaoService()
+	{
+		return autenticacaoService;
+	}
+	
+	protected UsuarioService getUsuarioService()
+	{
+		return usuarioService;
+	}
+	
+	protected EstadoService getEstadoService()
+	{
+		return estadoService;
+	}
+	
+	protected CidadeService getCidadeService()
+	{
+		return cidadeService;
+	}
+	
+	protected EnderecoService getEnderecoService()
+	{
+		return enderecoService;
+	}
+	
+	protected EstabelecimentoService getEstabelecimentoService()
+	{
+		return estabelecimentoService;
+	}
+	
+	protected LicencaService getLicencaService()
+	{
+		return licencaService;
+	}
+	
+	@Transactional(readOnly = true)
+	public void authenticate()
+	{
+		autenticacaoService.authenticate(request);
+	}
+	
+	@Transactional(readOnly = true)
+	public void authenticate(Autenticacao autenticacao)
+	{
+		if(autenticacao.value().length == 0)
+		{
+			authenticate();
+		}
+		else
+		{
+			for(Perfil perfil : autenticacao.value())
+			{
+				authenticate(perfil.value());
+			}
+		}
+	}
+	
+	@Transactional(readOnly = true)
+	public void authenticate(Usuario.Perfil... usuarioPerfis)
+	{
+		autenticacaoService.authenticate(request, usuarioPerfis);
+	}
+	
+	@Transactional(readOnly = true)
+	public void authenticateByUsuarioId(Long usuarioId)
+	{
+		Usuario usuario = new Usuario();
+		usuario.setUsuarioId(usuarioId);
+		
+		autenticacaoService.authenticate(request, usuario);
+	}
+	
+	protected View redirect(String path)
+	{
+		return View.redirect(path);
+	}
+	
+	protected View view(String viewName)
+	{
+		return view(viewName, null);
+	}
+	
+	protected View view(String viewName, String title)
+	{
+		return view(null, viewName, title);
+	}
+	
+	protected View view(String layoutName, String partialViewName, String title)
+	{
+		Date currentDate = new Date();
+		
+		View view = new View(layoutName, partialViewName, title);
+		view.addObject("currentFormattedDate", DateHelper.format(currentDate));
+		view.addObject("currentDate", currentDate);
+		
+		return view;
+	}
+	
+	private String fixAutenticacaoUrl(String autenticacaoUrl)
+	{
+		if(autenticacaoUrl != null)
+		{
+			autenticacaoUrl = autenticacaoUrl.replaceFirst("\\/" + WebMvcConfig.APP_NAME, "");
+		}
+		
+		return autenticacaoUrl;
+	}
+	
+	private String encodeAutenticacaoUrl(String autenticacaoUrl)
+	{
+		return autenticacaoUrl != null ? StringHelper.urlEncode(Base64.encode(autenticacaoUrl)) : null;
+	}
+	
+	private String decodeAutenticacaoUrl(String autenticacaoUrl)
+	{
+		return autenticacaoUrl != null ? StringHelper.urlDecode(Base64.decode(autenticacaoUrl)) : null;
+	}
+	
+	protected String getAutenticacaoUrl()
+	{
+		return decodeAutenticacaoUrl(fixAutenticacaoUrl(request.getParameter(AutenticacaoController.PARAMETER_URL)));
+	}
+	
+	protected View autenticacao()
+	{
+		return autenticacao(null);
+	}
+	
+	protected View autenticacao(HttpServletResponse response)
+	{
+		String url = request.getRequestURI();
+		
+		if(request.getQueryString() != null)
+		{
+			url += "?" + request.getQueryString();
+		}
+		
+		String path = "/autenticacao?" + AutenticacaoController.PARAMETER_URL + String.valueOf(Constants.CHAR_EQUALS) + encodeAutenticacaoUrl(fixAutenticacaoUrl(url));
+		
+		if(response == null)
+		{
+			return redirect(path);
+		}
+		else
+		{
+			try
+			{
+				response.sendRedirect(WebMvcConfig.getServletContext().getContextPath() + path);
+			}
+			catch(Exception ioException)
+			{
+			
+			}
+			
+			return null;
+		}
+	}
+	
+	public View handleHttpException(HttpException httpException)
+	{
+		return handleHttpException(httpException, null);
+	}
+	
+	public View handleHttpException(HttpException httpException, HttpServletResponse response)
+	{
+		if(httpException.getHttpStatus() == HttpStatus.FORBIDDEN)
+		{
+			return autenticacao(response);
+		}
+		else
+		{
+			throw httpException;
+		}
+	}
+	
+	protected <T> RepositoryQuery<T> getRepositoryQuery(Class<T> type)
+	{
+		return RepositoryQuery.getFromRequest(type, request);
+	}
+}
