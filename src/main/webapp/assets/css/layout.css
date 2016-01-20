@@ -1,5 +1,21 @@
 body {
-	padding-top: 70px;
+	padding-top: 100px;
+}
+.width-30 {
+	width: 30px !important;
+}
+.margin-bottom-0 {
+	margin-bottom: 0 !important;
+}
+.margin-top-40 {
+	margin-top: 40px !important;
+}
+.btn-green {
+	background-color: #57c77f;
+	color: #ffffff;
+}
+.btn-green:hover, .btn-green:focus {
+	color: yellow;
 }
 .navbar-default, .navbar-default .dropdown-menu {
 	background-color: #57c77f;

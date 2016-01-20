@@ -35,6 +35,8 @@
 	height: 100%;
 	background-color: rgba(255, 255, 255, 0.5);
 }
-#taxas-boxes-container .taxa-box-container.active .taxa-box .cover {
+#taxas-boxes-container .taxa-box-container.active .taxa-box .cover,
+#taxas-boxes-container .taxa-box-container a:hover .taxa-box .cover,
+#taxas-boxes-container .taxa-box-container a:focus .taxa-box .cover {
 	display: none;
 }

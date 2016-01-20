@@ -4,13 +4,14 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="u" uri="/usuario" %>
 <%@ taglib prefix="json" uri="/json" %>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-		<meta name="description" content="Encontre as melhores taxas de câmbio, negocie e fique por dentro das novidades do mercado." />
+		<meta name="description" content="Encontre as melhores taxas de câmbio, negocie e fique por dentro das novidades do mercado!" />
         <meta name="keywords" content="casas de câmbio, cotação, cambio, câmbio turismo, corretoras de câmbio, melhor taxa de câmbio, menor taxa de câmbio, melhor taxa, menor taxa" />
         <meta name="author" content="MaisCambio.com.br" />
         <link rel="shortcut icon" title="${__appName__}" href="${__contextPath__}/assets/img/favicon.png">
@@ -19,35 +20,28 @@
 		<title>MaisCâmbio - Compare melhor/menor taxa de câmbio</title>
 
 		<!-- Bootstrap core CSS -->
-		<link href="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/css/bootstrap.min.css?v=${__appVersion__}" rel="stylesheet">
 		
 		<!-- Font Awesome -->
-		<link href="${__contextPath__}/assets/libs/font-awesome-4.5.0-dist/css/font-awesome.min.css" rel="stylesheet">
+		<link href="${__contextPath__}/assets/libs/font-awesome-4.5.0-dist/css/font-awesome.min.css?v=${__appVersion__}" rel="stylesheet">
 
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-		<link href="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/assets/ie10-viewport-bug-workaround.css" rel="stylesheet">
+		<link href="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/assets/ie10-viewport-bug-workaround.css?v=${__appVersion__}" rel="stylesheet">
 
 		<!-- Custom styles for this template -->
-		<link href="${__contextPath__}/assets/css/layout.css" rel="stylesheet">
-
-		<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-		<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-		<!-- <script src="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/assets/ie-emulation-modes-warning.js"></script> -->
+		<link href="${__contextPath__}/assets/css/layout.css?v=${__appVersion__}" rel="stylesheet">
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
-			<script src="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/assets/html5shiv.min.js"></script>
-			<script src="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/assets/respond.min.js"></script>
+			<script src="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/assets/html5shiv.min.js?v=${__appVersion__}"></script>
+			<script src="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/assets/respond.min.js?v=${__appVersion__}"></script>
 		<![endif]-->
 		
-		<script src="${__contextPath__}/assets/libs/jquery-1.11.3-dist/jquery.min.js"></script>
-		<script src="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
-		<!-- <script src="${__contextPath__}/assets/libs/jquery-ui-1.8.21-dist/jquery-ui.min.js"></script> -->
-		<!-- <script src="${__contextPath__}/assets/libs/jquery-ui-touch-punch-dist/jquery-ui-touch-punch.min.js"></script> -->
-		<!-- <script src="${__contextPath__}/assets/libs/jquery.shapeshift-master/core/jquery.shapeshift.min.js"></script> -->
+		<script src="${__contextPath__}/assets/libs/jquery-1.11.3-dist/jquery.min.js?v=${__appVersion__}"></script>
+		<script src="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/js/bootstrap.min.js?v=${__appVersion__}"></script>
 		
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-		<script src="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/assets/ie10-viewport-bug-workaround.js"></script>
+		<script src="${__contextPath__}/assets/libs/bootstrap-3.3.6-dist/assets/ie10-viewport-bug-workaround.js?v=${__appVersion__}"></script>
 		
 		<script>
         	var APP_NAME = ${json:toString(__appName__)};
