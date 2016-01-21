@@ -53,3 +53,6 @@ body {
 		padding-bottom: 20px;
 	}
 }
+.jumbotron {
+	background-color: rgba(255, 255, 255, 0.5);
+}
