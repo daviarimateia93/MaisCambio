@@ -1,5 +1,15 @@
+html, body {
+	height: 100%;
+}
 body {
 	padding-top: 100px;
+	background-image: url(../img/background_city.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+.color-white {
+	color: white;
 }
 .width-30 {
 	width: 30px !important;
