@@ -14,9 +14,7 @@
 				
 				    <div class="form-container">
 				        <div class="top-wrapper text-center mg-btm-20">
-				        	<a href="${__contextPath__}">
-				            	<img class="logo" src="${__contextPath__}/assets/img/logo.png">
-				            </a>
+				        	<h3><i class="fa fa-lock fa-fw"></i> Autentique-se</h3>
 				        </div>
 				        <div class="bottom-wrapper">
 				            <form id="frmAutenticacao" class="login-form" role="form" action="${__contextPath__}/autenticacao/login?url=${fn:escapeXml((param['url']))}" method="post">
@@ -31,7 +29,7 @@
 				                    <span class="fa fa-unlock-alt form-control-feedback"></span>
 				                </div>
 				                <div class="form-group checkbox text-center">
-				                	<label class="color-white">
+				                	<label>
 				                		<input type="checkbox" name="remember"> <i>Lembrar usuário?</i>
 				                	</label>
 				                </div>

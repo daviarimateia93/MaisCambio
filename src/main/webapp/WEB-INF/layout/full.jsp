@@ -94,36 +94,37 @@
 
 	<body>
 
-		<c:if test="${__partialViewSimpleName__ != 'autenticacao'}">
-			<!-- Fixed navbar -->
-			<nav class="navbar navbar-default navbar-fixed-top">
-				<div class="container">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-							<span class="sr-only">Navegação</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-						<a class="navbar-brand" href="${__contextPath__}/">
-							<img src="${__contextPath__}/assets/img/logo.png" width="155" height="50" title="MaisCâmbio" alt="MaisCâmbio" />
-						</a>
-					</div>
-					<div id="navbar" class="navbar-collapse collapse">
-						<ul class="nav navbar-nav">
-							<li class="${__partialViewSimpleName__ == 'home' ? 'active' : ''}">
-								<a href="${__contextPath__}"><i class="fa fa-home fa-fw"></i> Home</a>
-							</li>
-						</ul>
-						<ul class="nav navbar-nav navbar-right">
-							<li class="${__partialViewSimpleName__ == 'autenticacao' ? 'active' : ''}">
-								<a href="${__contextPath__}/autenticacao"><i class="fa fa-lock fa-fw"></i> Entrar</a>
-							</li>
-						</ul>
-					</div><!--/.nav-collapse -->
+		<!-- Fixed navbar -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Navegação</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="${__contextPath__}/">
+						<img src="${__contextPath__}/assets/img/logo.png" width="155" height="50" title="MaisCâmbio" alt="MaisCâmbio" />
+					</a>
 				</div>
-			</nav>
-		</c:if>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="${__partialViewSimpleName__ == 'home' ? 'active' : ''}">
+							<a href="${__contextPath__}"><i class="fa fa-home fa-fw"></i> Home</a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="${__partialViewSimpleName__ == 'estabelecimento' ? 'active' : ''}">
+							<a href="${__contextPath__}/estabelecimento"><i class="fa fa-user fa-fw"></i> Seja nosso parceiro</a>
+						</li>
+						<li class="${__partialViewSimpleName__ == 'autenticacao' ? 'active' : ''}">
+							<a href="${__contextPath__}/autenticacao"><i class="fa fa-lock fa-fw"></i> Entrar</a>
+						</li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</nav>
 
 		<div class="container">
 			<c:import url="${__partialViewFullName__}"></c:import>
