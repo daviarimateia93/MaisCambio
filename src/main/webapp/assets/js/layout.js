@@ -584,10 +584,26 @@ $(function()
 		
 		$this.attr('data-masked-money', '');
 		
-		if($this.data('allow-null') == true)
+		if($this.data('allow-null') == true && $this.data('hide-clear') != true)
 		{
-		    $this.wrap('<div style="position: relative;" class="mask-money-remove"></div>');
-		    $this.parent().append('<div style="position: absolute; right: 5px; top: 50%; margin-top: -8px;"><a href="javascript: void(0);"><i class="fa fa-remove"></i></a></div>');
+		    var wrap = true;
+		    
+		    if($this.parent().length > 0)
+		    {
+			if($this.parent().css('position') == 'relative' && $this.parent().css('float') == 'none')
+			{
+			    $this.parent().addClass('mask-money-remove');
+			    
+			    wrap = false;
+			}
+		    }
+		    
+		    if(wrap)
+		    {
+			$this.wrap('<div style="position: relative;" class="mask-money-remove"></div>');
+		    }
+		    
+		    $this.parent().append('<div style="position: absolute; right: 5px; top: 50%; margin-top: -8px; z-index: 3;"><a href="javascript: void(0);"><i class="fa fa-remove"></i></a></div>');
 		    $this.css('padding-right', '20px');
 		}
 	    }
