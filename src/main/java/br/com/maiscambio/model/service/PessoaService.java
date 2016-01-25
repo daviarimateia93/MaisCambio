@@ -32,6 +32,7 @@ public class PessoaService implements BaseService
 	public static final String EXCEPTION_PESSOA_NOT_FOUND = "PESSOA_NOT_FOUND";
 	public static final String EXCEPTION_PESSOA_USUARIO_IS_ALREADY_IN_USE = "PESSOA_USUARIO_IS_ALREADY_IN_USE";
 	public static final String EXCEPTION_PESSOA_ENDERECO_MUST_BELONGS_TO_PESSOA = "PESSOA_ENDERECO_MUST_BELONGS_TO_PESSOA";
+	public static final String EXCEPTION_PESSOA_EMAIL_MUST_NOT_BE_EMPTY = "PESSOA_EMAIL_MUST_NOT_BE_EMPTY";
 	public static final String EXCEPTION_PESSOA_EMAIL_MUST_NOT_BE_BIGGER_THAN_320_CHARACTERS = "PESSOA_EMAIL_MUST_NOT_BE_BIGGER_THAN_320_CHARACTERS";
 	public static final String EXCEPTION_PESSOA_EMAIL_IS_INVALID = "PESSOA_EMAIL_IS_INVALID";
 	public static final String EXCEPTION_PESSOA_NOME_CONTATO_MUST_NOT_BE_EMPTY = "PESSOA_NOME_CONTATO_MUST_NOT_BE_EMPTY";
@@ -93,7 +94,7 @@ public class PessoaService implements BaseService
 	}
 	
 	@Transactional(readOnly = true)
-	protected void validateAsInsert(Pessoa pessoa)
+	protected void validateAsInsert(Pessoa pessoa, boolean usuarioIgnoringPessoa)
 	{
 		validateIgnoringId(pessoa);
 		
@@ -106,7 +107,14 @@ public class PessoaService implements BaseService
 		{
 			for(Usuario usuario : pessoa.getUsuarios())
 			{
-				usuarioService.validateAsInsert(usuario);
+				if(usuarioIgnoringPessoa)
+				{
+					usuarioService.validateAsInsertIgnoringPessoa(usuario);
+				}
+				else
+				{
+					usuarioService.validateAsInsert(usuario);
+				}
 			}
 		}
 		
@@ -114,7 +122,7 @@ public class PessoaService implements BaseService
 	}
 	
 	@Transactional(readOnly = true)
-	protected void validateAsUpdate(Pessoa pessoa)
+	protected void validateAsUpdate(Pessoa pessoa, boolean usuarioIgnoringPessoa)
 	{
 		validateIgnoringId(pessoa);
 		
@@ -144,7 +152,14 @@ public class PessoaService implements BaseService
 					}
 				}
 				
-				usuarioService.validateAsUpdate(usuario);
+				if(usuarioIgnoringPessoa)
+				{
+					usuarioService.validateAsUpdateIgnoringPessoa(usuario);
+				}
+				else
+				{
+					usuarioService.validateAsUpdate(usuario);
+				}
 			}
 		}
 		
@@ -224,17 +239,19 @@ public class PessoaService implements BaseService
 			}
 		}
 		
-		if(pessoa.getEmail() != null)
+		if(StringHelper.isBlank(pessoa.getEmail()))
 		{
-			if(pessoa.getEmail().length() > 320)
-			{
-				throw new HttpException(EXCEPTION_PESSOA_EMAIL_MUST_NOT_BE_BIGGER_THAN_320_CHARACTERS, HttpStatus.NOT_ACCEPTABLE);
-			}
-			
-			if(!pessoa.getEmail().matches(Constants.TEXT_PATTERN_EMAIL))
-			{
-				throw new HttpException(EXCEPTION_PESSOA_EMAIL_IS_INVALID, HttpStatus.NOT_ACCEPTABLE);
-			}
+			throw new HttpException(EXCEPTION_PESSOA_EMAIL_MUST_NOT_BE_EMPTY, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(pessoa.getEmail().length() > 320)
+		{
+			throw new HttpException(EXCEPTION_PESSOA_EMAIL_MUST_NOT_BE_BIGGER_THAN_320_CHARACTERS, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(!pessoa.getEmail().matches(Constants.TEXT_PATTERN_EMAIL))
+		{
+			throw new HttpException(EXCEPTION_PESSOA_EMAIL_IS_INVALID, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 		if(pessoa.getEndereco() != null)

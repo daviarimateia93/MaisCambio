@@ -9,7 +9,10 @@ body {
     background-attachment: fixed;
 }
 .color-white {
-	color: white;
+	color: white !important;
+}
+.color-green {
+	color: #57c77f !important;
 }
 .width-30 {
 	width: 30px !important;

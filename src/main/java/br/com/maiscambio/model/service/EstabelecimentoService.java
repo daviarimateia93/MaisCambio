@@ -43,9 +43,6 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	@Autowired
 	private EstabelecimentoRepository estabelecimentoRepository;
 	
-	@Autowired
-	private UsuarioService usuarioService;
-	
 	@Override
 	@Transactional(readOnly = true)
 	public Estabelecimento findOne(Long pessoaId)
@@ -140,21 +137,13 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	{
 		validateIgnoringId(estabelecimento);
 		
-		super.validateAsInsert(estabelecimento);
+		super.validateAsInsert(estabelecimento, true);
 		
 		Estabelecimento foundEstabelecimento = findByCnpjOrCpfOrIdEstrangeiro(estabelecimento.getCnpj(), estabelecimento.getCpf(), estabelecimento.getIdEstrangeiro());
 		
 		if(foundEstabelecimento != null)
 		{
 			throw new HttpException(EXCEPTION_ESTABELECIMENTO_ALREADY_EXISTS, HttpStatus.NOT_ACCEPTABLE);
-		}
-		
-		if(estabelecimento.getUsuarios() != null)
-		{
-			if(!estabelecimento.getUsuarios().isEmpty())
-			{
-				usuarioService.validateAsInsertIgnoringPessoa(estabelecimento.getUsuarios().get(0));
-			}
 		}
 	}
 	
@@ -163,7 +152,7 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	{
 		validateIgnoringId(estabelecimento);
 		
-		super.validateAsUpdate(estabelecimento);
+		super.validateAsUpdate(estabelecimento, true);
 		
 		Estabelecimento foundEstabelecimento = findByCnpjOrCpfOrIdEstrangeiro(estabelecimento.getCnpj(), estabelecimento.getCpf(), estabelecimento.getIdEstrangeiro());
 		
@@ -179,8 +168,6 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 		{
 			if(!estabelecimento.getUsuarios().isEmpty())
 			{
-				usuarioService.validateAsUpdateIgnoringPessoa(estabelecimento.getUsuarios().get(0));
-				
 				if(foundEstabelecimento.getUsuarios() != null)
 				{
 					if(!foundEstabelecimento.getUsuarios().isEmpty())

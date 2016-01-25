@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.maiscambio.WebMvcConfig;
@@ -17,9 +18,10 @@ public class EstabelecimentoController extends BaseController
 {
 	@Transactional(readOnly = true)
 	@RequestMapping(method = RequestMethod.GET)
-	public View index()
+	public View index(@RequestParam(required = false) boolean success)
 	{
 		View view = view("full", "estabelecimento", "Novo cadastro");
+		view.addObject("success", success);
 		view.addObject("estados", getEstadoService().findByPaisIdSortedAscByNome(WebMvcConfig.getEnvironment().getProperty("paisId")));
 		
 		return view;
@@ -27,7 +29,7 @@ public class EstabelecimentoController extends BaseController
 	
 	@Transactional
 	@RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
-	public @ResponseBody Estabelecimento saveEstabelecimentoAsMatriz(br.com.maiscambio.model.entity.Estabelecimento estabelecimento)
+	public @ResponseBody Estabelecimento saveEstabelecimentoAsMatriz(Estabelecimento estabelecimento)
 	{
 		estabelecimento.setPai(null);
 		estabelecimento.setData(null);
