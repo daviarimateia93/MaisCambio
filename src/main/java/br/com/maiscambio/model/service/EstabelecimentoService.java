@@ -27,7 +27,7 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	public static final String EXCEPTION_ESTABELECIMENTO_RAZAO_SOCIAL_MUST_NOT_BE_BIGGER_THAN_120_CHARACTERS = "ESTABELECIMENTO_RAZAO_SOCIAL_MUST_NOT_BE_BIGGER_THAN_120_CHARACTERS";
 	public static final String EXCEPTION_ESTABELECIMENTO_NOME_FANTASIA_MUST_NOT_BE_EMPTY = "ESTABELECIMENTO_NOME_FANTASIA_MUST_NOT_BE_EMPTY";
 	public static final String EXCEPTION_ESTABELECIMENTO_NOME_FANTASIA_MUST_NOT_BE_BIGGER_THAN_120_CHARACTERS = "ESTABELECIMENTO_NOME_FANTASIA_MUST_NOT_BE_BIGGER_THAN_120_CHARACTERS";
-	public static final String EXCEPTION_ESTABELECIMENTO_MUST_HAVE_1_USUARIO = "ESTABELECIMENTO_MUST_HAVE_1_USUARIO";
+	public static final String EXCEPTION_ESTABELECIMENTO_MUST_HAVE_AT_LEAST_1_USUARIO = "ESTABELECIMENTO_MUST_HAVE_AT_LEAST_1_USUARIO";
 	public static final String EXCEPTION_ESTABELECIMENTO_EMAIL_MUST_NOT_BE_EMPTY = "ESTABELECIMENTO_EMAIL_MUST_NOT_BE_EMPTY";
 	public static final String EXCEPTION_ESTABELECIMENTO_NOT_FOUND = "ESTABELECIMENTO_NOT_FOUND";
 	public static final String EXCEPTION_USUARIO_DOES_NOT_HAS_PERMISSION = "USUARIO_DOES_NOT_HAS_PERMISSION";
@@ -38,7 +38,6 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	public static final String EXCEPTION_ESTABELECIMENTO_PAI_NOT_FOUND = "ESTABELECIMENTO_PAI_NOT_FOUND";
 	public static final String EXCEPTION_ESTABELECIMENTO_PAI_PAI_MUST_BE_NULL = "ESTABELECIMENTO_PAI_PAI_MUST_BE_NULL";
 	public static final String EXCEPTION_ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI = "ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI";
-	public static final String EXCEPTION_ESTABELECIMENTO_MUST_NOT_HAVE_MORE_THAN_1_USUARIO = "ESTABELECIMENTO_MUST_NOT_HAVE_MORE_THAN_1_USUARIO";
 	
 	@Autowired
 	private EstabelecimentoRepository estabelecimentoRepository;
@@ -224,13 +223,13 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 			
 			if(estabelecimento.getUsuarios() == null)
 			{
-				throw new HttpException(EXCEPTION_ESTABELECIMENTO_MUST_HAVE_1_USUARIO, HttpStatus.NOT_ACCEPTABLE);
+				throw new HttpException(EXCEPTION_ESTABELECIMENTO_MUST_HAVE_AT_LEAST_1_USUARIO, HttpStatus.NOT_ACCEPTABLE);
 			}
 			else
 			{
 				if(estabelecimento.getUsuarios().isEmpty())
 				{
-					throw new HttpException(EXCEPTION_ESTABELECIMENTO_MUST_HAVE_1_USUARIO, HttpStatus.NOT_ACCEPTABLE);
+					throw new HttpException(EXCEPTION_ESTABELECIMENTO_MUST_HAVE_AT_LEAST_1_USUARIO, HttpStatus.NOT_ACCEPTABLE);
 				}
 			}
 		}
@@ -258,14 +257,6 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 			if(!estabelecimento.getPai().getNomeFantasia().equals(estabelecimento.getNomeFantasia()))
 			{
 				throw new HttpException(EXCEPTION_ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI, HttpStatus.NOT_ACCEPTABLE);
-			}
-		}
-		
-		if(estabelecimento.getUsuarios() != null)
-		{
-			if(estabelecimento.getUsuarios().size() > 1)
-			{
-				throw new HttpException(EXCEPTION_ESTABELECIMENTO_MUST_NOT_HAVE_MORE_THAN_1_USUARIO, HttpStatus.NOT_ACCEPTABLE);
 			}
 		}
 	}
