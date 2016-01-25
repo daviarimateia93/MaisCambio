@@ -22,15 +22,15 @@
 			<div class="form-group">
 		        <label for="estabelecimento-cnpj" class="col-md-2 control-label">CNPJ: </label>
 		        <div class="col-md-2">
-		            <input type="text" class="form-control" name="cnpj" id="estabelecimento-cnpj" data-mask="99.999.999/9999-99" />
+		            <input type="text" class="form-control iptCnpj" name="cnpj" id="estabelecimento-cnpj" data-mask="99.999.999/9999-99" />
 		        </div>
 		        <label for="estabelecimento-cpf" class="col-md-2 control-label">CPF: </label>
 		        <div class="col-md-2">
-		            <input type="text" class="form-control" name="cpf" id="estabelecimento-cpf" data-mask="999.999.999-99" />
+		            <input type="text" class="form-control iptCpf" name="cpf" id="estabelecimento-cpf" data-mask="999.999.999-99" />
 		        </div>
 		        <label for="estabelecimento-id-estrangeiro" class="col-md-2 control-label">ID Estrangeiro: </label>
 		        <div class="col-md-2">
-		            <input type="text" class="form-control" name="idEstrangeiro" id="estabelecimento-id-estrangeiro" />
+		            <input type="text" class="form-control iptIdEstrangeiro" name="idEstrangeiro" id="estabelecimento-id-estrangeiro" />
 		        </div>
 		    </div>
 		</fieldset>
@@ -103,6 +103,25 @@
 			            <input type="text" class="form-control" name="email" id="estabelecimento-email" />
 			        </div>
 			    </div>
+		    </div>
+		</fieldset>
+		<fieldset>
+			<legend><i class="fa fa-user fa-fw"></i> Usuário</legend>
+			<div class="form-group">
+		        <label for="estabelecimento-usuario-apelido" class="col-md-2 control-label">Usuário: </label>
+		        <div class="col-md-4">
+		            <input type="text" class="form-control" name="usuarios[0].apelido" id="estabelecimento-usuario-apelido" />
+		        </div>
+		        <label for="estabelecimento-usuario-senha" class="col-md-2 control-label">Senha: </label>
+		        <div class="col-md-4">
+		            <input type="password" class="form-control" name="usuarios[0].senha" id="estabelecimento-usuario-senha" />
+		        </div>
+		    </div>
+		    <hr />
+		    <div class="form-group">
+		    	<div class="col-md-offset-2 col-md-10">
+		    		<button class="btn btn-green"><i class="fa fa-floppy-o"></i> Cadastrar</button>
+		    	</div>
 		    </div>
 		</fieldset>
 	</form>

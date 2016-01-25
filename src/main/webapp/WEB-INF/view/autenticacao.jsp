@@ -14,7 +14,7 @@
 				
 				    <div class="form-container">
 				        <div class="top-wrapper text-center mg-btm-20">
-				        	<h3><i class="fa fa-lock fa-fw"></i> Autentique-se</h3>
+				        	<h3><i class="fa fa-lock fa-fw"></i> Autenticação</h3>
 				        </div>
 				        <div class="bottom-wrapper">
 				            <form id="frmAutenticacao" class="login-form" role="form" action="${__contextPath__}/autenticacao/login?url=${fn:escapeXml((param['url']))}" method="post">

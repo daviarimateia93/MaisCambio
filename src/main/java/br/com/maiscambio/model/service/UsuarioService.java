@@ -318,6 +318,8 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 		
 		if(usuario.getSenha().equals(encryptSenha(oldSenha)))
 		{
+			validateSenha(newSenha);
+			
 			usuario.setSenha(newSenha);
 			
 			return saveAsUpdate(usuario, true);
@@ -346,7 +348,26 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 	@Transactional(readOnly = true)
 	public void validateAsInsert(Usuario usuario)
 	{
-		validateIgnoringId(usuario);
+		validateAsInsert(usuario, false);
+	}
+	
+	@Transactional(readOnly = true)
+	public void validateAsInsertIgnoringPessoa(Usuario usuario)
+	{
+		validateAsInsert(usuario, true);
+	}
+	
+	@Transactional(readOnly = true)
+	private void validateAsInsert(Usuario usuario, boolean ignorePessoa)
+	{
+		if(ignorePessoa)
+		{
+			validateIgnoringIdAndPessoa(usuario);
+		}
+		else
+		{
+			validateIgnoringId(usuario);
+		}
 		
 		if(usuario.getUsuarioId() != null)
 		{
@@ -380,7 +401,26 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 	@Transactional(readOnly = true)
 	public void validateAsUpdate(Usuario usuario)
 	{
-		validateIgnoringId(usuario);
+		validateAsUpdate(usuario, false);
+	}
+	
+	@Transactional(readOnly = true)
+	public void validateAsUpdateIgnoringPessoa(Usuario usuario)
+	{
+		validateAsUpdate(usuario, true);
+	}
+	
+	@Transactional(readOnly = true)
+	private void validateAsUpdate(Usuario usuario, boolean ignorePessoa)
+	{
+		if(ignorePessoa)
+		{
+			validateIgnoringIdAndPessoa(usuario);
+		}
+		else
+		{
+			validateIgnoringId(usuario);
+		}
 		
 		if(usuario.getUsuarioId() == null)
 		{
@@ -413,10 +453,7 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 	@Transactional(readOnly = true)
 	public void validateIgnoringId(Usuario usuario)
 	{
-		if(usuario == null)
-		{
-			throw new HttpException(EXCEPTION_USUARIO_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
-		}
+		validateIgnoringIdAndPessoa(usuario);
 		
 		if(usuario.getPessoa() == null)
 		{
@@ -436,6 +473,15 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 		}
 		
 		usuario.setPessoa(foundPessoa);
+	}
+	
+	@Transactional(readOnly = true)
+	public void validateIgnoringIdAndPessoa(Usuario usuario)
+	{
+		if(usuario == null)
+		{
+			throw new HttpException(EXCEPTION_USUARIO_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
+		}
 		
 		if(usuario.getStatus() == null)
 		{
@@ -457,15 +503,7 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 			throw new HttpException(EXCEPTION_USUARIO_APELIDO_MUST_CONTAINS_ONLY_LETTERS_NUMBERS_UNDERLINES_DASHES_AND_POINTS, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
-		if(StringHelper.isBlank(usuario.getSenha()))
-		{
-			throw new HttpException(EXCEPTION_USUARIO_SENHA_MUST_NOT_BE_EMPTY, HttpStatus.NOT_ACCEPTABLE);
-		}
-		
-		if(usuario.getSenha().length() > 128)
-		{
-			throw new HttpException(EXCEPTION_USUARIO_SENHA_MUST_NOT_BE_BIGGER_THAN_128_CHARACTERS, HttpStatus.NOT_ACCEPTABLE);
-		}
+		validateSenha(usuario.getSenha());
 		
 		if(usuario.getPerfis() != null)
 		{
@@ -482,6 +520,19 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 					}
 				}
 			}
+		}
+	}
+	
+	private void validateSenha(String senha)
+	{
+		if(StringHelper.isBlank(senha))
+		{
+			throw new HttpException(EXCEPTION_USUARIO_SENHA_MUST_NOT_BE_EMPTY, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(senha.length() > 128)
+		{
+			throw new HttpException(EXCEPTION_USUARIO_SENHA_MUST_NOT_BE_BIGGER_THAN_128_CHARACTERS, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	
