@@ -27,7 +27,7 @@ public class UsuarioController extends BaseController
 {
 	@Transactional(readOnly = true)
 	@RequestMapping(method = RequestMethod.GET)
-	@Autenticacao({ @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_CONFIGURACAO_LEITURA) })
+	@Autenticacao({ @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
 	public View index()
 	{
 		View view = view("full", "usuario", "Novo usuário");
@@ -40,7 +40,7 @@ public class UsuarioController extends BaseController
 	
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/{usuarioId}", method = RequestMethod.GET)
-	@Autenticacao({ @Perfil({ Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA, Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA }), @Perfil(Usuario.Perfil.ESTABELECIMENTO_CONFIGURACAO_LEITURA) })
+	@Autenticacao({ @Perfil({ Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA, Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA }), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
 	public View edit(@PathVariable Long usuarioId)
 	{
 		Usuario usuario = getUsuarioService().findOne(usuarioId);
@@ -61,7 +61,7 @@ public class UsuarioController extends BaseController
 	
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	@Autenticacao({ @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_CONFIGURACAO_LEITURA) })
+	@Autenticacao({ @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
 	public View list()
 	{
 		return view("full", "usuario_grid", "Buscar usuário");
@@ -69,7 +69,7 @@ public class UsuarioController extends BaseController
 	
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
-	@Autenticacao({ @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_CONFIGURACAO_LEITURA) })
+	@Autenticacao({ @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
 	public @ResponseBody Page<Map<String, Object>> findAll()
 	{
 		RepositoryQuery<Usuario> repositoryQuery = getRepositoryQuery(Usuario.class);
