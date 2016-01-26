@@ -1,6 +1,12 @@
 package br.com.maiscambio.controller;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -238,5 +244,38 @@ public class BaseController
 	protected <T> RepositoryQuery<T> getRepositoryQuery(Class<T> type)
 	{
 		return RepositoryQuery.getFromRequest(type, request);
+	}
+	
+	protected String loadEmailTemplate(String emailTemplateFileName) throws IOException
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(WebMvcConfig.getServletContext().getRealPath("/WEB-INF/template/" + emailTemplateFileName)), Constants.TEXT_CHARSET_UTF_8));
+		
+		int character;
+		
+		while((character = bufferedReader.read()) != -1)
+		{
+			stringBuilder.append((char) character);
+		}
+		
+		bufferedReader.close();
+		
+		return stringBuilder.toString();
+	}
+	
+	protected String setVariablesToEmailTemplate(String emailTemplate, Map<String, String> variables)
+	{
+		for(Entry<String, String> variable : variables.entrySet())
+		{
+			emailTemplate = emailTemplate.replace(variable.getKey(), variable.getValue());
+		}
+		
+		return emailTemplate;
+	}
+	
+	protected String loadEmailTemplateWithVariables(String emailTemplateFileName, Map<String, String> variables) throws IOException
+	{
+		return setVariablesToEmailTemplate(loadEmailTemplate(emailTemplateFileName), variables);
 	}
 }
