@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.maiscambio.WebMvcConfig;
 import br.com.maiscambio.model.entity.Estabelecimento;
+import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.entity.Usuario.Status;
 import br.com.maiscambio.util.View;
 
@@ -36,10 +37,10 @@ public class EstabelecimentoController extends BaseController
 		
 		if(estabelecimento.getUsuarios() != null)
 		{
-			if(!estabelecimento.getUsuarios().isEmpty())
+			for(Usuario usuario : estabelecimento.getUsuarios())
 			{
-				estabelecimento.getUsuarios().get(0).setStatus(Status.INATIVO);
-				estabelecimento.getUsuarios().get(0).setPessoa(estabelecimento);
+				usuario.setStatus(Status.INATIVO);
+				usuario.setPessoa(estabelecimento);
 			}
 		}
 		
