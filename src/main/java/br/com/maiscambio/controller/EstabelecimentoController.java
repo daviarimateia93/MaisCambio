@@ -1,5 +1,9 @@
 package br.com.maiscambio.controller;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +15,7 @@ import br.com.maiscambio.WebMvcConfig;
 import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.entity.Usuario.Status;
+import br.com.maiscambio.util.StringHelper;
 import br.com.maiscambio.util.View;
 
 @Controller
@@ -30,7 +35,7 @@ public class EstabelecimentoController extends BaseController
 	
 	@Transactional
 	@RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
-	public @ResponseBody Estabelecimento saveEstabelecimentoAsMatriz(Estabelecimento estabelecimento)
+	public @ResponseBody Estabelecimento saveEstabelecimentoAsMatriz(Estabelecimento estabelecimento) throws IOException, InterruptedException
 	{
 		estabelecimento.setPai(null);
 		estabelecimento.setData(null);
@@ -42,8 +47,40 @@ public class EstabelecimentoController extends BaseController
 				usuario.setStatus(Status.INATIVO);
 				usuario.setPessoa(estabelecimento);
 			}
+			
+			for(int i = 1; i < estabelecimento.getUsuarios().size(); i++)
+			{
+				estabelecimento.getUsuarios().remove(i);
+			}
 		}
 		
-		return getEstabelecimentoService().saveAsInsert(estabelecimento);
+		estabelecimento = getEstabelecimentoService().saveAsInsert(estabelecimento);
+		
+		sendNewEmail(estabelecimento, "contato@maiscambio.com.br");
+		sendWelcomeEmail(estabelecimento, estabelecimento.getEmail());
+		
+		return estabelecimento;
+	}
+	
+	private void sendNewEmail(Estabelecimento estabelecimento, String email) throws IOException, InterruptedException
+	{
+		Map<String, String> variables = new HashMap<>();
+		variables.put("#___NOME_FANTASIA___#", estabelecimento.getNomeFantasia());
+		variables.put("#___CNPJ_CPF_ID_ESTRANGEIRO___#", estabelecimento.getCnpj() != null ? StringHelper.format(estabelecimento.getCnpj(), "##.###.###/####-##") : estabelecimento.getCpf() != null ? StringHelper.format(estabelecimento.getCpf(), "###.###.###-##") : estabelecimento.getIdEstrangeiro());
+		variables.put("#___TELEFONE___#", estabelecimento.getTelefone1().length() == 12 ? StringHelper.format(estabelecimento.getTelefone1(), "+## (##) ####-####") : StringHelper.format(estabelecimento.getTelefone1(), "+## (##) #####-####"));
+		variables.put("#___EMAIL___#", estabelecimento.getEmail());
+		variables.put("#___USUARIO_APELIDO___#", estabelecimento.getUsuarios().get(0).getApelido());
+		
+		getEmailService().sendAsynchronously(email, "MaisCâmbio - Bem vindo", loadEmailTemplateWithVariables("email_estabelecimento_new.html", variables));
+	}
+	
+	private void sendWelcomeEmail(Estabelecimento estabelecimento, String email) throws IOException, InterruptedException
+	{
+		Map<String, String> variables = new HashMap<>();
+		variables.put("#___NOME_FANTASIA___#", estabelecimento.getNomeFantasia());
+		variables.put("#___CNPJ_CPF_ID_ESTRANGEIRO___#", estabelecimento.getCnpj() != null ? StringHelper.format(estabelecimento.getCnpj(), "##.###.###/####-##") : estabelecimento.getCpf() != null ? StringHelper.format(estabelecimento.getCpf(), "###.###.###-##") : estabelecimento.getIdEstrangeiro());
+		variables.put("#___USUARIO_APELIDO___#", estabelecimento.getUsuarios().get(0).getApelido());
+		
+		getEmailService().sendAsynchronously(email, "MaisCâmbio - Bem vindo", loadEmailTemplateWithVariables("email_estabelecimento_welcome.html", variables));
 	}
 }

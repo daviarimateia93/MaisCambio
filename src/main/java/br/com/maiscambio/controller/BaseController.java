@@ -23,6 +23,7 @@ import br.com.maiscambio.WebMvcConfig;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.service.AutenticacaoService;
 import br.com.maiscambio.model.service.CidadeService;
+import br.com.maiscambio.model.service.EmailService;
 import br.com.maiscambio.model.service.EnderecoService;
 import br.com.maiscambio.model.service.EstabelecimentoService;
 import br.com.maiscambio.model.service.EstadoService;
@@ -60,6 +61,9 @@ public class BaseController
 	
 	@Autowired
 	private LicencaService licencaService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	protected HttpServletRequest getRequest()
 	{
@@ -99,6 +103,11 @@ public class BaseController
 	protected LicencaService getLicencaService()
 	{
 		return licencaService;
+	}
+	
+	protected EmailService getEmailService()
+	{
+		return emailService;
 	}
 	
 	@Transactional(readOnly = true)

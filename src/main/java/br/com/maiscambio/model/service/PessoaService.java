@@ -24,7 +24,7 @@ public class PessoaService implements BaseService
 	public static final String EXCEPTION_PESSOA_CPF_IS_INVALID = "PESSOA_CPF_IS_INVALID";
 	public static final String EXCEPTION_PESSOA_ID_ESTRANGEIRO_IS_INVALID = "PESSOA_ID_ESTRANGEIRO_IS_INVALID";
 	public static final String EXCEPTION_PESSOA_TELEFONE1_IS_INVALID = "PESSOA_TELEFONE1_IS_INVALID";
-	public static final String EXCEPTION_PESSOA_TELEFONE1_MUST_NOT_BE_NULL = "PESSOA_TELEFONE1_MUST_NOT_BE_NULL";
+	public static final String EXCEPTION_PESSOA_TELEFONE1_MUST_NOT_BE_EMPTY = "PESSOA_TELEFONE1_MUST_NOT_BE_EMPTY";
 	public static final String EXCEPTION_PESSOA_TELEFONE2_IS_INVALID = "PESSOA_TELEFONE2_IS_INVALID";
 	public static final String EXCEPTION_PESSOA_MUST_NOT_BE_NULL = "PESSOA_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_PESSOA_PESSOA_ID_MUST_BE_NULL = "PESSOA_PESSOA_ID_MUST_BE_NULL";
@@ -218,21 +218,18 @@ public class PessoaService implements BaseService
 			}
 		}
 		
-		if(pessoa.getTelefone1() != null)
+		if(StringHelper.isBlank(pessoa.getTelefone1()))
 		{
-			if(!pessoa.getTelefone1().matches(Constants.TEXT_PATTERN_TELEFONE))
-			{
-				throw new HttpException(EXCEPTION_PESSOA_TELEFONE1_IS_INVALID, HttpStatus.NOT_ACCEPTABLE);
-			}
+			throw new HttpException(EXCEPTION_PESSOA_TELEFONE1_MUST_NOT_BE_EMPTY, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(!pessoa.getTelefone1().matches(Constants.TEXT_PATTERN_TELEFONE))
+		{
+			throw new HttpException(EXCEPTION_PESSOA_TELEFONE1_IS_INVALID, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 		if(pessoa.getTelefone2() != null)
 		{
-			if(pessoa.getTelefone1() == null)
-			{
-				throw new HttpException(EXCEPTION_PESSOA_TELEFONE1_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
-			}
-			
 			if(!pessoa.getTelefone2().matches(Constants.TEXT_PATTERN_TELEFONE))
 			{
 				throw new HttpException(EXCEPTION_PESSOA_TELEFONE2_IS_INVALID, HttpStatus.NOT_ACCEPTABLE);

@@ -1192,6 +1192,10 @@ var Utils = {
 	    {
 		return '';
 	    }
+	    else if(('' + value).length === 0)
+	    {
+		return '';
+	    }
 	    
 	    try
 	    {
