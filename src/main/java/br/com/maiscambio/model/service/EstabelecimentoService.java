@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Pessoa;
+import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.repository.EstabelecimentoRepository;
 import br.com.maiscambio.util.HttpException;
 import br.com.maiscambio.util.StringHelper;
@@ -41,6 +42,9 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	
 	@Autowired
 	private EstabelecimentoRepository estabelecimentoRepository;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -115,7 +119,7 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	{
 		Pessoa pessoa = super.getFromRequest(request);
 		
-		return estabelecimentoRepository.findOne(pessoa.getPessoaId());
+		return pessoa != null ? estabelecimentoRepository.findOne(pessoa.getPessoaId()) : null;
 	}
 	
 	@Transactional(readOnly = true)
@@ -257,6 +261,14 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 			if(!estabelecimento.getPai().getNomeFantasia().equals(estabelecimento.getNomeFantasia()))
 			{
 				throw new HttpException(EXCEPTION_ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI, HttpStatus.NOT_ACCEPTABLE);
+			}
+		}
+		
+		if(estabelecimento.getUsuarios() != null)
+		{
+			for(Usuario usuario : estabelecimento.getUsuarios())
+			{
+				usuario.setSenha(usuarioService.encryptSenha(usuario.getSenha()));
 			}
 		}
 	}

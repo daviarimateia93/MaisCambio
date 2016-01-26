@@ -55,11 +55,6 @@ public class AutenticacaoService implements BaseService
 	@Transactional(readOnly = true)
 	public void login(HttpServletRequest request, String usuarioApelido, String usuarioSenha, boolean updateUsuarioSessionManager, boolean updateSessionEstabelecimentoPessoaId)
 	{
-		if(!isLoggedIn(request))
-		{
-			throw new HttpException(EXCEPTION_USUARIO_IS_NOT_LOGGED_IN, HttpStatus.NOT_ACCEPTABLE);
-		}
-		
 		Usuario usuario = test(usuarioApelido, usuarioSenha);
 		
 		setupLoginSession(request, usuario, updateUsuarioSessionManager, updateSessionEstabelecimentoPessoaId);
@@ -70,11 +65,6 @@ public class AutenticacaoService implements BaseService
 	@Transactional(readOnly = true)
 	public void loginEncrypted(HttpServletRequest request, String usuarioApelido, String usuarioSenhaEncrypted, boolean updateUsuarioSessionManager, boolean updateSessionEstabelecimentoPessoaId)
 	{
-		if(!isLoggedIn(request))
-		{
-			throw new HttpException(EXCEPTION_USUARIO_IS_NOT_LOGGED_IN, HttpStatus.NOT_ACCEPTABLE);
-		}
-		
 		Usuario usuario = testEncrypted(usuarioApelido, usuarioSenhaEncrypted);
 		
 		setupLoginSession(request, usuario, updateUsuarioSessionManager, updateSessionEstabelecimentoPessoaId);
@@ -91,7 +81,7 @@ public class AutenticacaoService implements BaseService
 		{
 			Pessoa pessoa = pessoaService.getFromRequest(request);
 			
-			Estabelecimento estabelecimento = estabelecimentoService.findOne(pessoa.getPessoaId());
+			Estabelecimento estabelecimento = pessoa != null ? estabelecimentoService.findOne(pessoa.getPessoaId()) : null;
 			
 			if(estabelecimento != null)
 			{
@@ -99,6 +89,13 @@ public class AutenticacaoService implements BaseService
 				request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_ESTABELECIMENTO_NOME_FANTASIA, estabelecimento.getNomeFantasia());
 				request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_ESTABELECIMENTO_CNPJ, estabelecimento.getCnpj());
 				request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_ESTABELECIMENTO_CPF, estabelecimento.getCpf());
+			}
+			else
+			{
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_ESTABELECIMENTO_PESSOA_ID, null);
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_ESTABELECIMENTO_NOME_FANTASIA, null);
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_ESTABELECIMENTO_CNPJ, null);
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_NAME_ESTABELECIMENTO_CPF, null);
 			}
 		}
 		

@@ -44,7 +44,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport
 	@Autowired
 	private Environment environment;
 	
-	public static final String APP_NAME = "MaisCâmbio";
+	public static final String APP_NAME = "MaisCambio";
 	public static final String APP_VERSION = "1.4.3";
 	public static final String VIEW_RESOLVER_PREFIX = "/WEB-INF/view/";
 	public static final String VIEW_RESOLVER_SUFFIX = ".jsp";

@@ -1,7 +1,9 @@
 package br.com.maiscambio.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -44,8 +46,16 @@ public class EstabelecimentoController extends BaseController
 		{
 			for(Usuario usuario : estabelecimento.getUsuarios())
 			{
+				List<Usuario.Perfil> perfis = new ArrayList<>();
+				perfis.add(Usuario.Perfil.ESTABELECIMENTO_DASHBOARD_LEITURA);
+				perfis.add(Usuario.Perfil.ESTABELECIMENTO_ESCRITA);
+				perfis.add(Usuario.Perfil.ESTABELECIMENTO_LEITURA);
+				perfis.add(Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA);
+				perfis.add(Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA);
+				
 				usuario.setStatus(Status.INATIVO);
 				usuario.setPessoa(estabelecimento);
+				usuario.setPerfis(perfis);
 			}
 			
 			for(int i = 1; i < estabelecimento.getUsuarios().size(); i++)

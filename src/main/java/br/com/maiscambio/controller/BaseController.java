@@ -177,7 +177,12 @@ public class BaseController
 	{
 		if(autenticacaoUrl != null)
 		{
-			autenticacaoUrl = autenticacaoUrl.replaceFirst("\\/" + WebMvcConfig.APP_NAME, "");
+			String contextPath = "/" + WebMvcConfig.APP_NAME;
+			
+			if(autenticacaoUrl.startsWith(contextPath))
+			{
+				autenticacaoUrl = autenticacaoUrl.replaceFirst("\\" + contextPath, Constants.TEXT_EMPTY);
+			}
 		}
 		
 		return autenticacaoUrl;

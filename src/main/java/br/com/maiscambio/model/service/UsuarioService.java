@@ -455,24 +455,22 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 	{
 		validateIgnoringIdAndPessoa(usuario);
 		
-		if(usuario.getPessoa() == null)
+		if(usuario.getPessoa() != null)
 		{
-			throw new HttpException(EXCEPTION_USUARIO_PESSOA_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
+			if(usuario.getPessoa().getPessoaId() == null)
+			{
+				throw new HttpException(EXCEPTION_USUARIO_PESSOA_PESSOA_ID_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
+			}
+			
+			Pessoa foundPessoa = pessoaService.findOne(usuario.getPessoa().getPessoaId());
+			
+			if(foundPessoa == null)
+			{
+				throw new HttpException(EXCEPTION_USUARIO_PESSOA_NOT_FOUND, HttpStatus.NOT_ACCEPTABLE);
+			}
+			
+			usuario.setPessoa(foundPessoa);
 		}
-		
-		if(usuario.getPessoa().getPessoaId() == null)
-		{
-			throw new HttpException(EXCEPTION_USUARIO_PESSOA_PESSOA_ID_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
-		}
-		
-		Pessoa foundPessoa = pessoaService.findOne(usuario.getPessoa().getPessoaId());
-		
-		if(foundPessoa == null)
-		{
-			throw new HttpException(EXCEPTION_USUARIO_PESSOA_NOT_FOUND, HttpStatus.NOT_ACCEPTABLE);
-		}
-		
-		usuario.setPessoa(foundPessoa);
 	}
 	
 	@Transactional(readOnly = true)
