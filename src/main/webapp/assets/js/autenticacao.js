@@ -1,5 +1,13 @@
 $(function()
 {
+    var action = $('#frmAutenticacao').attr('action');
+    var actionSuffix = 'url=';
+    
+    if(action.indexOf(actionSuffix, action.length - actionSuffix.length) !== -1)
+    {
+	$('#frmAutenticacao').attr('action', action + btoa('/dashboard?selectedFormattedDate=' + encodeURIComponent(Utils.format.date(new Date()))));
+    }
+    
     $('#frmAutenticacao').on('ajaxsubmit', function(e, action)
     {
 	var $this = $(this);

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.maiscambio.Autenticacao;
 import br.com.maiscambio.Perfil;
@@ -17,7 +18,7 @@ public class DashboardController extends BaseController
 	@Transactional(readOnly = true)
 	@RequestMapping(method = RequestMethod.GET)
 	@Autenticacao(@Perfil(Usuario.Perfil.ESTABELECIMENTO_DASHBOARD_LEITURA))
-	public View index()
+	public View index(@RequestParam String selectedFormattedDate)
 	{
 		return view("full", "dashboard", "Dashboard");
 	}
