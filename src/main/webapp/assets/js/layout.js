@@ -624,7 +624,7 @@ $(function()
 		    var hasValueProperty = (this['value'] !== undefined);
 		    var formatFunction = Utils.format[format];
 		    var $data = $this.data();
-		    var value = $data.formatValue !== undefined ? $data.formatValue === 'now' ? Utils.format.date(new Date()) : $data.formatValue : hasValueProperty ? $this[0].value : $this.originalText();
+		    var value = $data.formatValue !== undefined ? $data.formatValue : hasValueProperty ? $this[0].value : $this.originalText();
 		    
 		    delete $data['format'];
 		    
@@ -1237,7 +1237,7 @@ var Utils = {
 		    mask = mask.dateMask;
 		}
 		
-		return typeof value === 'string' ? value.length > 0 ? moment(value).format(mask) : '' : moment(value).format(mask);
+		return typeof value === 'string' ? value.length > 0 ? moment(value === 'now' ? new Date() : value).format(mask) : '' : moment(value).format(mask);
 	    }
 	    
 	    return '';
