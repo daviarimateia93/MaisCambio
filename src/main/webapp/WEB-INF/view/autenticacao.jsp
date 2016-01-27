@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="json" uri="/json" %>
+<%@ taglib prefix="s" uri="/string" %>
 
 <link rel="stylesheet" type="text/css" href="${__contextPath__}/assets/css/autenticacao.css?v=${__appVersion__}" />
 

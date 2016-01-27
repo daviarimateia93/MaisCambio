@@ -11,8 +11,30 @@ import javax.swing.text.MaskFormatter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.sun.syndication.io.impl.Base64;
+
 public class StringHelper
 {
+	public static String base64Encode(String string)
+	{
+		if(string != null)
+		{
+			return Base64.encode(string);
+		}
+		
+		return null;
+	}
+	
+	public static String base64Decode(String string)
+	{
+		if(string != null)
+		{
+			return Base64.decode(string);
+		}
+		
+		return null;
+	}
+	
 	public static String urlEncode(String string)
 	{
 		if(string != null)

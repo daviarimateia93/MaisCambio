@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sun.syndication.io.impl.Base64;
-
 import br.com.maiscambio.Autenticacao;
 import br.com.maiscambio.Perfil;
 import br.com.maiscambio.WebMvcConfig;
@@ -190,12 +188,12 @@ public class BaseController
 	
 	private String encodeAutenticacaoUrl(String autenticacaoUrl)
 	{
-		return autenticacaoUrl != null ? StringHelper.urlEncode(Base64.encode(autenticacaoUrl)) : null;
+		return autenticacaoUrl != null ? StringHelper.urlEncode(StringHelper.base64Encode(autenticacaoUrl)) : null;
 	}
 	
 	private String decodeAutenticacaoUrl(String autenticacaoUrl)
 	{
-		return autenticacaoUrl != null ? StringHelper.urlDecode(Base64.decode(autenticacaoUrl)) : null;
+		return autenticacaoUrl != null ? StringHelper.urlDecode(StringHelper.base64Decode(autenticacaoUrl)) : null;
 	}
 	
 	protected String getAutenticacaoUrl()

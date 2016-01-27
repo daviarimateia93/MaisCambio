@@ -3,6 +3,16 @@
     <tlib-version>1.0</tlib-version>
     <uri>/string</uri>
     <function>
+        <name>base64Encode</name>
+        <function-class>br.com.maiscambio.util.StringHelper</function-class>
+        <function-signature>String base64Encode(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>base64Decode</name>
+        <function-class>br.com.maiscambio.util.StringHelper</function-class>
+        <function-signature>String base64Decode(java.lang.String)</function-signature>
+    </function>
+    <function>
         <name>urlEncode</name>
         <function-class>br.com.maiscambio.util.StringHelper</function-class>
         <function-signature>String urlEncode(java.lang.String)</function-signature>

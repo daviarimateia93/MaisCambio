@@ -624,7 +624,7 @@ $(function()
 		    var hasValueProperty = (this['value'] !== undefined);
 		    var formatFunction = Utils.format[format];
 		    var $data = $this.data();
-		    var value = $data.formatValue !== undefined ? $data.formatValue : hasValueProperty ? $this[0].value : $this.originalText();
+		    var value = $data.formatValue !== undefined ? $data.formatValue === 'now' ? Utils.format.date(new Date()) : $data.formatValue : hasValueProperty ? $this[0].value : $this.originalText();
 		    
 		    delete $data['format'];
 		    
