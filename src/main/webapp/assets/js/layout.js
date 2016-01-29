@@ -223,6 +223,14 @@ $(document).on('submit', 'form', function(e)
 });
 // End Form Handler
 
+// Menu
+$(function()
+{
+    var $dashboard = $('[href$="/dashboard"]');
+    $dashboard.attr('href', $dashboard.attr('href') + '?selectedFormattedDate=' + encodeURIComponent(Utils.format.date(new Date())));
+});
+// End Menu
+
 // Modal Autenticacao - Ajax Error
 $(function()
 {

@@ -5,6 +5,8 @@
 <%@ taglib prefix="u" uri="/usuario" %>
 <%@ taglib prefix="json" uri="/json" %>
 
+<c:set var="sessionUsuario" value="${sessionScope.USUARIO}" scope="request" />
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 	<head>
@@ -113,14 +115,31 @@
 						<li class="${__partialViewSimpleName__ == 'home' ? 'active' : ''}">
 							<a href="${__contextPath__}"><i class="fa fa-home fa-fw"></i> Home</a>
 						</li>
+						<c:choose>
+							<c:when test="${sessionUsuario == null}"></c:when>
+							<c:otherwise>
+								<li class="${__partialViewSimpleName__ == 'dashboard' ? 'active' : ''}">
+									<a href="${__contextPath__}/dashboard"><i class="fa fa-desktop fa-fw"></i> Dashboard</a>
+								</li>	
+							</c:otherwise>
+						</c:choose>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li class="${__partialViewSimpleName__ == 'estabelecimento' ? 'active' : ''}">
-							<a href="${__contextPath__}/estabelecimento"><i class="fa fa-user fa-fw"></i> Seja nosso parceiro</a>
-						</li>
-						<li class="${__partialViewSimpleName__ == 'autenticacao' ? 'active' : ''}">
-							<a href="${__contextPath__}/autenticacao"><i class="fa fa-lock fa-fw"></i> Entrar</a>
-						</li>
+						<c:choose>
+							<c:when test="${sessionUsuario == null}">
+								<li class="${__partialViewSimpleName__ == 'estabelecimento' ? 'active' : ''}">
+									<a href="${__contextPath__}/estabelecimento"><i class="fa fa-user fa-fw"></i> Seja nosso parceiro</a>
+								</li>
+								<li class="${__partialViewSimpleName__ == 'autenticacao' ? 'active' : ''}">
+									<a href="${__contextPath__}/autenticacao"><i class="fa fa-lock fa-fw"></i> Entrar</a>
+								</li>
+							</c:when>
+							<c:otherwise>
+								<li>
+									<a href="${__contextPath__}/autenticacao/logout"><i class="fa fa-power-off fa-fw"></i> Sair</a>
+								</li>
+							</c:otherwise>
+						</c:choose>
 					</ul>
 				</div><!--/.nav-collapse -->
 			</div>
