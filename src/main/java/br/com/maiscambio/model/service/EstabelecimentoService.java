@@ -77,6 +77,12 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 		return estabelecimentoRepository.findByUsuarioId(usuarioId);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<Estabelecimento> findByUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(Usuario.Status usuarioStatus)
+	{
+		return estabelecimentoRepository.findByUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(usuarioStatus);
+	}
+	
 	@Transactional
 	public Estabelecimento saveAsInsert(Estabelecimento estabelecimento)
 	{

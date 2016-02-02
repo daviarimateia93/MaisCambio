@@ -40,18 +40,6 @@
 
 	<dependencies>
 
-		<dependency>
-			<groupId>gerenciarme</groupId>
-			<artifactId>gerenciarme-impinj</artifactId>
-			<version>1.0.5</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>gerenciarme</groupId>
-			<artifactId>gerenciarme-stp</artifactId>
-			<version>1.1.5</version>
-		</dependency>
-
 		<!-- Logging dependencies -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
