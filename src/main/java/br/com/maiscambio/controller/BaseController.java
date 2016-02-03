@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.maiscambio.Autenticacao;
 import br.com.maiscambio.Perfil;
 import br.com.maiscambio.WebMvcConfig;
+import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.service.AutenticacaoService;
 import br.com.maiscambio.model.service.CidadeService;
@@ -36,6 +37,8 @@ import br.com.maiscambio.util.View;
 
 public class BaseController
 {
+	private static final String EXCEPTION_YOU_CAN_NOT_DO_THIS = "YOU_CAN_NOT_DO_THIS";
+	
 	@Autowired
 	private HttpServletRequest request;
 	
@@ -251,6 +254,23 @@ public class BaseController
 		{
 			throw httpException;
 		}
+	}
+	
+	protected Estabelecimento getEstabelecimentoFromRequest()
+	{
+		return getEstabelecimentoFromRequest(false);
+	}
+	
+	protected Estabelecimento getEstabelecimentoFromRequest(boolean trowable)
+	{
+		Estabelecimento estabelecimento = estabelecimentoService.getFromRequest(request);
+		
+		if(estabelecimento == null && trowable)
+		{
+			throw new HttpException(EXCEPTION_YOU_CAN_NOT_DO_THIS, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		return estabelecimento;
 	}
 	
 	protected <T> RepositoryQuery<T> getRepositoryQuery(Class<T> type)

@@ -21,4 +21,7 @@ public interface EstabelecimentoRepository extends CustomRepository<Estabelecime
 	
 	@Query("SELECT DISTINCT e FROM Estabelecimento e JOIN e.usuarios us WITH us.status = :usuarioStatus WHERE e.pai IS NULL AND SIZE(us) = 1 AND SIZE(e.usuarios) = 1")
 	public List<Estabelecimento> findByUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(@Param("usuarioStatus") Usuario.Status usuarioStatus);
+	
+	@Query("SELECT DISTINCT e FROM Estabelecimento e JOIN e.usuarios us WITH us.status = :usuarioStatus WHERE e.pessoaId = :pessoaId AND e.pai IS NULL AND SIZE(us) = 1 AND SIZE(e.usuarios) = 1")
+	public Estabelecimento findByPessoaIdAndUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(@Param("pessoaId") Long pessoaId, @Param("usuarioStatus") Usuario.Status usuarioStatus);
 }

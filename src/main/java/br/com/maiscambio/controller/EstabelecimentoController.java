@@ -6,17 +6,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.com.maiscambio.Autenticacao;
+import br.com.maiscambio.Perfil;
 import br.com.maiscambio.WebMvcConfig;
 import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.entity.Usuario.Status;
+import br.com.maiscambio.model.service.EstabelecimentoService;
+import br.com.maiscambio.util.HttpException;
 import br.com.maiscambio.util.StringHelper;
 import br.com.maiscambio.util.View;
 
@@ -33,6 +39,36 @@ public class EstabelecimentoController extends BaseController
 		view.addObject("estados", getEstadoService().findByPaisIdSortedAscByNome(WebMvcConfig.getEnvironment().getProperty("paisId")));
 		
 		return view;
+	}
+	
+	@Transactional(readOnly = true)
+	@RequestMapping(value = "/{pessoaId}", method = RequestMethod.GET)
+	@Autenticacao(@Perfil({ Usuario.Perfil.ESTABELECIMENTO_LEITURA, Usuario.Perfil.ESTABELECIMENTO_ESCRITA }))
+	public View edit(@PathVariable Long pessoaId, @RequestParam(required = false) boolean success, @RequestParam(required = false) boolean activateSuccess)
+	{
+		Estabelecimento estabelecimento = getEstabelecimentoService().findOne(pessoaId);
+		
+		if(estabelecimento == null)
+		{
+			throw new HttpException(EstabelecimentoService.EXCEPTION_ESTABELECIMENTO_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
+		
+		View view = view("full", "estabelecimento", "Detalhes");
+		view.addObject("estabelecimento", estabelecimento);
+		view.addObject("success", success);
+		view.addObject("activateSuccess", activateSuccess);
+		
+		return view;
+	}
+	
+	@Transactional
+	@RequestMapping(value = "/{pessoaId}/activate", method = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT })
+	@Autenticacao({ @Perfil(Usuario.Perfil.ADMIN), @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_ESCRITA) })
+	public View activate(@PathVariable Long pessoaId)
+	{
+		getEstabelecimentoService().activate(pessoaId);
+		
+		return redirect("/estabelecimento/" + pessoaId + "?activateSuccess=true");
 	}
 	
 	@Transactional

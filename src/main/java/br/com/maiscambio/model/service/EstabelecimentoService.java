@@ -39,6 +39,7 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	public static final String EXCEPTION_ESTABELECIMENTO_PAI_NOT_FOUND = "ESTABELECIMENTO_PAI_NOT_FOUND";
 	public static final String EXCEPTION_ESTABELECIMENTO_PAI_PAI_MUST_BE_NULL = "ESTABELECIMENTO_PAI_PAI_MUST_BE_NULL";
 	public static final String EXCEPTION_ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI = "ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI";
+	public static final String EXCEPTION_ESTABELECIMENTO_NOT_FOUND_OR_NOT_ABLE_TO_DO_THIS = "ESTABELECIMENTO_NOT_FOUND_OR_NOT_ABLE_TO_DO_THIS";
 	
 	@Autowired
 	private EstabelecimentoRepository estabelecimentoRepository;
@@ -83,6 +84,12 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 		return estabelecimentoRepository.findByUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(usuarioStatus);
 	}
 	
+	@Transactional(readOnly = true)
+	public Estabelecimento findByPessoaIdAndUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(Long pessoaId, Usuario.Status usuarioStatus)
+	{
+		return estabelecimentoRepository.findByPessoaIdAndUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(pessoaId, usuarioStatus);
+	}
+	
 	@Transactional
 	public Estabelecimento saveAsInsert(Estabelecimento estabelecimento)
 	{
@@ -118,6 +125,27 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	private Estabelecimento save(Estabelecimento estabelecimento)
 	{
 		return estabelecimentoRepository.save(estabelecimento);
+	}
+	
+	@Transactional
+	public Estabelecimento activate(Long pessoaId)
+	{
+		Estabelecimento foundEstabelecimento = findByPessoaIdAndUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(pessoaId, Usuario.Status.INATIVO);
+		
+		if(foundEstabelecimento == null)
+		{
+			throw new HttpException(EXCEPTION_ESTABELECIMENTO_NOT_FOUND_OR_NOT_ABLE_TO_DO_THIS, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(foundEstabelecimento.getUsuarios() != null)
+		{
+			for(Usuario usuario : foundEstabelecimento.getUsuarios())
+			{
+				usuario.setStatus(Usuario.Status.ATIVO);
+			}
+		}
+		
+		return saveAsUpdate(foundEstabelecimento);
 	}
 	
 	@Transactional(readOnly = true)
@@ -181,7 +209,7 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 				{
 					if(!foundEstabelecimento.getUsuarios().isEmpty())
 					{
-						if(!foundEstabelecimento.getUsuarios().get(0).getUsuarioId().equals(estabelecimento.getUsuarios().get(0)))
+						if(!foundEstabelecimento.getUsuarios().get(0).getUsuarioId().equals(estabelecimento.getUsuarios().get(0).getUsuarioId()))
 						{
 							throw new HttpException(EXCEPTION_ESTABELECIMENTO_USUARIO_DOES_NOT_BELONG_TO_YOU, HttpStatus.NOT_ACCEPTABLE);
 						}
