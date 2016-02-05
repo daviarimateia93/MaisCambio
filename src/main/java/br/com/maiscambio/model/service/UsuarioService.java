@@ -1,7 +1,5 @@
 package br.com.maiscambio.model.service;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
@@ -278,25 +276,7 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 	
 	public String encryptSenha(String decryptedSenha)
 	{
-		MessageDigest sha512 = null;
-		
-		try
-		{
-			sha512 = MessageDigest.getInstance(Constants.TEXT_ALGORITHM_SHA_512);
-		}
-		catch(NoSuchAlgorithmException exception)
-		{
-			throw new HttpException("NoSuchAlgorithmException for MessageDigest.getInstance(\"SHA-512\"))", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
-		try
-		{
-			return StringHelper.hex(sha512.digest(decryptedSenha.getBytes()));
-		}
-		catch(Exception exception)
-		{
-			return null;
-		}
+		return StringHelper.encryptSHA512AndHex(decryptedSenha);
 	}
 	
 	public Usuario encrypt(Usuario decryptedUsuario)

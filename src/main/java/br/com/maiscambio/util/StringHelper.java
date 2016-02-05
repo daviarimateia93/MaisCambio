@@ -3,6 +3,7 @@ package br.com.maiscambio.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -160,5 +161,26 @@ public class StringHelper
 	public static boolean isEmpty(String string)
 	{
 		return StringUtils.isEmpty(string);
+	}
+	
+	public static String encryptSHA512AndHex(String string)
+	{
+		if(string == null)
+		{
+			return null;
+		}
+		
+		MessageDigest sha512 = null;
+		
+		try
+		{
+			sha512 = MessageDigest.getInstance(Constants.TEXT_ALGORITHM_SHA_512);
+			
+			return StringHelper.hex(sha512.digest(string.getBytes()));
+		}
+		catch(Exception exception)
+		{
+			return null;
+		}
 	}
 }
