@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSessionListener;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.service.AutenticacaoService;
 import br.com.maiscambio.util.Constants;
+import br.com.maiscambio.util.ControllerHelper;
 
 // we are not using singleton pattern because of HttpSessionListener (web.xml)
 // that forces a public constructor :-( so we are using an static concurrent map
@@ -117,7 +118,7 @@ public class UsuarioSessionManager implements HttpSessionListener
 	{
 		for(Map.Entry<String, Entry> entry : entries.entrySet())
 		{
-			iterator.iterate(Long.valueOf(entry.getKey().split(String.valueOf(Constants.CHAR_SEMICOLON))[0]), entry.getValue().getUsuarioId(), entry.getValue().getSession().getId());
+			iterator.iterate(Long.valueOf(entry.getKey().split(String.valueOf(Constants.CHAR_SEMICOLON))[0]), entry.getValue().getUsuarioId(), ControllerHelper.getSid(entry.getValue().getSession()));
 		}
 	}
 	
@@ -145,6 +146,6 @@ public class UsuarioSessionManager implements HttpSessionListener
 	
 	public static interface Iterator
 	{
-		public void iterate(Long estabelecimentoPessoaId, Long usuarioId, String sessionId);
+		public void iterate(Long estabelecimentoPessoaId, Long usuarioId, String sid);
 	}
 }

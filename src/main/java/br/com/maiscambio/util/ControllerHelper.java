@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class ControllerHelper
 {
@@ -81,5 +82,15 @@ public class ControllerHelper
 		outputStream.close();
 		
 		return request.getContextPath() + slash + dir + slash + name + extension;
+	}
+	
+	public static String getSid(HttpServletRequest request)
+	{
+		return getSid(request.getSession());
+	}
+	
+	public static String getSid(HttpSession session)
+	{
+		return StringHelper.encryptSHA512AndHex(session.getId());
 	}
 }

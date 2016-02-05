@@ -29,6 +29,7 @@ import br.com.maiscambio.model.service.EstadoService;
 import br.com.maiscambio.model.service.LicencaService;
 import br.com.maiscambio.model.service.UsuarioService;
 import br.com.maiscambio.util.Constants;
+import br.com.maiscambio.util.ControllerHelper;
 import br.com.maiscambio.util.DateHelper;
 import br.com.maiscambio.util.HttpException;
 import br.com.maiscambio.util.RepositoryQuery;
@@ -168,6 +169,7 @@ public class BaseController
 		Date currentDate = new Date();
 		
 		View view = new View(layoutName, partialViewName, title);
+		view.addObject("sid", ControllerHelper.getSid(request));
 		view.addObject("currentFormattedDate", DateHelper.format(currentDate));
 		view.addObject("currentDate", currentDate);
 		
