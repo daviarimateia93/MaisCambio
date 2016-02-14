@@ -33,4 +33,9 @@ $(function()
 	    load(ROOT + '/estabelecimento?success=true');
 	};
     });
+    
+    $('#estabelecimento-activate').click(function()
+    {
+	load(ROOT + '/estabelecimento/' + PESSOA_ID + '/activate');
+    });
 });

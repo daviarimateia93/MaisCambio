@@ -190,11 +190,14 @@ public class AutenticacaoService implements BaseService
 		
 		if(estabelecimento != null)
 		{
-			if(estabelecimento.getData().before(new Date()))
+			if(estabelecimento.getData() != null)
 			{
-				logout(request);
-				
-				throw new HttpException(EXCEPTION_LICENCA_IS_EXPIRED, HttpStatus.FORBIDDEN);
+				if(estabelecimento.getData().before(new Date()))
+				{
+					logout(request);
+					
+					throw new HttpException(EXCEPTION_LICENCA_IS_EXPIRED, HttpStatus.FORBIDDEN);
+				}
 			}
 		}
 	}

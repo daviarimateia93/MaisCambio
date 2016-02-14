@@ -6,6 +6,8 @@
 <%@ taglib prefix="json" uri="/json" %>
 
 <c:set var="sessionUsuario" value="${sessionScope.USUARIO}" scope="request" />
+<c:set var="menuEstabelecimentoHref" value="${u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_LEITURA') ? '/estabelecimento/list' : u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_ESCRITA') ? '/estabelecimento' : ''}" scope="request" />
+<c:set var="menuUsuarioHref" value="${u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_USUARIO_LEITURA') ? '/usuario/list' : u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_USUARIO_ESCRITA') ? '/usuario' : ''}" scope="request" />
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -53,9 +55,14 @@
         <script src="${__contextPath__}/assets/libs/jquery-maskmoney/jquery.maskMoney.custom.js?v=${__appVersion__}"></script>
         <script src="${__contextPath__}/assets/libs/jquery-filer/jquery.filer.js?v=${__appVersion__}"></script>
         <script src="${__contextPath__}/assets/libs/bigdecimal/BigDecimal-all-last.min.js?v=${__appVersion__}"></script>
+        <script src="${__contextPath__}/assets/libs/datatables/jquery.dataTables.custom.js?v=${__appVersion__}"></script>
+        <script src="${__contextPath__}/assets/libs/datatables/fnReloadAjax.js?v=${__appVersion__}"></script>
 		
 		<!-- Custom JS -->
 		<script src="${__contextPath__}/assets/js/layout.js?v=${__appVersion__}"></script>
+		
+		<!-- Replace Bundle JS -->
+		<script src="${__contextPath__}/assets/libs/replace-bundle/bundle.js?v=${__appVersion__}"></script>
 		
 		<!-- Templates -->
 		<script id="filerBoxTemplate" type="text/template">
@@ -91,6 +98,24 @@
         	var APP_VERSION = ${json:toString(__appVersion__)};
         
         	var ROOT = ${json:toString(__contextPath__)};
+        	
+			var SID = ${json:toString(sid)};
+        	
+        	var ESTABELECIMENTO_PESSOA_ID = ${json:toString(sessionEstabelecimentoPessoaId)};
+        	
+        	var PARTIAL_VIEW_SIMPLE_NAME = ${json:toString(__partialViewSimpleName__)};
+        	
+        	var USUARIO_ID = ${json:toString(sessionUsuario.usuarioId)};
+        	
+        	var USUARIO_APELIDO = ${json:toString(sessionUsuario.apelido)};
+        	
+        	var USUARIO_PERFIS = [
+				<c:if test="${sessionUsuario != null}">
+					<c:forEach items="${sessionUsuario.perfis}" var="perfil" varStatus="loop">
+						${json:toString(perfil)}<c:if test="${!loop.last}">,</c:if>
+					</c:forEach>
+				</c:if>
+            ];
         </script>
 	</head>
 
@@ -118,9 +143,21 @@
 						<c:choose>
 							<c:when test="${sessionUsuario == null}"></c:when>
 							<c:otherwise>
-								<li class="${__partialViewSimpleName__ == 'dashboard' ? 'active' : ''}">
-									<a href="${__contextPath__}/dashboard"><i class="fa fa-desktop fa-fw"></i> Dashboard</a>
-								</li>	
+								<c:if test="${u:hasPerfilForRequest(pageContext.request, 'ADMIN') ? u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_LEITURA') && u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_ESCRITA') : u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_LEITURA')}">
+									<li class="${__partialViewSimpleName__ == 'dashboard' ? 'active' : ''}">
+										<a href="${__contextPath__}/dashboard"><i class="fa fa-desktop fa-fw"></i> Dashboard</a>
+									</li>
+								</c:if>
+								<c:if test="${fn:length(menuEstabelecimentoHref) > 0}">
+									<li class="${__partialViewSimpleName__ == 'estabelecimento_grid' || __partialViewSimpleName__ == 'estabelecimento' ? 'active' : ''}">
+										<a href="${__contextPath__}${menuEstabelecimentoHref}"><i class="fa fa-hand-o-right fa-fw"></i> Parceiro</a>
+									</li>
+								</c:if>
+								<c:if test="${fn:length(menuUsuarioHref) > 0}">
+									<li class="${__partialViewSimpleName__ == 'usuario_grid' || __partialViewSimpleName__ == 'usuario' ? 'active' : ''}">
+										<a href="${__contextPath__}${menuUsuarioHref}"><i class="fa fa-user fa-fw"></i> Usuário</a>
+									</li>
+								</c:if>
 							</c:otherwise>
 						</c:choose>
 					</ul>
@@ -128,7 +165,7 @@
 						<c:choose>
 							<c:when test="${sessionUsuario == null}">
 								<li class="${__partialViewSimpleName__ == 'estabelecimento' ? 'active' : ''}">
-									<a href="${__contextPath__}/estabelecimento"><i class="fa fa-user fa-fw"></i> Seja nosso parceiro</a>
+									<a href="${__contextPath__}/estabelecimento"><i class="fa fa-hand-o-right fa-fw"></i> Seja nosso parceiro</a>
 								</li>
 								<li class="${__partialViewSimpleName__ == 'autenticacao' ? 'active' : ''}">
 									<a href="${__contextPath__}/autenticacao"><i class="fa fa-lock fa-fw"></i> Entrar</a>

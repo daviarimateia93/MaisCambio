@@ -58,7 +58,7 @@ public class Pessoa extends BaseEntity
 	
 	@JsonIgnore
 	@Fetch(FetchMode.SELECT)
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "pessoa", orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "pessoa")
 	private List<Usuario> usuarios = new ArrayList<>();
 	
 	public Long getPessoaId()
