@@ -66,15 +66,15 @@
 			<div class="form-group">
 		        <label for="estabelecimento-cnpj" class="col-md-2 control-label">CNPJ: </label>
 		        <div class="col-md-2">
-		            <input type="text" class="form-control iptCnpj" name="cnpj" id="estabelecimento-cnpj" data-mask="99.999.999/9999-99" value="${fn:escapeXml((estabelecimento.cnpj))}" ${readonly ? 'disabled' : ''} />
+		            <input type="text" class="form-control iptCnpj" name="cnpj" id="estabelecimento-cnpj" data-mask="99.999.999/9999-99" value="${fn:escapeXml((estabelecimento.cnpj))}" ${estabelecimento.cpf != null || estabelecimento.idEstrangeiro != null || readonly ? 'disabled': ''} />
 		        </div>
 		        <label for="estabelecimento-cpf" class="col-md-2 control-label">CPF: </label>
 		        <div class="col-md-2">
-		            <input type="text" class="form-control iptCpf" name="cpf" id="estabelecimento-cpf" data-mask="999.999.999-99" value="${fn:escapeXml((estabelecimento.cpf))}" ${readonly ? 'disabled' : ''} />
+		            <input type="text" class="form-control iptCpf" name="cpf" id="estabelecimento-cpf" data-mask="999.999.999-99" value="${fn:escapeXml((estabelecimento.cpf))}" ${estabelecimento.cnpj != null || estabelecimento.idEstrangeiro != null || readonly ? 'disabled': ''} />
 		        </div>
 		        <label for="estabelecimento-id-estrangeiro" class="col-md-2 control-label">ID Estrangeiro: </label>
 		        <div class="col-md-2">
-		            <input type="text" class="form-control iptIdEstrangeiro" name="idEstrangeiro" id="estabelecimento-id-estrangeiro" value="${fn:escapeXml((estabelecimento.idEstrangeiro))}" ${readonly ? 'disabled' : ''} />
+		            <input type="text" class="form-control iptIdEstrangeiro" name="idEstrangeiro" id="estabelecimento-id-estrangeiro" value="${fn:escapeXml((estabelecimento.idEstrangeiro))}" ${estabelecimento.cnpj != null || estabelecimento.cpf != null || readonly ? 'disabled': ''} />
 		        </div>
 		    </div>
 		</fieldset>

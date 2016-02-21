@@ -14,6 +14,16 @@ $(function()
 	    $(this).val($(action.form).find('#' + $(this).attr('id')).val()).change();
 	});
 	
+	var $paiPessoaId = $newForm.find('select[name="pai.pessoaId"]');
+	
+	if($paiPessoaId.length > 0)
+	{
+	    if($paiPessoaId.val().length == 0)
+	    {
+		$paiPessoaId.remove();
+	    }
+	}
+	
 	var $razaoSocial = $newForm.find('input[name="razaoSocial"]');
 	
 	if($razaoSocial.length > 0)
@@ -30,7 +40,10 @@ $(function()
 	
 	action.onSuccess = function(data)
 	{
-	    load(ROOT + '/estabelecimento?success=true');
+	    if(PESSOA_ID === null)
+	    {
+		load(ROOT + '/estabelecimento?success=true');
+	    }
 	};
     });
     
