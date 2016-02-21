@@ -51,4 +51,18 @@ $(function()
     {
 	load(ROOT + '/estabelecimento/' + PESSOA_ID + '/activate');
     });
+    
+    $('select[name="pai.pessoaId"]').change(function()
+    {
+	var $formGroup = $('input[name="nomeFantasia"]').parents('.form-group');
+	
+	if($(this).val().length > 0)
+	{
+	    $formGroup.addClass('hide');
+	}
+	else
+	{
+	    $formGroup.removeClass('hide');
+	}
+    });
 });

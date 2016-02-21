@@ -51,16 +51,16 @@
 		            </div>
 		        </div>
 			</c:if>
-			<div class="form-group">
+			<div class="form-group ${estabelecimento.pai != null ? 'hide' : ''}">
 		    	<label for="estabelecimento-nome-fantasia" class="col-md-2 control-label">Nome fantasia: </label>
 		        <div class="col-md-10">
-		            <input type="text" class="form-control" name="nomeFantasia" id="estabelecimento-nome-fantasia"  autofocus value="${fn:escapeXml((estabelecimento.nomeFantasia))}" ${readonly ? 'disabled' : ''} />
+		            <input type="text" class="form-control" name="nomeFantasia" id="estabelecimento-nome-fantasia" autofocus value="${fn:escapeXml((estabelecimento.nomeFantasia))}" ${readonly ? 'disabled' : ''} />
 		        </div>
 			</div>
 			<div class="form-group">
 		    	<label for="estabelecimento-razao-social" class="col-md-2 control-label">Razão social: </label>
 		        <div class="col-md-10">
-		            <input type="text" class="form-control" name="razaoSocial" id="estabelecimento-razao-social" value="${fn:escapeXml((estabelecimento.razaoSocial))}" ${readonly ? 'disabled' : ''} />
+		            <input type="text" class="form-control" name="razaoSocial" id="estabelecimento-razao-social" ${estabelecimento.pai != null ? 'autofocus' : ''} value="${fn:escapeXml((estabelecimento.razaoSocial))}" ${readonly ? 'disabled' : ''} />
 		        </div>
 			</div>
 			<div class="form-group">

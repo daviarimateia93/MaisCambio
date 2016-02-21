@@ -77,9 +77,15 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<Map<String, Object>> findAll(CustomRepositorySelector<Estabelecimento> customRepositorySelector, Specification<Estabelecimento> specification, Pageable pageable, boolean isAdmin)
+	public Page<Map<String, Object>> findAll(CustomRepositorySelector<Estabelecimento> customRepositorySelector, Specification<Estabelecimento> specification, Pageable pageable)
 	{
 		return estabelecimentoRepository.findAll(customRepositorySelector, Specifications.where(specification), pageable);
+	}
+	
+	@Transactional(readOnly = true)
+	public Page<Map<String, Object>> findAll(CustomRepositorySelector<Estabelecimento> customRepositorySelector, Specification<Estabelecimento> specification, Pageable pageable, Long pessoaId, Long paiPessoaId)
+	{
+		return estabelecimentoRepository.findAll(customRepositorySelector, Specifications.where(specification).and(pessoaIdEqualsOrPaiPessoaIdEquals(pessoaId, paiPessoaId)), pageable);
 	}
 	
 	@Transactional(readOnly = true)
@@ -199,9 +205,25 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 			@Override
 			public Predicate toPredicate(Root<Estabelecimento> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)
 			{
-				return criteriaBuilder.equal(root.get("pessoa").get("pessoaId"), pessoaId);
+				return criteriaBuilder.equal(root.get("pessoaId"), pessoaId);
 			}
 		};
+	}
+	
+	@Transactional(readOnly = true)
+	private Specification<Estabelecimento> pessoaIdEqualsOrPaiPessoaIdEquals(final Long pessoaId, final Long paiPessoaId)
+	{
+		Specification<Estabelecimento> pessoaIdEqualsSpecification = pessoaIdEquals(pessoaId);
+		Specification<Estabelecimento> paiPessoaIdEqualsSpecification = new Specification<Estabelecimento>()
+		{
+			@Override
+			public Predicate toPredicate(Root<Estabelecimento> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)
+			{
+				return criteriaBuilder.equal(root.get("pai").get("pessoaId"), paiPessoaId);
+			}
+		};
+		
+		return Specifications.where(pessoaIdEqualsSpecification).or(paiPessoaIdEqualsSpecification);
 	}
 	
 	@Transactional(readOnly = true)

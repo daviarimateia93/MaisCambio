@@ -50,7 +50,7 @@ public class EstabelecimentoController extends BaseController
 	public View edit(@PathVariable Long pessoaId, @RequestParam(required = false) boolean success, @RequestParam(required = false) boolean activateSuccess)
 	{
 		Usuario usuario = getUsuarioService().getFromRequest(getRequest());
-		Estabelecimento estabelecimento = getEstabelecimentoService().getFromRequest(getRequest());
+		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
 		Estabelecimento foundEstabelecimento = getEstabelecimentoService().findOne(pessoaId);
 		
 		if(foundEstabelecimento == null)
@@ -76,7 +76,7 @@ public class EstabelecimentoController extends BaseController
 	
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	@Autenticacao({ @Perfil(Usuario.Perfil.ADMIN), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
+	@Autenticacao(@Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA))
 	public View list()
 	{
 		return view("full", "estabelecimento_grid", "Buscar");
@@ -84,12 +84,22 @@ public class EstabelecimentoController extends BaseController
 	
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
-	@Autenticacao({ @Perfil(Usuario.Perfil.ADMIN), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
+	@Autenticacao(@Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA))
 	public @ResponseBody Page<Map<String, Object>> findAll()
 	{
+		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
+		Long pessoaId = estabelecimento != null ? estabelecimento.getPessoaId() : null;
+		
 		RepositoryQuery<Estabelecimento> repositoryQuery = getRepositoryQuery(Estabelecimento.class);
 		
-		return getEstabelecimentoService().findAll(repositoryQuery.toCustomRepositorySelector(), repositoryQuery.toSpecification(), repositoryQuery.toPageable(), UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN));
+		if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN))
+		{
+			return getEstabelecimentoService().findAll(repositoryQuery.toCustomRepositorySelector(), repositoryQuery.toSpecification(), repositoryQuery.toPageable());
+		}
+		else
+		{
+			return getEstabelecimentoService().findAll(repositoryQuery.toCustomRepositorySelector(), repositoryQuery.toSpecification(), repositoryQuery.toPageable(), pessoaId, pessoaId);
+		}
 	}
 	
 	@Transactional
@@ -106,9 +116,26 @@ public class EstabelecimentoController extends BaseController
 	
 	@Transactional
 	@RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
-	public @ResponseBody Estabelecimento saveAsMatriz(Estabelecimento estabelecimento) throws IOException, InterruptedException
+	public @ResponseBody Estabelecimento save(Estabelecimento estabelecimento) throws IOException, InterruptedException
 	{
-		estabelecimento.setPai(null);
+		if(getUsuarioService().getFromRequest(getRequest()) == null)
+		{
+			estabelecimento.setPai(null);
+		}
+		else if(getEstabelecimentoFromRequest() != null)
+		{
+			if(getEstabelecimentoFromRequest().getPai() == null)
+			{
+				estabelecimento.setPai(getEstabelecimentoFromRequest());
+				estabelecimento.setNomeFantasia(getEstabelecimentoFromRequest().getNomeFantasia());
+			}
+			else
+			{
+				estabelecimento.setPai(getEstabelecimentoFromRequest().getPai());
+				estabelecimento.setNomeFantasia(getEstabelecimentoFromRequest().getPai().getNomeFantasia());
+			}
+		}
+		
 		estabelecimento.setData(null);
 		
 		if(estabelecimento.getUsuarios() == null)
@@ -156,15 +183,7 @@ public class EstabelecimentoController extends BaseController
 	{
 		Estabelecimento foundEstabelecimento = getEstabelecimentoService().findOne(pessoaId);
 		
-		Usuario usuario = getUsuarioService().getFromRequest(getRequest());
-		
-		if(!UsuarioService.hasPerfil(usuario, Usuario.Perfil.ADMIN))
-		{
-			if(foundEstabelecimento != null)
-			{
-				estabelecimento.setPai(foundEstabelecimento.getPai());
-			}
-		}
+		fixEstabelecimentoForSaving(estabelecimento);
 		
 		if(estabelecimento.getEndereco() != null)
 		{
@@ -192,7 +211,7 @@ public class EstabelecimentoController extends BaseController
 	public void delete(@PathVariable Long pessoaId)
 	{
 		Estabelecimento foundEstabelecimento = getEstabelecimentoService().findByUsuarioId(pessoaId);
-		Estabelecimento estabelecimento = getEstabelecimentoService().getFromRequest(getRequest());
+		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
 		
 		if(foundEstabelecimento != null && estabelecimento != null)
 		{
@@ -237,5 +256,32 @@ public class EstabelecimentoController extends BaseController
 		variables.put("#___USUARIO_APELIDO___#", estabelecimento.getUsuarios().get(0).getApelido());
 		
 		getEmailService().sendAsynchronously(email, "MaisCâmbio - Perfil ativado", loadEmailTemplateWithVariables("email_estabelecimento_activated.html", variables));
+	}
+	
+	private void fixEstabelecimentoForSaving(Estabelecimento estabelecimento)
+	{
+		if(getUsuarioService().getFromRequest(getRequest()) == null)
+		{
+			estabelecimento.setPai(null);
+		}
+		else if(getEstabelecimentoFromRequest() != null)
+		{
+			if(getEstabelecimentoFromRequest().getPai() == null)
+			{
+				estabelecimento.setPai(getEstabelecimentoFromRequest());
+				estabelecimento.setNomeFantasia(getEstabelecimentoFromRequest().getNomeFantasia());
+			}
+			else
+			{
+				estabelecimento.setPai(getEstabelecimentoFromRequest().getPai());
+				estabelecimento.setNomeFantasia(getEstabelecimentoFromRequest().getPai().getNomeFantasia());
+			}
+		}
+		else if(estabelecimento.getPessoaId() != null && estabelecimento.getPai() != null)
+		{
+			estabelecimento.setNomeFantasia(getEstabelecimentoService().findOne(estabelecimento.getPai().getPessoaId()).getNomeFantasia());
+		}
+		
+		estabelecimento.setData(null);
 	}
 }

@@ -31,7 +31,7 @@ public class Estabelecimento extends Pessoa
 	private static final long serialVersionUID = -5586424328321297612L;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_PESSOA_PAI", insertable = false, updatable = false)
+	@JoinColumn(name = "ID_PESSOA_PAI")
 	private Estabelecimento pai;
 	
 	@JsonIgnore

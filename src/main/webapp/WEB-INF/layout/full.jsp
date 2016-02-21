@@ -150,7 +150,16 @@
 								</c:if>
 								<c:if test="${fn:length(menuEstabelecimentoHref) > 0}">
 									<li class="${__partialViewSimpleName__ == 'estabelecimento_grid' || __partialViewSimpleName__ == 'estabelecimento' ? 'active' : ''}">
-										<a href="${__contextPath__}${menuEstabelecimentoHref}"><i class="fa fa-hand-o-right fa-fw"></i> Parceiro</a>
+										<a href="${__contextPath__}${menuEstabelecimentoHref}">
+											<c:choose>
+												<c:when test="${u:hasPerfilForRequest(pageContext.request, 'ADMIN')}">
+													<i class="fa fa-hand-o-right fa-fw"></i> Parceiro
+												</c:when>
+												<c:otherwise>
+													<i class="fa fa-info fa-fw"></i> Informações
+												</c:otherwise>
+											</c:choose>
+										</a>
 									</li>
 								</c:if>
 								<c:if test="${fn:length(menuUsuarioHref) > 0}">
