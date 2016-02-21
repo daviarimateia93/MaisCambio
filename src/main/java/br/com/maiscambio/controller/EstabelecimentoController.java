@@ -258,6 +258,7 @@ public class EstabelecimentoController extends BaseController
 		getEmailService().sendAsynchronously(email, "MaisCâmbio - Perfil ativado", loadEmailTemplateWithVariables("email_estabelecimento_activated.html", variables));
 	}
 	
+	@Transactional(readOnly = true)
 	private void fixEstabelecimentoForSaving(Estabelecimento estabelecimento)
 	{
 		if(getUsuarioService().getFromRequest(getRequest()) == null)
