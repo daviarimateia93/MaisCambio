@@ -5,7 +5,6 @@
 <%@ taglib prefix="s" uri="/string" %>
 
 <c:set var="editAction" value="/${usuario != null ? usuario.usuarioId : ''}" scope="request" />
-<c:set var="readonly" value="${!u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_USUARIO_ESCRITA')}" scope="request" />
 
 <script>var USUARIO_NEW = ${(usuario == null)};</script>
 <script>var USUARIO_READONLY = ${readonly};</script>
@@ -37,17 +36,19 @@
 	                </select>
 	            </div>
 	        </div>
-	        <div class="form-group">
-	            <label for="usuario-pessoa" class="col-md-2 control-label">Estabelecimento: </label>
-	            <div class="col-md-10">
-	                <select class="form-control" name="pessoa.pessoaId" id="usuario-pessoa" ${readonly ? 'disabled' : ''}>
-	                	<option></option>
-	                	<c:forEach items="${estabelecimentos}" var="estabelecimento">
-	                		<option value="${fn:escapeXml((estabelecimento.pessoaId))}" ${usuario != null ? usuario.pessoa.pessoaId == estabelecimento.pessoaId ? 'selected' : '' : ''}>${fn:escapeXml((estabelecimento.nomeFantasia))} (${estabelecimento.cnpj != null ? s:format(fn:escapeXml((estabelecimento.cnpj)), '##.###.###/####-##') : s:format(fn:escapeXml((estabelecimento.cpf)), '###.###.###-##')})</option>
-	                	</c:forEach>
-	                </select>
-	            </div>
-	        </div>
+	        <c:if test="${showEstabelecimento}">
+		        <div class="form-group">
+		            <label for="usuario-pessoa" class="col-md-2 control-label">Estabelecimento: </label>
+		            <div class="col-md-10">
+		                <select class="form-control" name="pessoa.pessoaId" id="usuario-pessoa" ${readonly ? 'disabled' : ''}>
+		                	<option></option>
+		                	<c:forEach items="${estabelecimentos}" var="estabelecimento">
+		                		<option value="${fn:escapeXml((estabelecimento.pessoaId))}" ${usuario != null ? usuario.pessoa.pessoaId == estabelecimento.pessoaId ? 'selected' : '' : ''}>${fn:escapeXml((estabelecimento.nomeFantasia))} (${estabelecimento.cnpj != null ? s:format(fn:escapeXml((estabelecimento.cnpj)), '##.###.###/####-##') : s:format(fn:escapeXml((estabelecimento.cpf)), '###.###.###-##')})</option>
+		                	</c:forEach>
+		                </select>
+		            </div>
+		        </div>
+	        </c:if>
 	        <c:if test="${usuario == null && !readonly}">
 	        	<div class="form-group">
 		            <label for="usuario-senha" class="col-md-2 control-label">Senha: </label>
@@ -80,7 +81,7 @@
 				</div>
 			</c:forEach>
 		</fieldset>
-        <c:if test="${!readonly || usuario != null}">
+        <c:if test="${!readonly}">
 	        <hr />
        		<button type="submit" class="btn btn-green">
        			<c:choose>

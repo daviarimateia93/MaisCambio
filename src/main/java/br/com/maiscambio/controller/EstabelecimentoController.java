@@ -49,17 +49,14 @@ public class EstabelecimentoController extends BaseController
 	@RequestMapping(value = "/{pessoaId}", method = RequestMethod.GET)
 	public View edit(@PathVariable Long pessoaId, @RequestParam(required = false) boolean success, @RequestParam(required = false) boolean activateSuccess)
 	{
-		Usuario usuario = getUsuarioService().getFromRequest(getRequest());
-		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
+		boolean canEdit = canEdit(pessoaId, Usuario.Perfil.ESTABELECIMENTO_ESCRITA);
+		
 		Estabelecimento foundEstabelecimento = getEstabelecimentoService().findOne(pessoaId);
 		
 		if(foundEstabelecimento == null)
 		{
 			throw new HttpException(EstabelecimentoService.EXCEPTION_ESTABELECIMENTO_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
-		
-		boolean canEdit = usuario != null ? UsuarioService.hasPerfil(usuario, Usuario.Perfil.ESTABELECIMENTO_ESCRITA) : false;
-		canEdit = canEdit ? estabelecimento != null ? foundEstabelecimento.getPessoaId().equals(estabelecimento.getPessoaId()) || foundEstabelecimento.getPai().getPessoaId().equals(estabelecimento.getPessoaId()) : UsuarioService.hasPerfil(usuario, Usuario.Perfil.ADMIN) : false;
 		
 		View view = view("full", "estabelecimento", "Detalhes");
 		view.addObject("estabelecimentos", getEstabelecimentoService().findAllSortedAscByNomeFantasia());
@@ -181,9 +178,14 @@ public class EstabelecimentoController extends BaseController
 	@Autenticacao(@Perfil(Usuario.Perfil.ESTABELECIMENTO_ESCRITA))
 	public @ResponseBody Estabelecimento save(@PathVariable Long pessoaId, Estabelecimento estabelecimento)
 	{
+		if(!canEdit(pessoaId, Usuario.Perfil.ESTABELECIMENTO_ESCRITA))
+		{
+			throw new HttpException(EstabelecimentoService.EXCEPTION_ESTABELECIMENTO_NOT_FOUND, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
 		Estabelecimento foundEstabelecimento = getEstabelecimentoService().findOne(pessoaId);
 		
-		fixEstabelecimentoForSaving(estabelecimento);
+		fixForSaving(estabelecimento);
 		
 		if(estabelecimento.getEndereco() != null)
 		{
@@ -259,7 +261,7 @@ public class EstabelecimentoController extends BaseController
 	}
 	
 	@Transactional(readOnly = true)
-	private void fixEstabelecimentoForSaving(Estabelecimento estabelecimento)
+	private void fixForSaving(Estabelecimento estabelecimento)
 	{
 		if(getUsuarioService().getFromRequest(getRequest()) == null)
 		{

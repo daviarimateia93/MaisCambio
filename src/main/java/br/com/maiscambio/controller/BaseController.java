@@ -234,7 +234,7 @@ public class BaseController
 			}
 			catch(Exception ioException)
 			{
-			
+				
 			}
 			
 			return null;
@@ -311,5 +311,35 @@ public class BaseController
 	protected String loadEmailTemplateWithVariables(String emailTemplateFileName, Map<String, String> variables) throws IOException
 	{
 		return setVariablesToEmailTemplate(loadEmailTemplate(emailTemplateFileName), variables);
+	}
+	
+	@Transactional(readOnly = true)
+	protected boolean canEdit(Long pessoaId, Usuario.Perfil... usuarioPerfis)
+	{
+		Usuario usuario = getUsuarioService().getFromRequest(getRequest());
+		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
+		Estabelecimento foundEstabelecimento = getEstabelecimentoService().findOne(pessoaId);
+		
+		if(foundEstabelecimento == null)
+		{
+			throw new HttpException(EstabelecimentoService.EXCEPTION_ESTABELECIMENTO_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
+		
+		boolean hasPerfis = true;
+		
+		for(Usuario.Perfil usuarioPerfil : usuarioPerfis)
+		{
+			if(!UsuarioService.hasPerfil(usuario, usuarioPerfil))
+			{
+				hasPerfis = false;
+				
+				break;
+			}
+		}
+		
+		boolean canEdit = usuario != null ? hasPerfis : false;
+		canEdit = canEdit ? estabelecimento != null ? foundEstabelecimento.getPessoaId().equals(estabelecimento.getPessoaId()) || (foundEstabelecimento.getPai() != null ? foundEstabelecimento.getPai().getPessoaId().equals(estabelecimento.getPessoaId()) : false) : UsuarioService.hasPerfil(usuario, Usuario.Perfil.ADMIN) : false;
+		
+		return canEdit;
 	}
 }

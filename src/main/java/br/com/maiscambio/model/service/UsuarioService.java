@@ -5,8 +5,10 @@ import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,7 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 	public static final String EXCEPTION_USUARIO_MUST_NOT_BE_THE_SAME_FROM_THE_LOGGED_ONE = "USUARIO_MUST_NOT_BE_THE_SAME_FROM_THE_LOGGED_ONE";
 	public static final String EXCEPTION_USUARIO_MUST_NOT_CONTAINS_DUPLICATED_PERFIS = "USUARIO_MUST_NOT_CONTAINS_DUPLICATED_PERFIS";
 	public static final String EXCEPTION_USUARIO_PESSOA_MUST_BE_ESTABELECIMENTO = "USUARIO_PESSOA_MUST_BE_ESTABELECIMENTO";
+	public static final String EXCEPTION_USUARIO_PESSOA_INVALID = "USUARIO_PESSOA_INVALID";
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -82,6 +85,12 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 	public Page<Map<String, Object>> findAll(CustomRepositorySelector<Usuario> customRepositorySelector, Specification<Usuario> specification, Pageable pageable)
 	{
 		return usuarioRepository.findAll(customRepositorySelector, Specifications.where(specification), pageable);
+	}
+	
+	@Transactional(readOnly = true)
+	public Page<Map<String, Object>> findAll(CustomRepositorySelector<Usuario> customRepositorySelector, Specification<Usuario> specification, Pageable pageable, Long pessoaId, Long paiPessoaId)
+	{
+		return usuarioRepository.findAll(customRepositorySelector, Specifications.where(specification).and(pessoaIdEqualsOrPaiPessoaIdEquals(pessoaId, paiPessoaId)), pageable);
 	}
 	
 	@Transactional(readOnly = true)
@@ -260,7 +269,7 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 			}
 			catch(HttpException httpException)
 			{
-			
+				
 			}
 			
 			if(userCredentials != null)
@@ -550,14 +559,14 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 		{
 			Estabelecimento pai = null;
 			
-			Specifications<Usuario> pessoaIdSpecifications = Specifications.where(pessoaIdEquals(pessoaId));
+			Specifications<Usuario> pessoaIdEqualsSpecifications = Specifications.where(pessoaIdEquals(pessoaId));
 			
 			while((pai = pai == null ? ((Estabelecimento) pessoa).getPai() : pai.getPai()) != null)
 			{
-				pessoaIdSpecifications = pessoaIdSpecifications.or(pessoaIdEquals(pai.getPessoaId()));
+				pessoaIdEqualsSpecifications = pessoaIdEqualsSpecifications.or(pessoaIdEquals(pai.getPessoaId()));
 			}
 			
-			return pessoaIdSpecifications;
+			return pessoaIdEqualsSpecifications;
 		}
 		else
 		{
@@ -576,5 +585,28 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 				return criteriaBuilder.equal(root.get("usuarioId"), usuarioId);
 			}
 		};
+	}
+	
+	@Transactional(readOnly = true)
+	private Specification<Usuario> pessoaIdEqualsOrPaiPessoaIdEquals(final Long pessoaId, final Long paiPessoaId)
+	{
+		Specification<Usuario> pessoaIdEqualsSpecification = pessoaIdEquals(pessoaId);
+		
+		Specification<Usuario> paiPessoaIdEqualsSpecification = new Specification<Usuario>()
+		{
+			@Override
+			public Predicate toPredicate(Root<Usuario> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)
+			{
+				Subquery<Long> estabelecimentoQuery = criteriaQuery.subquery(Long.class);
+				Root<Estabelecimento> estabelecimentoRoot = estabelecimentoQuery.from(Estabelecimento.class);
+				Join<Estabelecimento, Usuario> usuarios = estabelecimentoRoot.join("usuarios");
+				estabelecimentoQuery.select(usuarios.get("usuarioId").as(Long.class));
+				estabelecimentoQuery.where(criteriaBuilder.equal(estabelecimentoRoot.get("pai").get("pessoaId"), paiPessoaId));
+				
+				return criteriaBuilder.in(root.get("usuarioId")).value(estabelecimentoQuery);
+			}
+		};
+		
+		return Specifications.where(pessoaIdEqualsSpecification).or(paiPessoaIdEqualsSpecification);
 	}
 }

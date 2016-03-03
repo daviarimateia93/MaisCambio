@@ -77,6 +77,12 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Estabelecimento> findAllSortedAscByNomeFantasia(Long pessoaId, Long paiPessoaId)
+	{
+		return estabelecimentoRepository.findAll(pessoaIdEqualsOrPaiPessoaIdEquals(pessoaId, paiPessoaId), new Sort(new Order(Direction.ASC, "nomeFantasia")));
+	}
+	
+	@Transactional(readOnly = true)
 	public Page<Map<String, Object>> findAll(CustomRepositorySelector<Estabelecimento> customRepositorySelector, Specification<Estabelecimento> specification, Pageable pageable)
 	{
 		return estabelecimentoRepository.findAll(customRepositorySelector, Specifications.where(specification), pageable);
@@ -198,35 +204,6 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	}
 	
 	@Transactional(readOnly = true)
-	private Specification<Estabelecimento> pessoaIdEquals(final Long pessoaId)
-	{
-		return new Specification<Estabelecimento>()
-		{
-			@Override
-			public Predicate toPredicate(Root<Estabelecimento> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)
-			{
-				return criteriaBuilder.equal(root.get("pessoaId"), pessoaId);
-			}
-		};
-	}
-	
-	@Transactional(readOnly = true)
-	private Specification<Estabelecimento> pessoaIdEqualsOrPaiPessoaIdEquals(final Long pessoaId, final Long paiPessoaId)
-	{
-		Specification<Estabelecimento> pessoaIdEqualsSpecification = pessoaIdEquals(pessoaId);
-		Specification<Estabelecimento> paiPessoaIdEqualsSpecification = new Specification<Estabelecimento>()
-		{
-			@Override
-			public Predicate toPredicate(Root<Estabelecimento> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)
-			{
-				return criteriaBuilder.equal(root.get("pai").get("pessoaId"), paiPessoaId);
-			}
-		};
-		
-		return Specifications.where(pessoaIdEqualsSpecification).or(paiPessoaIdEqualsSpecification);
-	}
-	
-	@Transactional(readOnly = true)
 	public void validateAsInsert(Estabelecimento estabelecimento)
 	{
 		validateIgnoringId(estabelecimento);
@@ -325,5 +302,34 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 				throw new HttpException(EXCEPTION_ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI, HttpStatus.NOT_ACCEPTABLE);
 			}
 		}
+	}
+	
+	@Transactional(readOnly = true)
+	private Specification<Estabelecimento> pessoaIdEquals(final Long pessoaId)
+	{
+		return new Specification<Estabelecimento>()
+		{
+			@Override
+			public Predicate toPredicate(Root<Estabelecimento> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)
+			{
+				return criteriaBuilder.equal(root.get("pessoaId"), pessoaId);
+			}
+		};
+	}
+	
+	@Transactional(readOnly = true)
+	private Specification<Estabelecimento> pessoaIdEqualsOrPaiPessoaIdEquals(final Long pessoaId, final Long paiPessoaId)
+	{
+		Specification<Estabelecimento> pessoaIdEqualsSpecification = pessoaIdEquals(pessoaId);
+		Specification<Estabelecimento> paiPessoaIdEqualsSpecification = new Specification<Estabelecimento>()
+		{
+			@Override
+			public Predicate toPredicate(Root<Estabelecimento> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)
+			{
+				return criteriaBuilder.equal(root.get("pai").get("pessoaId"), paiPessoaId);
+			}
+		};
+		
+		return Specifications.where(pessoaIdEqualsSpecification).or(paiPessoaIdEqualsSpecification);
 	}
 }

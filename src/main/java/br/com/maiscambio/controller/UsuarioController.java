@@ -1,5 +1,6 @@
 package br.com.maiscambio.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.com.maiscambio.Autenticacao;
 import br.com.maiscambio.Perfil;
+import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.service.UsuarioService;
 import br.com.maiscambio.util.HttpException;
@@ -30,10 +32,23 @@ public class UsuarioController extends BaseController
 	@Autenticacao({ @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
 	public View index()
 	{
+		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
+		Long pessoaId = estabelecimento != null ? estabelecimento.getPessoaId() : null;
+		Long paiPessoaId = estabelecimento != null ? estabelecimento.getPai() != null ? estabelecimento.getPai().getPessoaId() : null : null;
+		
 		View view = view("full", "usuario", "Novo usuário");
 		view.addObject("perfis", getUsuarioService().getPerfisAsStringList());
 		view.addObject("status", getUsuarioService().getStatusAsStringList());
-		view.addObject("estabelecimentos", getEstabelecimentoService().findAllSortedAscByNomeFantasia());
+		view.addObject("showEstabelecimento", paiPessoaId == null);
+		
+		if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN))
+		{
+			view.addObject("estabelecimentos", getEstabelecimentoService().findAllSortedAscByNomeFantasia());
+		}
+		else
+		{
+			view.addObject("estabelecimentos", getEstabelecimentoService().findAllSortedAscByNomeFantasia(pessoaId, pessoaId));
+		}
 		
 		return view;
 	}
@@ -43,6 +58,10 @@ public class UsuarioController extends BaseController
 	@Autenticacao({ @Perfil({ Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA, Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA }), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
 	public View edit(@PathVariable Long usuarioId)
 	{
+		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
+		Long pessoaId = estabelecimento != null ? estabelecimento.getPessoaId() : null;
+		Long paiPessoaId = estabelecimento != null ? estabelecimento.getPai() != null ? estabelecimento.getPai().getPessoaId() : null : null;
+		
 		Usuario usuario = getUsuarioService().findOne(usuarioId);
 		
 		if(usuario == null)
@@ -50,18 +69,35 @@ public class UsuarioController extends BaseController
 			throw new HttpException(UsuarioService.EXCEPTION_USUARIO_NOT_FOUND, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
+		boolean canEdit = canEdit(usuario);
+		
+		if(!canEdit)
+		{
+			throw new HttpException(UsuarioService.EXCEPTION_USUARIO_NOT_FOUND, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
 		View view = view("full", "usuario", "Detalhes do usuário");
 		view.addObject("usuario", usuario);
+		view.addObject("readonly", !canEdit);
 		view.addObject("perfis", getUsuarioService().getPerfisAsStringList());
 		view.addObject("status", getUsuarioService().getStatusAsStringList());
-		view.addObject("estabelecimentos", getEstabelecimentoService().findAllSortedAscByNomeFantasia());
+		view.addObject("showEstabelecimento", paiPessoaId == null);
+		
+		if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN))
+		{
+			view.addObject("estabelecimentos", getEstabelecimentoService().findAllSortedAscByNomeFantasia());
+		}
+		else
+		{
+			view.addObject("estabelecimentos", getEstabelecimentoService().findAllSortedAscByNomeFantasia(pessoaId, pessoaId));
+		}
 		
 		return view;
 	}
 	
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	@Autenticacao({ @Perfil(Usuario.Perfil.ADMIN), @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
+	@Autenticacao({ @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
 	public View list()
 	{
 		return view("full", "usuario_grid", "Buscar usuário");
@@ -69,12 +105,22 @@ public class UsuarioController extends BaseController
 	
 	@Transactional(readOnly = true)
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
-	@Autenticacao({ @Perfil(Usuario.Perfil.ADMIN), @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
+	@Autenticacao({ @Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_LEITURA), @Perfil(Usuario.Perfil.ESTABELECIMENTO_LEITURA) })
 	public @ResponseBody Page<Map<String, Object>> findAll()
 	{
+		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
+		Long pessoaId = estabelecimento != null ? estabelecimento.getPessoaId() : null;
+		
 		RepositoryQuery<Usuario> repositoryQuery = getRepositoryQuery(Usuario.class);
 		
-		return getUsuarioService().findAll(repositoryQuery.toCustomRepositorySelector(), repositoryQuery.toSpecification(), repositoryQuery.toPageable());
+		if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN))
+		{
+			return getUsuarioService().findAll(repositoryQuery.toCustomRepositorySelector(), repositoryQuery.toSpecification(), repositoryQuery.toPageable());
+		}
+		else
+		{
+			return getUsuarioService().findAll(repositoryQuery.toCustomRepositorySelector(), repositoryQuery.toSpecification(), repositoryQuery.toPageable(), pessoaId, pessoaId);
+		}
 	}
 	
 	@Transactional
@@ -97,6 +143,8 @@ public class UsuarioController extends BaseController
 	@Autenticacao(@Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA))
 	public @ResponseBody Usuario save(Usuario usuario)
 	{
+		validateAndFixForSaving(usuario);
+		
 		return getUsuarioService().saveAsInsertByEstabelecimento(usuario, true);
 	}
 	
@@ -105,11 +153,16 @@ public class UsuarioController extends BaseController
 	@Autenticacao(@Perfil(Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA))
 	public @ResponseBody Usuario save(@PathVariable Long usuarioId, Usuario usuario)
 	{
-		authenticateByUsuarioId(getUsuarioService().getFromRequest(getRequest()).getUsuarioId());
+		validateAndFixForSaving(usuario);
 		
 		Usuario foundUsuario = getUsuarioService().findOne(usuarioId);
 		
 		if(foundUsuario == null)
+		{
+			throw new HttpException(UsuarioService.EXCEPTION_USUARIO_NOT_FOUND, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(!canEdit(foundUsuario))
 		{
 			throw new HttpException(UsuarioService.EXCEPTION_USUARIO_NOT_FOUND, HttpStatus.NOT_ACCEPTABLE);
 		}
@@ -120,7 +173,14 @@ public class UsuarioController extends BaseController
 		{
 			usuario.setSenha(foundUsuario.getSenha());
 			
-			getUsuarioService().saveAsUpdateByEstabelecimento(usuarioId, usuario, false);
+			if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN))
+			{
+				getUsuarioService().saveAsUpdate(usuarioId, usuario, false);
+			}
+			else
+			{
+				getUsuarioService().saveAsUpdateByEstabelecimento(usuarioId, usuario, false);
+			}
 			
 			if(getUsuarioService().getFromRequest(getRequest()).getUsuarioId().equals(usuarioId))
 			{
@@ -129,7 +189,14 @@ public class UsuarioController extends BaseController
 		}
 		else
 		{
-			getUsuarioService().saveAsUpdateByEstabelecimento(usuarioId, usuario, true);
+			if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN))
+			{
+				getUsuarioService().saveAsUpdate(usuarioId, usuario, true);
+			}
+			else
+			{
+				getUsuarioService().saveAsUpdateByEstabelecimento(usuarioId, usuario, true);
+			}
 			
 			if(getUsuarioService().getFromRequest(getRequest()).getUsuarioId().equals(usuarioId))
 			{
@@ -153,6 +220,66 @@ public class UsuarioController extends BaseController
 		else
 		{
 			getUsuarioService().delete(usuarioId);
+		}
+	}
+	
+	@Transactional(readOnly = true)
+	private void validateAndFixForSaving(Usuario usuario)
+	{
+		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
+		Long pessoaId = estabelecimento != null ? estabelecimento.getPessoaId() : null;
+		
+		if(estabelecimento != null)
+		{
+			if(estabelecimento.getPai() != null)
+			{
+				usuario.setPessoa(estabelecimento);
+			}
+			
+			List<Estabelecimento> availableEstabelecimentos = getEstabelecimentoService().findAllSortedAscByNomeFantasia(pessoaId, pessoaId);
+			
+			if(usuario.getPessoa() != null)
+			{
+				boolean contains = false;
+				
+				if(availableEstabelecimentos != null)
+				{
+					for(Estabelecimento availableEstabelecimento : availableEstabelecimentos)
+					{
+						if(usuario.getPessoa().getPessoaId().equals(availableEstabelecimento.getPessoaId()))
+						{
+							contains = true;
+							
+							break;
+						}
+					}
+				}
+				
+				if(!contains)
+				{
+					throw new HttpException(UsuarioService.EXCEPTION_USUARIO_PESSOA_INVALID, HttpStatus.NOT_ACCEPTABLE);
+				}
+			}
+			
+		}
+	}
+	
+	private boolean canEdit(Usuario usuario)
+	{
+		if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN))
+		{
+			return true;
+		}
+		else
+		{
+			if(usuario.getPessoa() != null)
+			{
+				return canEdit(usuario.getPessoa().getPessoaId(), Usuario.Perfil.ESTABELECIMENTO_USUARIO_ESCRITA);
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 }
