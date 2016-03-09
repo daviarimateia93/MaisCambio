@@ -677,6 +677,11 @@ $(function()
 			$this.insertAfter(selector);
 		    }
 		}
+		
+		if($this.is('[autofocus]') && !isMobile())
+		{
+		    $this.focus();
+		}
 	    }
 	});
 	
