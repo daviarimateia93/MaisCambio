@@ -5,8 +5,6 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +18,6 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -71,15 +68,6 @@ public class PersistenceConfig
 	public HibernateExceptionTranslator hibernateExceptionTranslator()
 	{
 		return new HibernateExceptionTranslator();
-	}
-	
-	@Bean
-	public FactoryBean<SessionFactory> sessionFactory()
-	{
-		HibernateJpaSessionFactoryBean hibernateJpaSessionFactoryBean = new HibernateJpaSessionFactoryBean();
-		hibernateJpaSessionFactoryBean.setEntityManagerFactory(entityManagerFactory().getObject());
-		
-		return hibernateJpaSessionFactoryBean;
 	}
 	
 	@Bean

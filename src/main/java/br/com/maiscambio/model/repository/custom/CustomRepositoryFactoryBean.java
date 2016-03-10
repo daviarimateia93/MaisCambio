@@ -32,14 +32,13 @@ public class CustomRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I ext
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		protected Object getTargetRepository(RepositoryMetadata metadata)
+		protected Object getTargetRepository(RepositoryMetadata repositoryMetadata)
 		{
-			
-			return new CustomRepositoryImpl<T, I>((Class<T>) metadata.getDomainType(), entityManager);
+			return new CustomRepositoryImpl<T, I>((Class<T>) repositoryMetadata.getDomainType(), entityManager);
 		}
 		
 		@Override
-		protected Class<?> getRepositoryBaseClass(RepositoryMetadata metadata)
+		protected Class<?> getRepositoryBaseClass(RepositoryMetadata repositoryMetadata)
 		{
 			return CustomRepositoryImpl.class;
 		}
