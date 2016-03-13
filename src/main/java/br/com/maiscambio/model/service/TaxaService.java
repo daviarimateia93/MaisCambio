@@ -31,6 +31,7 @@ public class TaxaService implements BaseEntityService<Taxa, Long>
 	public static final String EXCEPTION_TAXA_VALOR_CARTAO_MUST_BE_BIGGER_THAN_ZERO = "EXCEPTION_TAXA_VALOR_CARTAO_MUST_BE_BIGGER_THAN_ZERO";
 	public static final String EXCEPTION_TAXA_DATA_MUST_NOT_BE_NULL = "TAXA_DATA_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_TAXA_STATUW_MUST_NOT_BE_NULL = "TAXA_STATUW_MUST_NOT_BE_NULL";
+	public static final String EXCEPTION_TAXA_FINALIDADE_MUST_NOT_BE_NULL = "TAXA_FINALIDADE_MUST_NOT_BE_NULL";
 	
 	@Autowired
 	private TaxaRepository taxaRepository;
@@ -104,6 +105,11 @@ public class TaxaService implements BaseEntityService<Taxa, Long>
 		if(taxa.getStatus() == null)
 		{
 			throw new HttpException(EXCEPTION_TAXA_STATUW_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(taxa.getFinalidade() == null)
+		{
+			throw new HttpException(EXCEPTION_TAXA_FINALIDADE_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	

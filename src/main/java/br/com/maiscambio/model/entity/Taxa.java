@@ -3,6 +3,15 @@ package br.com.maiscambio.model.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TAXA")
 public class Taxa extends BaseEntity
 {
 	private static final long serialVersionUID = -5084058008269562708L;
@@ -17,6 +26,14 @@ public class Taxa extends BaseEntity
 		ATIVO, INATIVO
 	}
 	
+	public static enum Finalidade
+	{
+		COMPRA, VENDA
+	}
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID_TAXA")
 	private Long taxaId;
 	private Estabelecimento estabelecimento;
 	private BigDecimal valorEspecie;
@@ -24,6 +41,7 @@ public class Taxa extends BaseEntity
 	private Moeda moeda;
 	private Date data;
 	private Status status;
+	private Finalidade finalidade;
 	
 	public Long getTaxaId()
 	{
@@ -93,5 +111,15 @@ public class Taxa extends BaseEntity
 	public void setStatus(Status status)
 	{
 		this.status = status;
+	}
+	
+	public Finalidade getFinalidade()
+	{
+		return finalidade;
+	}
+	
+	public void setFinalidade(Finalidade finalidade)
+	{
+		this.finalidade = finalidade;
 	}
 }
