@@ -18,6 +18,7 @@ import br.com.maiscambio.util.StringHelper;
 public class PessoaService implements BaseService
 {
 	public static final String EXCEPTION_PESSOA_CNPJ_CPF_ID_ESTRANGEIRO_BOTH_MUST_NOT_BE_EMPTY = "PESSOA_CNPJ_CPF_ID_ESTRANGEIRO_BOTH_MUST_NOT_BE_EMPTY";
+	public static final String EXCEPTION_PESSOA_CNPJ_CPF_ID_ESTRANGEIRO_BOTH_MUST_NOT_BE_FILLED = "PESSOA_CNPJ_CPF_ID_ESTRANGEIRO_BOTH_MUST_NOT_BE_FILLED";
 	public static final String EXCEPTION_PESSOA_CNPJ_MUST_BE_ONLY_NUMBERS_AND_14_CHARACTERS = "PESSOA_CNPJ_MUST_BE_ONLY_NUMBERS_AND_14_CHARACTERS";
 	public static final String EXCEPTION_PESSOA_CNPJ_IS_INVALID = "PESSOA_CNPJ_IS_INVALID";
 	public static final String EXCEPTION_PESSOA_CPF_MUST_BE_ONLY_NUMBERS_AND_11_CHARACTERS = "PESSOA_CPF_MUST_BE_ONLY_NUMBERS_AND_11_CHARACTERS";
@@ -179,6 +180,21 @@ public class PessoaService implements BaseService
 		if(StringHelper.isBlank(pessoa.getCnpj()) && StringHelper.isBlank(pessoa.getCpf()) && StringHelper.isBlank(pessoa.getIdEstrangeiro()))
 		{
 			throw new HttpException(EXCEPTION_PESSOA_CNPJ_CPF_ID_ESTRANGEIRO_BOTH_MUST_NOT_BE_EMPTY, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(!StringHelper.isBlank(pessoa.getCnpj()) && (!StringHelper.isBlank(pessoa.getCpf()) || !StringHelper.isBlank(pessoa.getIdEstrangeiro())))
+		{
+			throw new HttpException(EXCEPTION_PESSOA_CNPJ_CPF_ID_ESTRANGEIRO_BOTH_MUST_NOT_BE_FILLED, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(!StringHelper.isBlank(pessoa.getCpf()) && (!StringHelper.isBlank(pessoa.getCnpj()) || !StringHelper.isBlank(pessoa.getIdEstrangeiro())))
+		{
+			throw new HttpException(EXCEPTION_PESSOA_CNPJ_CPF_ID_ESTRANGEIRO_BOTH_MUST_NOT_BE_FILLED, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(!StringHelper.isBlank(pessoa.getIdEstrangeiro()) && (!StringHelper.isBlank(pessoa.getCnpj()) || !StringHelper.isBlank(pessoa.getCpf())))
+		{
+			throw new HttpException(EXCEPTION_PESSOA_CNPJ_CPF_ID_ESTRANGEIRO_BOTH_MUST_NOT_BE_FILLED, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 		if(pessoa.getCnpj() != null)

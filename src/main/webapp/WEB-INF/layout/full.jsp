@@ -194,5 +194,69 @@
 		<div class="container">
 			<c:import url="${__partialViewFullName__}"></c:import>
 		</div> <!-- /container -->
+		
+		<c:if test="${sessionUsuario != null}">
+			<!-- Light Blue Header Model -->
+	        <div class="modal fade" id="modalExternalLink" data-backdrop="static" data-keyboard="false" role="dialog">
+	            <div class="modal-dialog">
+	                <div class="modal-content">
+	                    <div class="modal-header modal-header-light-blue">
+	                        <h4 class="modal-title">Ops! Link externo</h4>
+	                    </div>
+	                    <div class="modal-body">
+	                    	<p>Algum link externo está tentando ser aberto, caso deseje, clique em continuar.</p>
+	                    	<p>
+	                    		<small>
+	                    			<i class="link"></i>
+	                    		</small>
+	                    	</p>
+	                    </div>
+	                    <div class="modal-footer">
+	                    	<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+	                        <a href="javascript: void(0);" target="_blank" class="continue btn btn-blue">Continuar</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <!-- End Light Blue Header Modal -->
+	       	
+	       	<!-- Light Blue Header Model -->
+	        <div class="modal fade" id="modalAutenticacao" data-backdrop="static" data-keyboard="false" role="dialog">
+	        	<form method="post" action="${__contextPath__}/autenticacao/login?doNotRedirect=true" class="form-horizontal" role="form">
+		            <div class="modal-dialog">
+		                <div class="modal-content">
+		                    <div class="modal-header modal-header-light-blue">
+		                        <h4 class="modal-title">Ops! Sua sessão expirou</h4>
+		                    </div>
+		                    <div class="modal-body">
+		                    	<div class="form-group">
+					                <label for="iptUsuarioPaiPessoaId" class="col-sm-2 control-label">Matriz: </label>
+					                <div class="col-sm-10">
+					                    <input type="text" id="iptUsuarioPaiPessoaId" class="form-control" name="matriz" placeholder="Matriz" value="${fn:escapeXml((sessionMatriz))}" readonly>
+					                </div>
+					            </div>
+					            <div class="form-group">
+					                <label for="iptUsuarioApelido" class="col-sm-2 control-label">Usuário: </label>
+					                <div class="col-sm-10">
+					                    <input type="text" id="iptUsuarioApelido" class="form-control" name="apelido" placeholder="Usuário" value="${fn:escapeXml((sessionUsuario.apelido))}" readonly>
+					                </div>
+					            </div>
+					            <div class="form-group">
+					                <label for="iptUsuarioSenha" class="col-sm-2 control-label">Senha: </label>
+					                <div class="col-sm-10">
+					                    <input type="password" id="iptUsuarioSenha" class="form-control" name="senha" placeholder="Senha">
+					                </div>
+					            </div>
+		                    </div>
+		                    <div class="modal-footer">
+		                    	<input type="hidden" class="form-control" name="estabelecimentoPessoaId" value="${fn:escapeXml((sessionEstabelecimentoPessoaId))}">
+		                        <button type="submit" class="btn btn-blue">Entrar</button>
+		                    </div>
+		                </div>
+		            </div>
+	            </form>
+	        </div>
+	        <!-- End Light Blue Header Modal -->
+		</c:if>
 	</body>
 </html>

@@ -37,6 +37,7 @@ public class UsuarioController extends BaseController
 		Long paiPessoaId = estabelecimento != null ? estabelecimento.getPai() != null ? estabelecimento.getPai().getPessoaId() : null : null;
 		
 		View view = view("full", "usuario", "Novo usuário");
+		view.addObject("readonly", false);
 		view.addObject("perfis", getUsuarioService().getPerfisAsStringList());
 		view.addObject("status", getUsuarioService().getStatusAsStringList());
 		view.addObject("showEstabelecimento", paiPessoaId == null);
