@@ -680,7 +680,10 @@ $(function()
 		
 		if($this.is('[autofocus]') && !isMobile())
 		{
-		    $this.focus();
+		    setTimeout(function()
+		    {
+			$this.focus();
+		    }, 300);
 		}
 	    }
 	});
