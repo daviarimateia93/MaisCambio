@@ -5,10 +5,21 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.maiscambio.util.DateHelper;
 
 @Entity
 @Table(name = "TAXA")
@@ -35,12 +46,32 @@ public class Taxa extends BaseEntity
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID_TAXA")
 	private Long taxaId;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "ID_PESSOA")
 	private Estabelecimento estabelecimento;
+	
+	@Column(name = "VALOR_ESPECIE")
 	private BigDecimal valorEspecie;
+	
+	@Column(name = "VALOR_CARTAO")
 	private BigDecimal valorCartao;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "MOEDA")
 	private Moeda moeda;
+	
+	@DateTimeFormat(pattern = DateHelper.DATE_TIME_FORMAT_PATTERN)
+	@Column(name = "DATA")
 	private Date data;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "STATUS")
 	private Status status;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "FINALIDADE")
 	private Finalidade finalidade;
 	
 	public Long getTaxaId()
