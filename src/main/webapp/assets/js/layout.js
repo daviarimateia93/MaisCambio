@@ -678,19 +678,13 @@ $(function()
 		    }
 		}
 		
-		var $thisIsAutofocus = $this.is('[autofocus]');
-		var $thisHasAutofocus = $this.find('[autofocus]').length > 0;
-		
-		if($thisIsAutofocus || $thisHasAutofocus && !isMobile())
+		if($this.is('[autofocus]'))
 		{
-		    if($thisIsAutofocus)
-		    {
-			$this.focus();
-		    }
-		    else if($thisHasAutofocus)
-		    {
-			$this.find('[autofocus]').focus();
-		    }
+		    $this.focus();
+		}
+		else if($this.find('[autofocus]').length > 0)
+		{
+		    $this.find('[autofocus]').focus();
 		}
 	    }
 	});
