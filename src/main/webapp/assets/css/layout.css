@@ -59,6 +59,50 @@ body {
 		padding-bottom: 20px;
 	}
 }
+@media (max-width: 992px) {
+  .form-horizontal .control-label {
+	padding-top: 7px;
+	margin-bottom: 0;
+	text-align: right;
+  }
+  .form-group {
+    margin-bottom: 0;
+  }
+  .form-group *[class^=col-md] {
+    margin-bottom: 15px;
+  }
+  .form-group *[class^=col-md] input[type="text"],
+  .form-group *[class^=col-md] input[type="password"], 
+  .form-group *[class^=col-md] select, 
+  .form-group *[class^=col-md] textarea {
+    margin-top: -10px;
+  }
+}
+.form-control {
+  border: 1px solid #e8e8e8;
+  height: 30px;
+  webkit-box-shadow: none;
+  box-shadow: none;
+  padding: 0 6px;
+}
+.form-control[readonly] {
+  background: #fff;
+}
+.form-control[disabled],  
+fieldset[disabled] .form-control {
+  background: #fafafa;
+}
+@media (max-width: 768px) {
+  form .btn {
+	display: block;
+	width: 100%;
+	float: none !important;
+	margin: 0 0 15px;
+  }
+  form .btn .glyphicon, form .btn .fa {
+	display: none;
+  }
+}
 .jumbotron {
 	background-color: rgba(255, 255, 255, 0.7);
 }
