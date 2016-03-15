@@ -18,7 +18,7 @@ import br.com.maiscambio.util.HttpException;
 @Service
 public class GatewayService implements BaseService
 {
-	public Object intercept(String action, String payload, HttpServletRequest request)
+	public String intercept(String action, String payload, HttpServletRequest request)
 	{
 		HttpURLConnection httpURLConnection = null;
 		
