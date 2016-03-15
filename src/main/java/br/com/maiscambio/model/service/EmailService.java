@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import br.com.maiscambio.util.Constants;
 
 @Service
-public class EmailService
+public class EmailService implements BaseService
 {
 	private static class Email
 	{
@@ -53,13 +53,13 @@ public class EmailService
 					}
 					catch(MailException | MessagingException exception)
 					{
-					
+						
 					}
 				}
 			}
 			catch(InterruptedException interruptedException)
 			{
-			
+				
 			}
 		}
 	};

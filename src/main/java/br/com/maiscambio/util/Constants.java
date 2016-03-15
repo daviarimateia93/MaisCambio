@@ -77,6 +77,8 @@ public class Constants
 	public static final String TEXT_HTML_CODE_EQUALS = "&#61;";
 	
 	// content types
+	public static final String TEXT_CONTENT_LENGTH = "Content-Length";
+	public static final String TEXT_CONTENT_TYPE = "Content-Type";
 	public static final String TEXT_CONTENT_TYPE_IMAGE_JPEG = "IMAGE/JPEG";
 	public static final String TEXT_CONTENT_TYPE_IMAGE_JPG = "IMAGE/JPG";
 	public static final String TEXT_CONTENT_TYPE_IMAGE_JPE = "IMAGE/JPE";

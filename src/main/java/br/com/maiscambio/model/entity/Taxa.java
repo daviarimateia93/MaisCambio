@@ -29,7 +29,7 @@ public class Taxa extends BaseEntity
 	
 	public static enum Moeda
 	{
-		USD, EUR, GBP, CAD, AUD, CLP, ARS, CHF, ZAR, MXN, UYU, JPY
+		USD, EUR, GBP, CAD, AUD, CLP, ARS, CHF, ZAR, MXN, UYU, JPY, NZD
 	}
 	
 	public static enum Status
