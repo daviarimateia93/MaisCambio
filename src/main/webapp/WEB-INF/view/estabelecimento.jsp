@@ -8,9 +8,7 @@
 
 <c:set var="editAction" value="/${estabelecimento != null ? estabelecimento.pessoaId : ''}" scope="request" />
 
-<c:if test="${estabelecimento != null}">
-	<script>var PESSOA_ID = ${json:toString(estabelecimento.pessoaId)};</script>
-</c:if>
+<script>var PESSOA_ID = ${json:toString(estabelecimento.pessoaId)};</script>
 
 <c:choose>
 	<c:when test="${success}">
