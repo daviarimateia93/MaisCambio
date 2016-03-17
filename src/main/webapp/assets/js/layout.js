@@ -70,6 +70,49 @@ $(function()
 });
 // End jQuery extensions
 
+// Data-Form
+$(document).on('click', '[data-form-submit]', function(e)
+{
+    e.stopPropagation();
+    e.preventDefault();
+    
+    var $submit = $(this);
+    var $form = $submit.parents('[data-form]');
+    
+    var $newForm = $('<form />');
+    $newForm.append($form.clone(true));
+    $newForm.attr('action', $form.data('formAction'));
+    $newForm.attr('method', $form.data('formMethod'));
+    
+    $newForm.find('select').each(function()
+    {
+	$(this).val($form.find('#' + $(this).attr('id')).val()).change();
+    });
+    
+    $newForm.find('input, textarea, select').each(function()
+    {
+	var $this = $(this);
+	
+	if($this.prop('tagName') === 'INPUT' && $this.is('[type="radio"]'))
+	{
+	    if(!$this.is(':checked'))
+	    {
+		$this.remove();
+	    }
+	}
+	else if($.trim($this.val()) == '')
+	{
+	    $this.remove();
+	}
+    });
+    
+    $('body').append($newForm);
+    
+    $newForm.submit();
+    $newForm.remove();
+});
+// End Data-Form
+
 // Form Handler
 $(document).on('submit', 'form', function(e)
 {

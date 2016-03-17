@@ -52,6 +52,7 @@ public class UsuarioService implements GlobalBaseEntityService<Usuario, Long>
 	public static final String EXCEPTION_USUARIO_MUST_NOT_CONTAINS_DUPLICATED_PERFIS = "USUARIO_MUST_NOT_CONTAINS_DUPLICATED_PERFIS";
 	public static final String EXCEPTION_USUARIO_PESSOA_MUST_BE_ESTABELECIMENTO = "USUARIO_PESSOA_MUST_BE_ESTABELECIMENTO";
 	public static final String EXCEPTION_USUARIO_PESSOA_INVALID = "USUARIO_PESSOA_INVALID";
+	public static final String EXCEPTION_USUARIO_MUST_NOT_HAS_ADMIN_PERFIL = "USUARIO_MUST_NOT_HAS_ADMIN_PERFIL";
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;

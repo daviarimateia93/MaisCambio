@@ -11,17 +11,41 @@ body {
 .width-30 {
 	width: 30px !important;
 }
+.padding-7 {
+	padding: 7px !important;
+}
 .margin-bottom-0 {
 	margin-bottom: 0 !important;
 }
 .margin-bottom-15 {
 	margin-bottom: 15px !important;
 }
+.margin-top-10 {
+	margin-top: 10px !important;
+}
 .margin-top-7 {
 	margin-top: 7px !important;
 }
+.margin-top-11 {
+	margin-top: 11px !important;
+}
 .margin-top-40 {
 	margin-top: 40px !important;
+}
+.margin-left-10 {
+	margin-left: 10px !important;
+}
+.margin-right-7 {
+	margin-right: 7px !important;
+}
+.position-relative {
+	position: relative !important;
+}
+.top-3-negative {
+	top: -3px !important;
+}
+.font-size-70-percent {
+	font-size: 70%;
 }
 .navbar-default, .navbar-default .dropdown-menu {
 	background-color: #2ecc71;

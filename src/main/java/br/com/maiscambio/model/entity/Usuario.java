@@ -31,7 +31,7 @@ public class Usuario extends BaseEntity
 	
 	public static enum Perfil
 	{
-		ADMIN, ESTABELECIMENTO_ESCRITA, ESTABELECIMENTO_LEITURA, ESTABELECIMENTO_DASHBOARD_LEITURA, ESTABELECIMENTO_USUARIO_ESCRITA, ESTABELECIMENTO_USUARIO_LEITURA
+		ADMIN, ESTABELECIMENTO_ESCRITA, ESTABELECIMENTO_LEITURA, ESTABELECIMENTO_DASHBOARD_LEITURA, ESTABELECIMENTO_TAXA_ESCRITA, ESTABELECIMENTO_TAXA_LEITURA, ESTABELECIMENTO_USUARIO_ESCRITA, ESTABELECIMENTO_USUARIO_LEITURA
 	}
 	
 	private static final long serialVersionUID = 5785151691588649542L;
@@ -56,7 +56,7 @@ public class Usuario extends BaseEntity
 	private Status status;
 	
 	@ElementCollection(targetClass = Perfil.class, fetch = FetchType.EAGER)
-	@JoinTable(name = "USUARIO_USUARIO_PERFIL", joinColumns = @JoinColumn(name = "ID_USUARIO") )
+	@JoinTable(name = "USUARIO_USUARIO_PERFIL", joinColumns = @JoinColumn(name = "ID_USUARIO"))
 	@Enumerated(EnumType.STRING)
 	@Column(name = "PERFIL")
 	private List<Perfil> perfis = new ArrayList<>();

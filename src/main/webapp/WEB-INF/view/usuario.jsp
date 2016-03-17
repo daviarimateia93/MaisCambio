@@ -74,11 +74,13 @@
 				</label>
 			</div>
 			<c:forEach items="${perfis}" var="usuarioPerfil">
-				<div class="mg-left-15 checkbox">
-					<label>
-			    		<input type="checkbox" name="perfis" value="${fn:escapeXml((usuarioPerfil))}" ${usuario != null ? u:hasPerfilForUsuario(usuario, usuarioPerfil) ? 'checked' : '' : ''} ${readonly ? 'disabled' : ''}> <span data-replace="usuario.perfis.${fn:escapeXml((usuarioPerfil))}">${fn:escapeXml((usuarioPerfil))}</span>
-					</label>
-				</div>
+				<c:if test="${usuarioPerfil == 'ADMIN' ? u:hasPerfilForRequest(pageContext.request, 'ADMIN') : true}">
+					<div class="mg-left-15 checkbox">
+						<label>
+				    		<input type="checkbox" name="perfis" value="${fn:escapeXml((usuarioPerfil))}" ${usuario != null ? u:hasPerfilForUsuario(usuario, usuarioPerfil) ? 'checked' : '' : ''} ${readonly ? 'disabled' : ''}> <span data-replace="usuario.perfis.${fn:escapeXml((usuarioPerfil))}">${fn:escapeXml((usuarioPerfil))}</span>
+						</label>
+					</div>
+				</c:if>
 			</c:forEach>
 		</fieldset>
         <c:if test="${!readonly}">

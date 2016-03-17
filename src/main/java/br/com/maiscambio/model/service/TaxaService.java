@@ -1,6 +1,7 @@
 package br.com.maiscambio.model.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -11,13 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Taxa;
 import br.com.maiscambio.model.repository.TaxaRepository;
 import br.com.maiscambio.util.HttpException;
+import br.com.maiscambio.util.ReflectionHelper;
 
+@Service
 public class TaxaService implements BaseEntityService<Taxa, Long>
 {
 	public static final String EXCEPTION_TAXA_MUST_NOT_BE_NULL = "EXCEPTION_TAXA_MUST_NOT_BE_NULL";
@@ -137,5 +141,12 @@ public class TaxaService implements BaseEntityService<Taxa, Long>
 				return criteriaBuilder.equal(root.get("taxaId"), taxaId);
 			}
 		};
+	}
+	
+	public List<String> getMoedasAsStringList()
+	{
+		List<String> moedas = ReflectionHelper.fieldsToNames(ReflectionHelper.getEnumFieldsConstants(Taxa.Moeda.class));
+		
+		return moedas;
 	}
 }

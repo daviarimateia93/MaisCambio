@@ -230,6 +230,17 @@ public class UsuarioController extends BaseController
 		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
 		Long pessoaId = estabelecimento != null ? estabelecimento.getPessoaId() : null;
 		
+		if(usuario.getPerfis() != null)
+		{
+			for(Usuario.Perfil perfil : usuario.getPerfis())
+			{
+				if(perfil == Usuario.Perfil.ADMIN && usuario.getPessoa() != null)
+				{
+					throw new HttpException(UsuarioService.EXCEPTION_USUARIO_MUST_NOT_HAS_ADMIN_PERFIL, HttpStatus.NOT_ACCEPTABLE);
+				}
+			}
+		}
+		
 		if(estabelecimento != null)
 		{
 			if(estabelecimento.getPai() != null)
