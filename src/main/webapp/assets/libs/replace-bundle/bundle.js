@@ -15,6 +15,12 @@ Utils.replace({
 	    INATIVO: 'Inativo'
 	}
     },
+    taxa: {
+	finalidade: {
+	    COMPRA: 'Compra',
+	    VENDA: 'Venda'
+	}
+    },
     responses: {
 
     }

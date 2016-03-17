@@ -29,10 +29,6 @@ public class DashboardController extends BaseController
 		{
 			view.addObject("estabelecimentos", getEstabelecimentoService().findByUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(Usuario.Status.INATIVO));
 		}
-		else
-		{
-			view.addObject("moedas", getTaxaService().getMoedasAsStringList());
-		}
 		
 		return view;
 	}
