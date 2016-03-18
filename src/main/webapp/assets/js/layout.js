@@ -81,6 +81,7 @@ $(document).on('click', '[data-form-submit]', function(e)
     
     var $newForm = $('<form />');
     $newForm.append($form.clone(true));
+    $newForm.attr('id', $form.data('formId'));
     $newForm.attr('action', $form.data('formAction'));
     $newForm.attr('method', $form.data('formMethod'));
     

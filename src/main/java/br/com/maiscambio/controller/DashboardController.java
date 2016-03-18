@@ -1,5 +1,9 @@
 package br.com.maiscambio.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.maiscambio.Autenticacao;
 import br.com.maiscambio.Perfil;
+import br.com.maiscambio.model.entity.Estabelecimento;
+import br.com.maiscambio.model.entity.Taxa;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.service.UsuarioService;
 import br.com.maiscambio.util.View;
@@ -22,6 +28,7 @@ public class DashboardController extends BaseController
 	public View index(@RequestParam String selectedFormattedDate)
 	{
 		Usuario usuario = getUsuarioService().getFromRequest(getRequest());
+		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
 		
 		View view = view("full", "dashboard", "Dashboard");
 		
@@ -30,9 +37,22 @@ public class DashboardController extends BaseController
 			view.addObject("estabelecimentos", getEstabelecimentoService().findByUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(Usuario.Status.INATIVO));
 		}
 		
-		if(UsuarioService.hasPerfil(usuario, Usuario.Perfil.ESTABELECIMENTO_TAXA_LEITURA))
+		if(UsuarioService.hasPerfil(usuario, Usuario.Perfil.ESTABELECIMENTO_TAXA_LEITURA) && estabelecimento != null)
 		{
-			view.addObject("moedas", getTaxaService().getMoedasAsStringList());
+			List<String> moedas = getTaxaService().getMoedasAsStringList();
+			
+			Map<String, Taxa> taxasVenda = new HashMap<>();
+			Map<String, Taxa> taxasCompra = new HashMap<>();
+			
+			for(String moeda : moedas)
+			{
+				taxasVenda.put(moeda, getTaxaService().findLastByMoedaAndFinalidade(estabelecimento.getPessoaId(), Taxa.Moeda.valueOf(moeda), Taxa.Finalidade.VENDA));
+				taxasCompra.put(moeda, getTaxaService().findLastByMoedaAndFinalidade(estabelecimento.getPessoaId(), Taxa.Moeda.valueOf(moeda), Taxa.Finalidade.COMPRA));
+			}
+			
+			view.addObject("moedas", moedas);
+			view.addObject("taxasVenda", taxasVenda);
+			view.addObject("taxasCompra", taxasCompra);
 		}
 		
 		return view;

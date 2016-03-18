@@ -50,13 +50,13 @@
 			<fieldset>
 				<legend>
 					<div class="pull-left">Bem vindo, <strong>${fn:escapeXml((sessionUsuario.apelido))}</strong>.</div>
-					<div class="pull-right"><span data-format="date" data-format-value="${fn:escapeXml((d:formatWithPattern(currentDate, 'yyyy-MM-dd\'T\'HH:mm:ss.SSSZ')))}" data-date-mask="DD/MM/YY HH:mm"></span></div>
+					<div class="pull-right"><small><span data-format="date" data-format-value="${fn:escapeXml((d:formatWithPattern(currentDate, 'yyyy-MM-dd\'T\'HH:mm:ss.SSSZ')))}" data-date-mask="DD/MM/YYYY"></span></small></div>
 					<div class="clearfix"></div>
 				</legend>
 			</fieldset>
 		</div>
 		<c:if test="${u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_TAXA_LEITURA')}">
-			<c:set var="taxaReadonly" value="${u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_TAXA_ESCRITA')}" />
+			<c:set var="taxaReadonly" value="${!u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_TAXA_ESCRITA')}" />
 			<div class="jumbotron">
 				<div>
 					<ul class="nav nav-tabs" role="tablist">
@@ -78,23 +78,31 @@
 									</thead>
 									<tbody>
 										<c:forEach items="${moedas}" var="moeda" varStatus="loop">
-											<tr data-form data-form-action="${__contextPath__}/taxa/VENDA" data-form-method="post" class="success">
+											<c:set var="taxa" value="${taxasVenda[moeda]}" />
+											<tr data-form data-form-id="taxa-form" data-form-action="${__contextPath__}/taxa/VENDA" data-form-method="post" class="success">
 												<td>
-													<input class="margin-left-10 margin-top-10" type="checkbox" />
+													<input class="margin-left-10 margin-top-10" name="status" value="ATIVO" type="checkbox" ${taxa != null ? taxa.status == 'ATIVO' ? 'checked' : '' : ''} ${taxaReadonly ? 'disabled' : ''} />
 												</td>
 												<td>
-													<input type="text" class="form-control" value="${fn:escapeXml((moeda))}" readonly />
+													<input type="text" class="form-control" name="moeda" value="${fn:escapeXml((moeda))}" readonly />
 												</td>
 												<td>
-													<input type="text" class="form-control" value="R$ 3,64" data-mask-money data-prefix="R$ " data-allow-zero="true" data-mask-money />
+													<input type="text" class="form-control" name="valorEspecie" value="${taxa.valorEspecie}" data-mask-money data-prefix="R$ " data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
 												</td>
 												<td>
-													<input type="text" class="form-control" value="R$ 3,74" data-mask-money data-prefix="R$ " data-allow-zero="true" data-mask-money />
+													<input type="text" class="form-control" name="valorCartao" value="${taxa.valorCartao}" data-mask-money data-prefix="R$ " data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
 												</td>
 												<td>
-													<a href="javascript: void(0);" data-form-submit class="margin-left-10 color-green">
-														<i class="fa fa-check fa-2x"></i>
-													</a>
+													<c:choose>
+														<c:when test="${!taxaReadonly}">
+															<a href="javascript: void(0);" data-form-submit class="margin-left-10 color-green">
+																<i class="fa fa-check fa-2x"></i>
+															</a>
+														</c:when>
+														<c:otherwise>
+															<span class="margin-left-10">-</span>
+														</c:otherwise>
+													</c:choose>
 												</td>
 											</tr>
 										</c:forEach>
@@ -116,23 +124,31 @@
 									</thead>
 									<tbody>
 										<c:forEach items="${moedas}" var="moeda" varStatus="loop">
-											<tr data-form data-form-action="${__contextPath__}/taxa/COMPRA" data-form-method="post" class="info">
+											<c:set var="taxa" value="${taxasCompra[moeda]}" />
+											<tr data-form data-form-id="taxa-form" data-form-action="${__contextPath__}/taxa/COMPRA" data-form-method="post" class="info">
 												<td>
-													<input class="margin-left-10 margin-top-10" type="checkbox" />
+													<input class="margin-left-10 margin-top-10" name="status" value="ATIVO" type="checkbox" ${taxa != null ? taxa.status == 'ATIVO' ? 'checked' : '' : ''} ${taxaReadonly ? 'disabled' : ''} />
 												</td>
 												<td>
-													<input type="text" class="form-control" value="${fn:escapeXml((moeda))}" readonly />
+													<input type="text" class="form-control" name="moeda" value="${fn:escapeXml((moeda))}" readonly />
 												</td>
 												<td>
-													<input type="text" class="form-control" value="R$ 3,64" data-mask-money data-prefix="R$ " data-allow-zero="true" data-mask-money />
+													<input type="text" class="form-control" name="valorEspecie" value="${taxa.valorEspecie}" data-mask-money data-prefix="R$ " data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
 												</td>
 												<td>
-													<input type="text" class="form-control" value="R$ 3,74" data-mask-money data-prefix="R$ " data-allow-zero="true" data-mask-money />
+													<input type="text" class="form-control" name="valorCartao" value="${taxa.valorCartao}" data-mask-money data-prefix="R$ " data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
 												</td>
 												<td>
-													<a href="javascript: void(0);" data-form-submit class="margin-left-10 color-blue">
-														<i class="fa fa-check fa-2x"></i>
-													</a>
+													<c:choose>
+														<c:when test="${!taxaReadonly}">
+															<a href="javascript: void(0);" data-form-submit class="margin-left-10 color-blue">
+																<i class="fa fa-check fa-2x"></i>
+															</a>
+														</c:when>
+														<c:otherwise>
+															<span class="margin-left-10">-</span>
+														</c:otherwise>
+													</c:choose>
 												</td>
 											</tr>
 										</c:forEach>
@@ -146,3 +162,5 @@
 		</c:if>
 	</c:otherwise>
 </c:choose>
+
+<script src="${__contextPath__}/assets/js/dashboard.js?v=${__appVersion__}"></script>

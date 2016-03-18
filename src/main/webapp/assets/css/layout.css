@@ -50,6 +50,12 @@ body {
 .font-size-70-percent {
 	font-size: 70%;
 }
+.mask-money-remove > div {
+	margin-top: -10px !important;
+}
+.mask-money-remove a, .mask-money-remove a:focus, .mask-money-remove a:hover, .mask-money-remove a:active {
+	color: #999 !important;
+}
 .navbar-default, .navbar-default .dropdown-menu {
 	background-color: #2ecc71;
     border-color: #055421;

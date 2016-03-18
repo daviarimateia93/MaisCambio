@@ -1,5 +1,7 @@
 package br.com.maiscambio.controller;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +22,12 @@ public class TaxaController extends BaseController
 	@Transactional
 	@RequestMapping(value = "/{finalidade}", method = RequestMethod.POST)
 	@Autenticacao(@Perfil(Usuario.Perfil.ESTABELECIMENTO_TAXA_ESCRITA))
-	public @ResponseBody Taxa save(@PathVariable Finalidade finalidade)
+	public @ResponseBody Taxa save(@PathVariable Finalidade finalidade, Taxa taxa)
 	{
-		return null;
+		taxa.setFinalidade(finalidade);
+		taxa.setEstabelecimento(getEstabelecimentoFromRequest());
+		taxa.setData(new Date());
+		
+		return getTaxaService().saveAsInsert(taxa);
 	}
 }

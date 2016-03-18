@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Taxa;
+import br.com.maiscambio.model.entity.Taxa.Finalidade;
+import br.com.maiscambio.model.entity.Taxa.Moeda;
+import br.com.maiscambio.model.entity.Taxa.Status;
 import br.com.maiscambio.model.repository.TaxaRepository;
 import br.com.maiscambio.util.HttpException;
 import br.com.maiscambio.util.ReflectionHelper;
@@ -25,7 +28,6 @@ import br.com.maiscambio.util.ReflectionHelper;
 public class TaxaService implements BaseEntityService<Taxa, Long>
 {
 	public static final String EXCEPTION_TAXA_MUST_NOT_BE_NULL = "EXCEPTION_TAXA_MUST_NOT_BE_NULL";
-	public static final String EXCEPTION_TAXA_TAXA_ID_MUST_NOT_BE_NULL = "EXCEPTION_TAXA_TAXA_ID_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_TAXA_ESTABELECIMENTO_MUST_NOT_BE_NULL = "EXCEPTION_TAXA_ESTABELECIMENTO_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_TAXA_ESTABELECIMENTO_PESSOA_ID_MUST_NOT_BE_NULL = "EXCEPTION_TAXA_ESTABELECIMENTO_PESSOA_ID_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_TAXA_ESTABELECIMENTO_NOT_FOUND = "EXCEPTION_TAXA_ESTABELECIMENTO_NOT_FOUND";
@@ -36,6 +38,7 @@ public class TaxaService implements BaseEntityService<Taxa, Long>
 	public static final String EXCEPTION_TAXA_DATA_MUST_NOT_BE_NULL = "TAXA_DATA_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_TAXA_STATUW_MUST_NOT_BE_NULL = "TAXA_STATUW_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_TAXA_FINALIDADE_MUST_NOT_BE_NULL = "TAXA_FINALIDADE_MUST_NOT_BE_NULL";
+	public static final String EXCEPTION_TAXA_TAXA_ID_MUST_BE_NULL = "TAXA_TAXA_ID_MUST_BE_NULL";
 	
 	@Autowired
 	private TaxaRepository taxaRepository;
@@ -50,16 +53,51 @@ public class TaxaService implements BaseEntityService<Taxa, Long>
 	}
 	
 	@Transactional(readOnly = true)
+	public Taxa findLastByMoedaAndFinalidade(Long estabelecimentoPessoaId, Moeda moeda, Finalidade finalidade)
+	{
+		return taxaRepository.findLastByEstabelecimentoPessoaIdAndMoedaAndFinalidade(estabelecimentoPessoaId, moeda, finalidade);
+	}
+	
+	@Transactional(readOnly = true)
+	public void validateAsInsert(Taxa taxa)
+	{
+		validateIgnoringTaxaId(taxa);
+		
+		if(taxa.getTaxaId() != null)
+		{
+			throw new HttpException(EXCEPTION_TAXA_TAXA_ID_MUST_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
+		}
+	}
+	
+	@Transactional
+	public Taxa saveAsInsert(Taxa taxa)
+	{
+		validateAsInsert(taxa);
+		
+		Taxa foundTaxa = findLastByMoedaAndFinalidade(taxa.getEstabelecimento().getPessoaId(), taxa.getMoeda(), taxa.getFinalidade());
+		
+		if(foundTaxa != null)
+		{
+			foundTaxa.setStatus(Status.INATIVO);
+			
+			save(foundTaxa);
+		}
+		
+		return save(taxa);
+	}
+	
+	@Transactional
+	private Taxa save(Taxa taxa)
+	{
+		return taxaRepository.save(taxa);
+	}
+	
+	@Transactional(readOnly = true)
 	public void validateIgnoringTaxaId(Taxa taxa)
 	{
 		if(taxa == null)
 		{
 			throw new HttpException(EXCEPTION_TAXA_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
-		}
-		
-		if(taxa.getTaxaId() == null)
-		{
-			throw new HttpException(EXCEPTION_TAXA_TAXA_ID_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 		if(taxa.getEstabelecimento() == null)
