@@ -55,5 +55,94 @@
 				</legend>
 			</fieldset>
 		</div>
+		<c:if test="${u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_TAXA_LEITURA')}">
+			<c:set var="taxaReadonly" value="${u:hasPerfilForRequest(pageContext.request, 'ESTABELECIMENTO_TAXA_ESCRITA')}" />
+			<div class="jumbotron">
+				<div>
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active"><a href="#taxa-venda" aria-controls="taxa-venda" role="tab" data-toggle="tab">Venda</a></li>
+						<li role="presentation"><a href="#taxa-compra" aria-controls="taxa-compra" role="tab" data-toggle="tab">Compra</a></li>
+					</ul>
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active padding-top-15" id="taxa-venda">
+							<div class="table-responsive">
+								<table class="table table-striped table-hover">
+									<thead>
+										<tr>
+											<th>Ativo</th>
+											<th>Moeda</th>
+											<th>Espécie</th>
+											<th>Cartão</th>
+											<th>Alterar</th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach items="${moedas}" var="moeda" varStatus="loop">
+											<tr data-form data-form-action="${__contextPath__}/taxa/VENDA" data-form-method="post" class="success">
+												<td>
+													<input class="margin-left-10 margin-top-10" type="checkbox" />
+												</td>
+												<td>
+													<input type="text" class="form-control" value="${fn:escapeXml((moeda))}" readonly />
+												</td>
+												<td>
+													<input type="text" class="form-control" value="R$ 3,64" data-mask-money data-prefix="R$ " data-allow-zero="true" data-mask-money />
+												</td>
+												<td>
+													<input type="text" class="form-control" value="R$ 3,74" data-mask-money data-prefix="R$ " data-allow-zero="true" data-mask-money />
+												</td>
+												<td>
+													<a href="javascript: void(0);" data-form-submit class="margin-left-10 color-green">
+														<i class="fa fa-check fa-2x"></i>
+													</a>
+												</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div role="tabpanel" class="tab-pane padding-top-15" id="taxa-compra">
+							<div class="table-responsive">
+								<table class="table table-striped table-hover">
+									<thead>
+										<tr>
+											<th>Ativo</th>
+											<th>Moeda</th>
+											<th>Espécie</th>
+											<th>Cartão</th>
+											<th>Alterar</th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach items="${moedas}" var="moeda" varStatus="loop">
+											<tr data-form data-form-action="${__contextPath__}/taxa/COMPRA" data-form-method="post" class="info">
+												<td>
+													<input class="margin-left-10 margin-top-10" type="checkbox" />
+												</td>
+												<td>
+													<input type="text" class="form-control" value="${fn:escapeXml((moeda))}" readonly />
+												</td>
+												<td>
+													<input type="text" class="form-control" value="R$ 3,64" data-mask-money data-prefix="R$ " data-allow-zero="true" data-mask-money />
+												</td>
+												<td>
+													<input type="text" class="form-control" value="R$ 3,74" data-mask-money data-prefix="R$ " data-allow-zero="true" data-mask-money />
+												</td>
+												<td>
+													<a href="javascript: void(0);" data-form-submit class="margin-left-10 color-blue">
+														<i class="fa fa-check fa-2x"></i>
+													</a>
+												</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</c:if>
 	</c:otherwise>
 </c:choose>
