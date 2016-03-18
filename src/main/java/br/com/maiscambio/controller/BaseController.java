@@ -26,6 +26,7 @@ import br.com.maiscambio.model.service.EmailService;
 import br.com.maiscambio.model.service.EnderecoService;
 import br.com.maiscambio.model.service.EstabelecimentoService;
 import br.com.maiscambio.model.service.EstadoService;
+import br.com.maiscambio.model.service.IofService;
 import br.com.maiscambio.model.service.LicencaService;
 import br.com.maiscambio.model.service.TaxaService;
 import br.com.maiscambio.model.service.UsuarioService;
@@ -70,6 +71,9 @@ public class BaseController
 	
 	@Autowired
 	private TaxaService taxaService;
+	
+	@Autowired
+	private IofService iofService;
 	
 	protected HttpServletRequest getRequest()
 	{
@@ -119,6 +123,11 @@ public class BaseController
 	protected TaxaService getTaxaService()
 	{
 		return taxaService;
+	}
+	
+	protected IofService getIofService()
+	{
+		return iofService;
 	}
 	
 	@Transactional(readOnly = true)

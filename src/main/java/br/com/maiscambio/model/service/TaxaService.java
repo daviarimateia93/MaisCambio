@@ -34,9 +34,11 @@ public class TaxaService implements BaseEntityService<Taxa, Long>
 	public static final String EXCEPTION_TAXA_MOEDA_MUST_NOT_BE_NULL = "EXCEPTION_TAXA_MOEDA_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_TAXA_VALOR_ESPECIE_AND_VALOR_CARTAO_BOTH_MUST_NOT_BE_EMPTY_ = "EXCEPTION_TAXA_VALOR_ESPECIE_AND_VALOR_CARTAO_BOTH_MUST_NOT_BE_EMPTY_";
 	public static final String EXCEPTION_TAXA_VALOR_ESPECIE_MUST_BE_BIGGER_THAN_ZERO = "EXCEPTION_TAXA_VALOR_ESPECIE_MUST_BE_BIGGER_THAN_ZERO";
+	public static final String EXCEPTION_TAXA_VALOR_ESPECIE_TOO_LARGE = "TAXA_VALOR_ESPECIE_TOO_LARGE";
 	public static final String EXCEPTION_TAXA_VALOR_CARTAO_MUST_BE_BIGGER_THAN_ZERO = "EXCEPTION_TAXA_VALOR_CARTAO_MUST_BE_BIGGER_THAN_ZERO";
+	public static final String EXCEPTION_TAXA_VALOR_CARTAO_TOO_LARGE = "TAXA_VALOR_CARTAO_TOO_LARGE";
 	public static final String EXCEPTION_TAXA_DATA_MUST_NOT_BE_NULL = "TAXA_DATA_MUST_NOT_BE_NULL";
-	public static final String EXCEPTION_TAXA_STATUW_MUST_NOT_BE_NULL = "TAXA_STATUW_MUST_NOT_BE_NULL";
+	public static final String EXCEPTION_TAXA_STATUS_MUST_NOT_BE_NULL = "TAXA_STATUS_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_TAXA_FINALIDADE_MUST_NOT_BE_NULL = "TAXA_FINALIDADE_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_TAXA_TAXA_ID_MUST_BE_NULL = "TAXA_TAXA_ID_MUST_BE_NULL";
 	
@@ -61,7 +63,7 @@ public class TaxaService implements BaseEntityService<Taxa, Long>
 	@Transactional(readOnly = true)
 	public void validateAsInsert(Taxa taxa)
 	{
-		validateIgnoringTaxaId(taxa);
+		validateIgnoringId(taxa);
 		
 		if(taxa.getTaxaId() != null)
 		{
@@ -93,7 +95,7 @@ public class TaxaService implements BaseEntityService<Taxa, Long>
 	}
 	
 	@Transactional(readOnly = true)
-	public void validateIgnoringTaxaId(Taxa taxa)
+	public void validateIgnoringId(Taxa taxa)
 	{
 		if(taxa == null)
 		{
@@ -129,14 +131,30 @@ public class TaxaService implements BaseEntityService<Taxa, Long>
 			throw new HttpException(EXCEPTION_TAXA_VALOR_ESPECIE_AND_VALOR_CARTAO_BOTH_MUST_NOT_BE_EMPTY_, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
-		if(taxa.getValorEspecie().compareTo(BigDecimal.ZERO) <= 0)
+		if(taxa.getValorEspecie() != null)
 		{
-			throw new HttpException(EXCEPTION_TAXA_VALOR_ESPECIE_MUST_BE_BIGGER_THAN_ZERO, HttpStatus.NOT_ACCEPTABLE);
+			if(taxa.getValorEspecie().compareTo(BigDecimal.ZERO) <= 0)
+			{
+				throw new HttpException(EXCEPTION_TAXA_VALOR_ESPECIE_MUST_BE_BIGGER_THAN_ZERO, HttpStatus.NOT_ACCEPTABLE);
+			}
+			
+			if(taxa.getValorEspecie().compareTo(new BigDecimal("9999999999.99999")) > 0)
+			{
+				throw new HttpException(EXCEPTION_TAXA_VALOR_ESPECIE_TOO_LARGE, HttpStatus.NOT_ACCEPTABLE);
+			}
 		}
 		
-		if(taxa.getValorCartao().compareTo(BigDecimal.ZERO) <= 0)
+		if(taxa.getValorCartao() != null)
 		{
-			throw new HttpException(EXCEPTION_TAXA_VALOR_CARTAO_MUST_BE_BIGGER_THAN_ZERO, HttpStatus.NOT_ACCEPTABLE);
+			if(taxa.getValorCartao().compareTo(BigDecimal.ZERO) <= 0)
+			{
+				throw new HttpException(EXCEPTION_TAXA_VALOR_CARTAO_MUST_BE_BIGGER_THAN_ZERO, HttpStatus.NOT_ACCEPTABLE);
+			}
+			
+			if(taxa.getValorCartao().compareTo(new BigDecimal("9999999999.99999")) > 0)
+			{
+				throw new HttpException(EXCEPTION_TAXA_VALOR_CARTAO_TOO_LARGE, HttpStatus.NOT_ACCEPTABLE);
+			}
 		}
 		
 		if(taxa.getData() == null)
@@ -146,7 +164,7 @@ public class TaxaService implements BaseEntityService<Taxa, Long>
 		
 		if(taxa.getStatus() == null)
 		{
-			throw new HttpException(EXCEPTION_TAXA_STATUW_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
+			throw new HttpException(EXCEPTION_TAXA_STATUS_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 		if(taxa.getFinalidade() == null)

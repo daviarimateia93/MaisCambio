@@ -35,6 +35,7 @@ public class DashboardController extends BaseController
 		if(UsuarioService.hasPerfil(usuario, Usuario.Perfil.ADMIN))
 		{
 			view.addObject("estabelecimentos", getEstabelecimentoService().findByUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(Usuario.Status.INATIVO));
+			view.addObject("iof", getIofService().findLast());
 		}
 		
 		if(UsuarioService.hasPerfil(usuario, Usuario.Perfil.ESTABELECIMENTO_TAXA_LEITURA) && estabelecimento != null)

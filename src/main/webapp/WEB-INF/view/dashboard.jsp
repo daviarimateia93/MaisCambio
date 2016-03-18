@@ -44,6 +44,41 @@
 					</c:choose>
 			</fieldset>
 		</div>
+		<div class="jumbotron">
+			<fieldset>
+				<legend><i class="fa fa-bar-chart fa-fw"></i> IOF</legend>
+				<div class="table-responsive">
+					<table class="table table-striped table-hover">
+						<thead>
+							<tr>
+								<th>Ativo</th>
+								<th>Espécie</th>
+								<th>Cartão</th>
+								<th>Alterar</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-form data-form-id="taxa-form" data-form-action="${__contextPath__}/iof" data-form-method="post" class="danger">
+								<td>
+									<input class="margin-left-10 margin-top-10" name="status" value="ATIVO" type="checkbox" ${iof != null ? iof.status == 'ATIVO' ? 'checked' : '' : ''} />
+								</td>
+								<td>
+									<input type="text" class="form-control" name="valorEspecie" value="${iof.valorEspecie}" data-mask-money data-suffix=" %" data-precision="2" data-allow-zero="true" data-allow-null="true" data-mask-money />
+								</td>
+								<td>
+									<input type="text" class="form-control" name="valorCartao" value="${iof.valorCartao}" data-mask-money data-suffix=" %" data-precision="2" data-allow-zero="true" data-allow-null="true" data-mask-money />
+								</td>
+								<td>
+									<a href="javascript: void(0);" data-form-submit class="margin-left-10 color-red">
+										<i class="fa fa-check fa-2x"></i>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
+		</div>
 	</c:when>
 	<c:otherwise>
 		<div class="jumbotron">
@@ -87,10 +122,10 @@
 													<input type="text" class="form-control" name="moeda" value="${fn:escapeXml((moeda))}" readonly />
 												</td>
 												<td>
-													<input type="text" class="form-control" name="valorEspecie" value="${taxa.valorEspecie}" data-mask-money data-prefix="R$ " data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
+													<input type="text" class="form-control" name="valorEspecie" value="${taxa.valorEspecie}" data-mask-money data-prefix="R$ " data-precision="5" data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
 												</td>
 												<td>
-													<input type="text" class="form-control" name="valorCartao" value="${taxa.valorCartao}" data-mask-money data-prefix="R$ " data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
+													<input type="text" class="form-control" name="valorCartao" value="${taxa.valorCartao}" data-mask-money data-prefix="R$ " data-precision="5" data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
 												</td>
 												<td>
 													<c:choose>
@@ -133,10 +168,10 @@
 													<input type="text" class="form-control" name="moeda" value="${fn:escapeXml((moeda))}" readonly />
 												</td>
 												<td>
-													<input type="text" class="form-control" name="valorEspecie" value="${taxa.valorEspecie}" data-mask-money data-prefix="R$ " data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
+													<input type="text" class="form-control" name="valorEspecie" value="${taxa.valorEspecie}" data-mask-money data-prefix="R$ " data-precision="5" data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
 												</td>
 												<td>
-													<input type="text" class="form-control" name="valorCartao" value="${taxa.valorCartao}" data-mask-money data-prefix="R$ " data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
+													<input type="text" class="form-control" name="valorCartao" value="${taxa.valorCartao}" data-mask-money data-prefix="R$ " data-precision="5" data-allow-zero="true" data-allow-null="true" data-mask-money ${taxaReadonly ? 'disabled' : ''} />
 												</td>
 												<td>
 													<c:choose>
