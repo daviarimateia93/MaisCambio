@@ -146,7 +146,14 @@ public class UsuarioController extends BaseController
 	{
 		validateAndFixForSaving(usuario);
 		
-		return getUsuarioService().saveAsInsertByEstabelecimento(usuario, true);
+		if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN) && usuario.getPessoa() == null)
+		{
+			return getUsuarioService().saveAsInsert(usuario, false);
+		}
+		else
+		{
+			return getUsuarioService().saveAsInsertByEstabelecimento(usuario, true);
+		}
 	}
 	
 	@Transactional
@@ -174,7 +181,7 @@ public class UsuarioController extends BaseController
 		{
 			usuario.setSenha(foundUsuario.getSenha());
 			
-			if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN))
+			if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN) && usuario.getPessoa() == null)
 			{
 				getUsuarioService().saveAsUpdate(usuarioId, usuario, false);
 			}
