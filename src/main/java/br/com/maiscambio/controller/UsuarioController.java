@@ -148,7 +148,7 @@ public class UsuarioController extends BaseController
 		
 		if(UsuarioService.hasPerfil(getUsuarioService().getFromRequest(getRequest()), Usuario.Perfil.ADMIN) && usuario.getPessoa() == null)
 		{
-			return getUsuarioService().saveAsInsert(usuario, false);
+			return getUsuarioService().saveAsInsert(usuario, true);
 		}
 		else
 		{
