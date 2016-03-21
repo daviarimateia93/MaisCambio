@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import br.com.maiscambio.UsuarioSessionManager;
 import br.com.maiscambio.model.entity.Estabelecimento;
@@ -133,6 +136,32 @@ public class AutenticacaoService implements BaseService
 		String[] userCredentials = getUserCredentialsFromRequest(request);
 		
 		authenticate(userCredentials[1], userCredentials[2], usuarioPerfis);
+	}
+	
+	public static String[] getUserCredentials()
+	{
+		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+		
+		if(requestAttributes != null)
+		{
+			if(requestAttributes instanceof ServletRequestAttributes)
+			{
+				String[] userCredentials = null;
+				
+				try
+				{
+					userCredentials = getUserCredentialsFromRequest(((ServletRequestAttributes) requestAttributes).getRequest());
+				}
+				catch(HttpException httpException)
+				{
+					
+				}
+				
+				return userCredentials;
+			}
+		}
+		
+		return null;
 	}
 	
 	public static String[] getUserCredentialsFromRequest(HttpServletRequest request)
