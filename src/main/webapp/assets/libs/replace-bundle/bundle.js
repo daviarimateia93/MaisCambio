@@ -77,6 +77,8 @@ Utils.replace({
 	ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI: 'Nome fantasia deve ser o mesmo da Matriz',
 	ESTABELECIMENTO_NOT_FOUND_OR_NOT_ABLE_TO_DO_THIS: 'Estabelecimento não encontrado',
 	ESTABELECIMENTO_MUST_NOT_BE_THE_SAME_FROM_THE_LOGGED_ONE: 'Estabelecimento não deve ser o mesmo logado',
+	ESTABELECIMENTO_TIME_ZONE_MUST_NOT_BE_EMPTY: 'TimeZone não deve ser vazio',
+	ESTABELECIMENTO_TIME_ZONE_IS_INVALID: 'TimeZone inválido',
 	
 	// IofService
 	IOF_MUST_NOT_BE_NULL: 'Iof não deve ser nulo',

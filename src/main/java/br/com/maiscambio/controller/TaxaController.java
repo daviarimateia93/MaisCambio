@@ -1,7 +1,5 @@
 package br.com.maiscambio.controller;
 
-import java.util.Date;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +12,7 @@ import br.com.maiscambio.Perfil;
 import br.com.maiscambio.model.entity.Taxa;
 import br.com.maiscambio.model.entity.Taxa.Finalidade;
 import br.com.maiscambio.model.entity.Usuario;
+import br.com.maiscambio.model.service.EstabelecimentoService;
 
 @Controller
 @RequestMapping("/taxa")
@@ -26,7 +25,7 @@ public class TaxaController extends BaseController
 	{
 		taxa.setFinalidade(finalidade);
 		taxa.setEstabelecimento(getEstabelecimentoFromRequest());
-		taxa.setData(new Date());
+		taxa.setData(EstabelecimentoService.now(getEstabelecimentoFromRequest()));
 		
 		return getTaxaService().saveAsInsert(taxa);
 	}

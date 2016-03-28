@@ -48,9 +48,12 @@ public class Estabelecimento extends Pessoa
 	@Column(name = "DATA")
 	private Date data;
 	
+	@Column(name = "TIME_ZONE")
+	private String timeZone;
+	
 	@Fetch(FetchMode.SELECT)
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "ESTABELECIMENTO_LICENCA", joinColumns = @JoinColumn(name = "ID_PESSOA") )
+	@JoinTable(name = "ESTABELECIMENTO_LICENCA", joinColumns = @JoinColumn(name = "ID_PESSOA"))
 	@Column(name = "LICENCA")
 	private List<String> licencas = new ArrayList<>();
 	
@@ -97,6 +100,16 @@ public class Estabelecimento extends Pessoa
 	public void setData(Date data)
 	{
 		this.data = data;
+	}
+	
+	public String getTimeZone()
+	{
+		return timeZone;
+	}
+	
+	public void setTimeZone(String timeZone)
+	{
+		this.timeZone = timeZone;
 	}
 	
 	public List<String> getLicencas()

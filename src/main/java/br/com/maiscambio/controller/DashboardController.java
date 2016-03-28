@@ -25,7 +25,7 @@ public class DashboardController extends BaseController
 	@Transactional(readOnly = true)
 	@RequestMapping(method = RequestMethod.GET)
 	@Autenticacao(@Perfil(Usuario.Perfil.ESTABELECIMENTO_DASHBOARD_LEITURA))
-	public View index(@RequestParam String selectedFormattedDate)
+	public View index(@RequestParam(required = false) String selectedFormattedDate)
 	{
 		Usuario usuario = getUsuarioService().getFromRequest(getRequest());
 		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();

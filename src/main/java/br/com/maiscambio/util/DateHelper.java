@@ -6,10 +6,28 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class DateHelper
 {
 	public static final String DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+	
+	public static Date setTimeZone(Date date, String timeZone)
+	{
+		TimeZone foundTimeZone = TimeZone.getTimeZone(timeZone);
+		
+		if(foundTimeZone == null)
+		{
+			return date;
+		}
+		else
+		{
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateHelper.DATE_TIME_FORMAT_PATTERN);
+			simpleDateFormat.setTimeZone(foundTimeZone);
+			
+			return parse(simpleDateFormat.format(date));
+		}
+	}
 	
 	public static Date parse(String date)
 	{

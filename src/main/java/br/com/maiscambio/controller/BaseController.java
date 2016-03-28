@@ -184,7 +184,7 @@ public class BaseController
 	
 	protected View view(String layoutName, String partialViewName, String title)
 	{
-		Date currentDate = new Date();
+		Date currentDate = AutenticacaoService.isLoggedIn(request) ? EstabelecimentoService.now(estabelecimentoService.getFromRequest(request)) : new Date();
 		
 		View view = new View(layoutName, partialViewName, title);
 		view.addObject("sid", ControllerHelper.getSid(request));

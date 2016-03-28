@@ -65,4 +65,6 @@ $(function()
 	    $formGroup.removeClass('hide');
 	}
     });
+    
+    additionalSelectorsWhenCnpj.push('.iptRazaoSocial');
 });

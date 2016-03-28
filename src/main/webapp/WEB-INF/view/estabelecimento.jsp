@@ -58,7 +58,7 @@
 			<div class="form-group">
 		    	<label for="estabelecimento-razao-social" class="col-md-2 control-label">Razão social: </label>
 		        <div class="col-md-10">
-		            <input type="text" class="form-control" name="razaoSocial" id="estabelecimento-razao-social" ${estabelecimento.pai != null ? 'autofocus' : ''} value="${fn:escapeXml((estabelecimento.razaoSocial))}" ${readonly ? 'disabled' : ''} />
+		            <input type="text" class="form-control iptRazaoSocial" name="razaoSocial" id="estabelecimento-razao-social" ${estabelecimento.pai != null ? 'autofocus' : ''} value="${fn:escapeXml((estabelecimento.razaoSocial))}" ${estabelecimento.cpf != null || estabelecimento.idEstrangeiro != null || estabelecimento.cnpj == null || readonly ? 'disabled' : ''} />
 		        </div>
 			</div>
 			<div class="form-group">
@@ -75,6 +75,30 @@
 		            <input type="text" class="form-control iptIdEstrangeiro" name="idEstrangeiro" id="estabelecimento-id-estrangeiro" value="${fn:escapeXml((estabelecimento.idEstrangeiro))}" ${estabelecimento.cnpj != null || estabelecimento.cpf != null || readonly ? 'disabled': ''} />
 		        </div>
 		    </div>
+		    <div class="form-group">
+	        	<label for="estabelecimento-time-zone" class="col-md-2 control-label">Região (horário): </label>
+	        	<div class="col-md-10">
+	        		<select class="form-control" name="timeZone" id="estabelecimento-time-zone">
+	        			<option></option>
+	        			<option value="America/Noronha" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Noronha' ? 'selected' : '' : ''}>(UTC -02:00) Fernando de Noronha</option>
+	        			<option value="America/Maceio" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Maceio' ? 'selected' : '' : ''}>(UTC -03:00) Alagoas, Sergipe</option>
+	        			<option value="America/Belem" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Belem' ? 'selected' : '' : ''}>(UTC -03:00) Amapá, Leste Pará</option>
+	        			<option value="America/Bahia" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Bahia' ? 'selected' : '' : ''}>(UTC -03:00) Bahia</option>
+	        			<option value="America/Fortaleza" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Fortaleza' ? 'selected' : '' : ''}>(UTC -03:00) Nordeste (MA, PI, CE, RN, PB)</option>
+	        			<option value="America/Santarem" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Santarem' ? 'selected' : '' : ''}>(UTC -03:00) Oeste Pará</option>
+	        			<option value="America/Recife" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Recife' ? 'selected' : '' : ''}>(UTC -03:00) Pernambuco</option>
+	        			<option value="America/Sao_Paulo" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Sao_Paulo' ? 'selected' : '' : ''}>(UTC -03:00) Sul & Sudeste (GO, DF, MG, ES, RJ, SP, PR, SC, RS)</option>
+	        			<option value="America/Araguaina" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Araguaina' ? 'selected' : '' : ''}>(UTC -03:00) Tocantins</option>
+	        			<option value="America/Porto_Velho" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Porto_Velho' ? 'selected' : '' : ''}>(UTC -04:00) Rondônia</option>
+	        			<option value="America/Manaus" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Manaus' ? 'selected' : '' : ''}>(UTC -04:00) Leste Amazonas</option>
+	        			<option value="America/Cuiaba" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Cuiaba' ? 'selected' : '' : ''}>(UTC -04:00) Mato Grosso</option>
+	        			<option value="America/Campo_Grande" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Campo_Grande' ? 'selected' : '' : ''}>(UTC -04:00) Mato Grosso do Sul</option>
+	        			<option value="America/Boa_Vista" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Boa_Vista' ? 'selected' : '' : ''}>(UTC -04:00) Roraima</option>
+	        			<option value="America/Rio_Branco" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Rio_Branco' ? 'selected' : '' : ''}>(UTC -05:00) Acre</option>
+	        			<option value="America/Eirunepe" ${estabelecimento != null ? estabelecimento.timeZone == 'America/Eirunepe' ? 'selected' : '' : ''}>(UTC -05:00) Oeste Amazonas</option>
+	        		</select>
+	        	</div>
+	        </div>
 		</fieldset>
 		<fieldset>
 			<legend><i class="fa fa-home fa-fw"></i> Endereço</legend>

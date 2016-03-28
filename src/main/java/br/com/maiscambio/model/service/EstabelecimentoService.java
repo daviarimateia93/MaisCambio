@@ -1,7 +1,9 @@
 package br.com.maiscambio.model.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,6 +28,7 @@ import br.com.maiscambio.model.entity.Pessoa;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.repository.EstabelecimentoRepository;
 import br.com.maiscambio.model.repository.custom.CustomRepositorySelector;
+import br.com.maiscambio.util.DateHelper;
 import br.com.maiscambio.util.HttpException;
 import br.com.maiscambio.util.StringHelper;
 
@@ -50,6 +53,8 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 	public static final String EXCEPTION_ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI = "ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI";
 	public static final String EXCEPTION_ESTABELECIMENTO_NOT_FOUND_OR_NOT_ABLE_TO_DO_THIS = "ESTABELECIMENTO_NOT_FOUND_OR_NOT_ABLE_TO_DO_THIS";
 	public static final String EXCEPTION_ESTABELECIMENTO_MUST_NOT_BE_THE_SAME_FROM_THE_LOGGED_ONE = "ESTABELECIMENTO_MUST_NOT_BE_THE_SAME_FROM_THE_LOGGED_ONE";
+	public static final String EXCEPTION_ESTABELECIMENTO_TIME_ZONE_MUST_NOT_BE_EMPTY = "ESTABELECIMENTO_TIME_ZONE_MUST_NOT_BE_EMPTY";
+	public static final String EXCEPTION_ESTABELECIMENTO_TIME_ZONE_IS_INVALID = "ESTABELECIMENTO_TIME_ZONE_IS_INVALID";
 	
 	@Autowired
 	private EstabelecimentoRepository estabelecimentoRepository;
@@ -302,6 +307,16 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 				throw new HttpException(EXCEPTION_ESTABELECIMENTO_NOME_FANTASIA_MUST_BE_THE_SAME_FROM_PAI, HttpStatus.NOT_ACCEPTABLE);
 			}
 		}
+		
+		if(StringHelper.isBlank(estabelecimento.getTimeZone()))
+		{
+			throw new HttpException(EXCEPTION_ESTABELECIMENTO_TIME_ZONE_MUST_NOT_BE_EMPTY, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(TimeZone.getTimeZone(estabelecimento.getTimeZone()) == null)
+		{
+			throw new HttpException(EXCEPTION_ESTABELECIMENTO_TIME_ZONE_IS_INVALID, HttpStatus.NOT_ACCEPTABLE);
+		}
 	}
 	
 	@Transactional(readOnly = true)
@@ -331,5 +346,18 @@ public class EstabelecimentoService extends PessoaService implements GlobalBaseE
 		};
 		
 		return Specifications.where(pessoaIdEqualsSpecification).or(paiPessoaIdEqualsSpecification);
+	}
+	
+	@Transactional(readOnly = true)
+	public Date now(Long pessoaId)
+	{
+		return pessoaId != null ? now(findOne(pessoaId)) : now((Estabelecimento) null);
+	}
+	
+	public static Date now(Estabelecimento estabelecimento)
+	{
+		Date now = new Date();
+		
+		return estabelecimento != null ? DateHelper.setTimeZone(now, estabelecimento.getTimeZone()) : now;
 	}
 }

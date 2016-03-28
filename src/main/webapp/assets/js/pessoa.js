@@ -41,7 +41,7 @@ function fixPessoaForm($form)
     }
 }
 
-var additionalSelectorsWhenCpf = [];
+var additionalSelectorsWhenCnpj = [];
 
 $(function()
 {
@@ -65,17 +65,17 @@ $(function()
 	
 	if(/^[\d]{2}\.[\d]{3}\.[\d]{3}\/[\d]{4}\-[\d]{2}$/.test($(this).val()))
 	{
-	    $this.parents('.form-group').parent().find('#iptInscricaoEstadual, .iptInscricaoEstadual, #iptInscricaoSuframa, .iptInscricaoSuframa' + (additionalSelectorsWhenCpf.length > 0 ? ',' + additionalSelectorsWhenCpf.join(',') : '')).removeAttr('disabled');
+	    $this.parents('.form-group').parent().find('#iptInscricaoEstadual, .iptInscricaoEstadual, #iptInscricaoSuframa, .iptInscricaoSuframa' + (additionalSelectorsWhenCnpj.length > 0 ? ',' + additionalSelectorsWhenCnpj.join(',') : '')).removeAttr('disabled');
 	}
 	else
 	{
-	    $this.parents('.form-group').parent().find('#iptInscricaoEstadual, .iptInscricaoEstadual, #iptInscricaoSuframa, .iptInscricaoSuframa' + (additionalSelectorsWhenCpf.length > 0 ? ',' + additionalSelectorsWhenCpf.join(',') : '')).attr('disabled', '').val('');
+	    $this.parents('.form-group').parent().find('#iptInscricaoEstadual, .iptInscricaoEstadual, #iptInscricaoSuframa, .iptInscricaoSuframa' + (additionalSelectorsWhenCnpj.length > 0 ? ',' + additionalSelectorsWhenCnpj.join(',') : '')).attr('disabled', '').val('');
 	}
     });
     
     $('#iptCpf, .iptCpf').focus(function()
     {
-	$(this).parents('.form-group').parent().find('#iptCnpj, .iptCnpj, #iptIdEstrangeiro, .iptIdEstrangeiro, #iptInscricaoEstadual, .iptInscricaoEstadual, #iptInscricaoSuframa, .iptInscricaoSuframa' + (additionalSelectorsWhenCpf.length > 0 ? ',' + additionalSelectorsWhenCpf.join(',') : '')).attr('disabled', '').val('');
+	$(this).parents('.form-group').parent().find('#iptCnpj, .iptCnpj, #iptIdEstrangeiro, .iptIdEstrangeiro, #iptInscricaoEstadual, .iptInscricaoEstadual, #iptInscricaoSuframa, .iptInscricaoSuframa' + (additionalSelectorsWhenCnpj.length > 0 ? ',' + additionalSelectorsWhenCnpj.join(',') : '')).attr('disabled', '').val('');
     });
     
     $('#iptCpf, .iptCpf').blur(function()
@@ -94,7 +94,7 @@ $(function()
     
     $('#iptIdEstrangeiro, .iptIdEstrangeiro').focus(function()
     {
-	$(this).parents('.form-group').parent().find('#iptCnpj, .iptCnpj, #iptCpf, .iptCpf, #iptInscricaoEstadual, .iptInscricaoEstadual, #iptInscricaoSuframa, .iptInscricaoSuframa' + (additionalSelectorsWhenCpf.length > 0 ? ',' + additionalSelectorsWhenCpf.join(',') : '')).attr('disabled', '').val('');
+	$(this).parents('.form-group').parent().find('#iptCnpj, .iptCnpj, #iptCpf, .iptCpf, #iptInscricaoEstadual, .iptInscricaoEstadual, #iptInscricaoSuframa, .iptInscricaoSuframa' + (additionalSelectorsWhenCnpj.length > 0 ? ',' + additionalSelectorsWhenCnpj.join(',') : '')).attr('disabled', '').val('');
     });
     
     $('#iptIdEstrangeiro, .iptIdEstrangeiro').blur(function()
