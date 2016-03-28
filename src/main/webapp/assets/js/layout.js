@@ -308,13 +308,6 @@ $(function()
     {
 	var $this = $(this);
 	
-	if($this.find('[name="matriz"]').val().length === 0)
-	{
-	    toastr.error('Matriz deve ser preenchida');
-	    
-	    action.stop = true;
-	}
-	
 	var $newForm = $(action.form).clone();
 	
 	if($newForm.find('[name="estabelecimentoPessoaId"]').val().length === 0)

@@ -225,16 +225,10 @@
 	        	<form method="post" action="${__contextPath__}/autenticacao/login?doNotRedirect=true" class="form-horizontal" role="form">
 		            <div class="modal-dialog">
 		                <div class="modal-content">
-		                    <div class="modal-header modal-header-light-blue">
+		                    <div class="modal-header modal-header-light-green">
 		                        <h4 class="modal-title">Ops! Sua sessão expirou</h4>
 		                    </div>
 		                    <div class="modal-body">
-		                    	<div class="form-group">
-					                <label for="iptUsuarioPaiPessoaId" class="col-sm-2 control-label">Matriz: </label>
-					                <div class="col-sm-10">
-					                    <input type="text" id="iptUsuarioPaiPessoaId" class="form-control" name="matriz" placeholder="Matriz" value="${fn:escapeXml((sessionMatriz))}" readonly>
-					                </div>
-					            </div>
 					            <div class="form-group">
 					                <label for="iptUsuarioApelido" class="col-sm-2 control-label">Usuário: </label>
 					                <div class="col-sm-10">
@@ -250,7 +244,7 @@
 		                    </div>
 		                    <div class="modal-footer">
 		                    	<input type="hidden" class="form-control" name="estabelecimentoPessoaId" value="${fn:escapeXml((sessionEstabelecimentoPessoaId))}">
-		                        <button type="submit" class="btn btn-blue">Entrar</button>
+		                        <button type="submit" class="btn btn-green">Entrar</button>
 		                    </div>
 		                </div>
 		            </div>
