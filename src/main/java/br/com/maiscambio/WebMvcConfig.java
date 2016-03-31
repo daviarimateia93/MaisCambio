@@ -11,7 +11,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
@@ -35,7 +34,7 @@ import br.com.maiscambio.util.CustomFilter;
 import br.com.maiscambio.util.JsonHelper;
 
 @Configuration
-@ComponentScan(basePackages = { "br.com.maiscambio" }, excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class) )
+@ComponentScan(basePackages = { "br.com.maiscambio.controller" })
 public class WebMvcConfig extends WebMvcConfigurationSupport
 {
 	@Autowired
