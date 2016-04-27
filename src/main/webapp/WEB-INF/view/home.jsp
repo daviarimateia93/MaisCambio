@@ -5,205 +5,45 @@
 
 <link href="${__contextPath__}/assets/css/home.css?v=${__appVersion__}" rel="stylesheet">
 
-<div class="jumbotron">
-	<h3 class="text-center">Encontre as melhores taxas de câmbio, negocie e fique por dentro das novidades do mercado!</h3>
-	<hr />
-	<form class="form-inline col-xs-12">
-	  	<div class="form-group col-sm-6">
-	  		<div class="input-group col-xs-12">
-		    	<div class="input-group-addon width-30">
-		    		<label class="margin-bottom-0" for="moeda-chooser">
-		    			<i class="fa fa-usd fa-lg"></i>
-		    		</label>
-		    	</div>
-		    	<select id="moeda-chooser" class="form-control">
-		    		<option value="" disabled selected>Preciso de...</option>
-		    		<option value="DOLAR">Dólar</option>
-		    		<option value="EURO">Euro</option>
-		    		<option value="LIBRA">Libra</option>
-		    	</select>
-		    </div>
+<div id="query" class="jumbotron col-md-3 col-sm-4">
+	<form id="query-form" role="form">
+		<fieldset>
+			<legend>Eu quero</legend>
+		</fieldset>
+		<div class="radio">
+	    	<label>
+	    		<input type="radio" name="query-comprar-vender" value="comprar" checked> Comprar
+	    	</label>
 	  	</div>
-	  	<div class="form-group col-sm-6">
-	  		<div class="input-group col-xs-12">
-		  		<div class="input-group-addon width-30">
-		    		<label class="margin-bottom-0" for="estado-chooser">
-		    			<i class="fa fa-map-marker fa-lg"></i>
-		    		</label>
-		    	</div>
-		    	<select id="estado-chooser" class="form-control">
-		    		<option value="" disabled selected>Estou em...</option>
-		    		<option value="SP">São Paulo</option>
-		    		<option value="RJ">Rio de Janeiro</option>
-		    		<option value="MG">Minas Gerais</option>
-		    	</select>
-	    	</div>
+	  	<div class="radio">
+	    	<label>
+	    		<input type="radio" name="query-comprar-vender" value="vender"> Vender
+	    	</label>
 	  	</div>
-	  	<div class="form-group col-xs-12 text-center margin-top-40">
-	  		<button type="submit" class="btn btn-lg btn-green">
-	  			<i class="fa fa-search"></i> Pesquisar
-	  		</button>
+	  	<fieldset>
+	  		<legend>Preciso de</legend>
+	  	</fieldset>
+	  	<div class="form-group">
+	  		<select name="query-moeda" class="form-control">
+				<option value="" disabled selected>Selecione...</option>
+				<c:forEach items="${moedas}" var="moeda">
+				    <option value="${fn:escapeXml((moeda))}" data-replace="taxa.moeda.${fn:escapeXml((moeda))}" data-replace-text>${fn:escapeXml((moeda))}</option>
+				</c:forEach>
+			</select>
+	  	</div>
+	  	<fieldset>
+	  		<legend>Estou em</legend>
+	  	</fieldset>
+	  	<div class="form-group">
+	  		<select name="query-estado" class="form-control">
+				<option value="" disabled selected>Selecione...</option>
+				<c:forEach items="${estados}" var="estado">
+				    <option value="${fn:escapeXml((estado.estadoId))}">${fn:escapeXml((estado.nome))}</option>
+				</c:forEach>
+			</select>
 	  	</div>
 	</form>
-	<div class="clearfix"></div>
 </div>
-
-<div id="taxas-boxes-container">
-	<div class="taxa-box-container col-xs-6 col-sm-4 col-md-3 col-lg-3">
-		<a href="javascript: void(0);">
-			<div class="taxa-box">
-				<div class="icon text-center">
-					<img src="${__contextPath__}/assets/img/icon_user_metro.png" alt="nome empresa" title="nome empresa" />
-				</div>
-				<div class="valor">
-					<hr />
-					<div class="row">
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-money fa-2x"></i>
-						</div>
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-credit-card fa-2x"></i>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6 text-center especie">R$ 4,13</div>
-						<div class="col-xs-6 text-center cartao">R$ 4,16</div>
-					</div>
-				</div>
-				<div class="cover"></div>
-			</div>
-		</a>
-	</div>
-	
-	<div class="taxa-box-container col-xs-6 col-sm-4 col-md-3 col-lg-3">
-		<a href="javascript: void(0);">
-			<div class="taxa-box">
-				<div class="icon text-center">
-					<img src="${__contextPath__}/assets/img/icon_user_metro.png" alt="nome empresa" title="nome empresa" />
-				</div>
-				<div class="valor">
-					<hr />
-					<div class="row">
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-money fa-2x"></i>
-						</div>
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-credit-card fa-2x"></i>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6 text-center especie">R$ 4,13</div>
-						<div class="col-xs-6 text-center cartao">R$ 4,16</div>
-					</div>
-				</div>
-				<div class="cover"></div>
-			</div>
-		</a>
-	</div>
-	
-	<div class="taxa-box-container col-xs-6 col-sm-4 col-md-3 col-lg-3">
-		<a href="javascript: void(0);">
-			<div class="taxa-box">
-				<div class="icon text-center">
-					<img src="${__contextPath__}/assets/img/icon_user_metro.png" alt="nome empresa" title="nome empresa" />
-				</div>
-				<div class="valor">
-					<hr />
-					<div class="row">
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-money fa-2x"></i>
-						</div>
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-credit-card fa-2x"></i>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6 text-center especie">R$ 4,13</div>
-						<div class="col-xs-6 text-center cartao">R$ 4,16</div>
-					</div>
-				</div>
-				<div class="cover"></div>
-			</div>
-		</a>
-	</div>
-	
-	<div class="taxa-box-container col-xs-6 col-sm-4 col-md-3 col-lg-3">
-		<a href="javascript: void(0);">
-			<div class="taxa-box">
-				<div class="icon text-center">
-					<img src="${__contextPath__}/assets/img/icon_user_metro.png" alt="nome empresa" title="nome empresa" />
-				</div>
-				<div class="valor">
-					<hr />
-					<div class="row">
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-money fa-2x"></i>
-						</div>
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-credit-card fa-2x"></i>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6 text-center especie">R$ 4,13</div>
-						<div class="col-xs-6 text-center cartao">R$ 4,16</div>
-					</div>
-				</div>
-				<div class="cover"></div>
-			</div>
-		</a>
-	</div>
-	
-	<div class="taxa-box-container col-xs-6 col-sm-4 col-md-3 col-lg-3">
-		<a href="javascript: void(0);">
-			<div class="taxa-box">
-				<div class="icon text-center">
-					<img src="${__contextPath__}/assets/img/icon_user_metro.png" alt="nome empresa" title="nome empresa" />
-				</div>
-				<div class="valor">
-					<hr />
-					<div class="row">
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-money fa-2x"></i>
-						</div>
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-credit-card fa-2x"></i>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6 text-center especie">R$ 4,13</div>
-						<div class="col-xs-6 text-center cartao">R$ 4,16</div>
-					</div>
-				</div>
-				<div class="cover"></div>
-			</div>
-		</a>
-	</div>
-	
-	<div class="taxa-box-container col-xs-6 col-sm-4 col-md-3 col-lg-3">
-		<a href="javascript: void(0);">
-			<div class="taxa-box">
-				<div class="icon text-center">
-					<img src="${__contextPath__}/assets/img/icon_user_metro.png" alt="nome empresa" title="nome empresa" />
-				</div>
-				<div class="valor">
-					<hr />
-					<div class="row">
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-money fa-2x"></i>
-						</div>
-						<div class="col-xs-6 text-center">
-							<i class="fa fa-credit-card fa-2x"></i>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6 text-center especie">R$ 4,13</div>
-						<div class="col-xs-6 text-center cartao">R$ 4,16</div>
-					</div>
-				</div>
-				<div class="cover"></div>
-			</div>
-		</a>
-	</div>
+<div id="content" class="jumbotron col-md-offset-1 col-sm-offset-1 col-md-8 col-sm-7">
+	<h4 class="text-center">Encontre as melhores taxas de câmbio, negocie e fique por dentro das novidades do mercado!</h4>
 </div>
-
-<script src="${__contextPath__}/assets/js/home.js?v=${__appVersion__}"></script>

@@ -138,6 +138,7 @@ fieldset[disabled] .form-control {
 }
 .jumbotron {
 	background-color: rgba(255, 255, 255, 0.7);
+	overflow: hidden;
 }
 .jumbotron p {
 	font-size: inherit;

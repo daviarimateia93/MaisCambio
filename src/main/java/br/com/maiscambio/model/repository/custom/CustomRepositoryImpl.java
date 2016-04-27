@@ -156,44 +156,48 @@ public class CustomRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
 						
 						populate(map, alias, array[j]);
 					}
-					
-					for(Handmade handmade : customRepositorySelectorResult.getHandmades())
+				}
+				else
+				{
+					populate(map, aliases.get(0).split(String.valueOf(Constants.CHAR_UNDERLINE))[0], listContent.get(i));
+				}
+				
+				for(Handmade handmade : customRepositorySelectorResult.getHandmades())
+				{
+					if(StringHelper.isNotEmpty(handmade.getFilterValue()))
 					{
-						if(StringHelper.isNotEmpty(handmade.getFilterValue()))
+						String[] fragments = handmade.getFilterValue().split(String.valueOf(Constants.CHAR_AMP));
+						
+						Map<String, String> values = new HashMap<>();
+						
+						for(String fragment : fragments)
 						{
-							String[] fragments = handmade.getFilterValue().split(String.valueOf(Constants.CHAR_AMP));
+							int equalsPosition = fragment.indexOf(String.valueOf(Constants.CHAR_EQUALS));
 							
-							Map<String, String> values = new HashMap<>();
+							String name = fragment.substring(0, equalsPosition);
+							String value = fragment.substring(equalsPosition + 1, fragment.length());
 							
-							for(String fragment : fragments)
+							if(StringHelper.isEmpty(value))
 							{
-								int equalsPosition = fragment.indexOf(String.valueOf(Constants.CHAR_EQUALS));
-								
-								String name = fragment.substring(0, equalsPosition);
-								String value = fragment.substring(equalsPosition + 1, fragment.length());
-								
-								if(StringHelper.isEmpty(value))
-								{
-									values.put(name, String.valueOf(search(map, name)));
-								}
-								else
-								{
-									values.put(name, value);
-								}
+								values.put(name, String.valueOf(search(map, name)));
 							}
-							
-							try
+							else
 							{
-								Method method = handmade.getType().getMethod(METHOD_NAME_HANDMADE_RESOLVER, String.class, Map.class);
-								
-								Object result = method.invoke(null, handmade.getFieldName(), values);
-								
-								populate(map, handmade.getFilterName(), result);
+								values.put(name, value);
 							}
-							catch(NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception)
-							{
+						}
+						
+						try
+						{
+							Method method = handmade.getType().getMethod(METHOD_NAME_HANDMADE_RESOLVER, String.class, Map.class);
 							
-							}
+							Object result = method.invoke(null, handmade.getFieldName(), values);
+							
+							populate(map, handmade.getFilterName(), result);
+						}
+						catch(NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException exception)
+						{
+							
 						}
 					}
 				}

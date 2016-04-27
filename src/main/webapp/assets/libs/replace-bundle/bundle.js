@@ -16,6 +16,21 @@ Utils.replace({
 	}
     },
     taxa: {
+	moeda: {
+	    USD: 'Dólar Americano',
+	    EUR: 'Euro',
+	    GBP: 'Libras Esterlina',
+	    CAD: 'Dólar Canadense',
+	    AUD: 'Dólar Australiano',
+	    CLP: 'Peso Chileno',
+	    ARS: 'Peso Argentino',
+	    CHF: 'Franco Suíço',
+	    ZAR: 'Dólar Neozolandes',
+	    MXN: 'Peso Mexicano',
+	    UYU: 'Peso Uruguaio',
+	    JPY: 'Iene',
+	    NZD: 'Dólar Neozelandês'
+	},
 	finalidade: {
 	    COMPRA: 'Compra',
 	    VENDA: 'Venda'

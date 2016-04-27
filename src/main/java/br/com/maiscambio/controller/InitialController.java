@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import br.com.maiscambio.WebMvcConfig;
 import br.com.maiscambio.util.View;
 
 @Controller
@@ -13,6 +14,10 @@ public class InitialController extends BaseController
 	@RequestMapping(method = RequestMethod.GET)
 	public View index()
 	{
-		return view("full", "home", "Home");
+		View view = view("full", "home", "Home");
+		view.addObject("moedas", getTaxaService().getMoedasAsStringList());
+		view.addObject("estados", getEstadoService().findByPaisIdSortedAscByNome(WebMvcConfig.getEnvironment().getProperty("paisId")));
+		
+		return view;
 	}
 }
