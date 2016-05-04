@@ -71,6 +71,7 @@
                 affixesStay: true,
                 thousands: ".",
                 decimal: ",",
+                integerPrecision: -1,
                 precision: 2,
                 allowZero: false,
                 allowNull: false,
@@ -189,6 +190,12 @@
     
                         // remove initial zeros
                         integerPart = integerPart.replace(/^0*/g, "");
+                        
+                        // integer precision
+                        if (settings.integerPrecision > -1) {
+                            integerPart = integerPart.substring(0, settings.integerPrecision);
+                        }
+                        
                         // put settings.thousands every 3 chars
                         integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, settings.thousands);
                         if (integerPart === "") {
@@ -197,7 +204,14 @@
                         newValue = negative + integerPart;
     
                         if (settings.precision > 0) {
-                            decimalPart = onlyNumbers.slice(onlyNumbers.length - settings.precision);
+                            
+                            // integer precision case
+                            if (settings.integerPrecision > -1 && integerPart.length === settings.integerPrecision) {
+                        	decimalPart = onlyNumbers.substring(integerPart.length, integerPart.length + settings.precision);
+                            } else {
+                        	decimalPart = onlyNumbers.slice(onlyNumbers.length - settings.precision);
+                            }
+                            
                             leadingZeros = new Array((settings.precision + 1) - decimalPart.length).join(0);
                             newValue += settings.decimal + leadingZeros + decimalPart;
                         }

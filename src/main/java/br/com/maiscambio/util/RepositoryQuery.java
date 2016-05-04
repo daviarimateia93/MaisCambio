@@ -72,6 +72,9 @@ public class RepositoryQuery<T>
 	public static final String EXCEPTION_REPOSITORY_QUERY_FILTER_PARAMETER_ORDER_NOT_ACCEPTABLE = "REPOSITORY_QUERY_FILTER_PARAMETER_ORDER_NOT_ACCEPTABLE";
 	public static final String EXCEPTION_REPOSITORY_QUERY_FILTER_PARAMETER_OPERATOR_NOT_ACCEPTABLE = "REPOSITORY_QUERY_FILTER_PARAMETER_OPERATOR_NOT_ACCEPTABLE";
 	public static final String EXCEPTION_REPOSITORY_QUERY_FILTER_PARAMETER_GLUE_NOT_ACCEPTABLE = "REPOSITORY_QUERY_FILTER_PARAMETER_GLUE_NOT_ACCEPTABLE";
+	public static final String EXCEPTION_REPOSITORY_QUERY_LIMIT_IS_OVERPOWERING = "REPOSITORY_QUERY_LIMIT_IS_OVERPOWERING";
+	
+	public static final Long REPOSITORY_QUERY_LIMIT = 500L;
 	
 	public static class Filter
 	{
@@ -340,7 +343,7 @@ public class RepositoryQuery<T>
 					case DESC:
 						orders.add(new Order(Direction.DESC, filter.getName()));
 						break;
-						
+					
 					case ASC:
 						orders.add(new Order(Direction.ASC, filter.getName()));
 						break;
@@ -546,47 +549,47 @@ public class RepositoryQuery<T>
 						case EQUALS:
 							predicate = criteriaBuilder.equal(path.get(fieldName).as(fieldType), fieldValue);
 							break;
-							
+						
 						case NOT_EQUALS:
 							predicate = criteriaBuilder.notEqual(path.get(fieldName).as(fieldType), fieldValue);
 							break;
-							
+						
 						case GREATER:
 							if(fieldValue instanceof Date)
 								predicate = criteriaBuilder.greaterThan(path.<Date> get(fieldName), (Date) fieldValue);
 							else
 								predicate = criteriaBuilder.gt(path.<Number> get(fieldName), NumberHelper.valueOf(filter.getValue()));
 							break;
-							
+						
 						case GREATER_OR_EQUALS:
 							if(fieldValue instanceof Date)
 								predicate = criteriaBuilder.greaterThanOrEqualTo(path.<Date> get(fieldName), (Date) fieldValue);
 							else
 								predicate = criteriaBuilder.ge(path.<Number> get(fieldName), NumberHelper.valueOf(filter.getValue()));
 							break;
-							
+						
 						case LESS:
 							if(fieldValue instanceof Date)
 								predicate = criteriaBuilder.lessThan(path.<Date> get(fieldName), (Date) fieldValue);
 							else
 								predicate = criteriaBuilder.lt(path.<Number> get(fieldName), NumberHelper.valueOf(filter.getValue()));
 							break;
-							
+						
 						case LESS_OR_EQUALS:
 							if(fieldValue instanceof Date)
 								predicate = criteriaBuilder.lessThanOrEqualTo(path.<Date> get(fieldName), (Date) fieldValue);
 							else
 								predicate = criteriaBuilder.le(path.<Number> get(fieldName), NumberHelper.valueOf(filter.getValue()));
 							break;
-							
+						
 						case NOT_LIKE:
 							predicate = criteriaBuilder.notLike(path.<String> get(fieldName), filter.getValue());
 							break;
-							
+						
 						case LIKE:
 							predicate = criteriaBuilder.like(path.<String> get(fieldName), filter.getValue());
 							break;
-							
+						
 						case ILIKE:
 							predicate = criteriaBuilder.like(criteriaBuilder.lower(path.<String> get(fieldName)), (filter.getValue() != null ? filter.getValue().toLowerCase() : null));
 							break;
@@ -637,6 +640,11 @@ public class RepositoryQuery<T>
 		// indexes
 		long starterIndex = Long.valueOf(starterIndexParameter);
 		long endIndex = Long.valueOf(endIndexParameter);
+		
+		if(endIndex - starterIndex > REPOSITORY_QUERY_LIMIT)
+		{
+			throw new HttpException(EXCEPTION_REPOSITORY_QUERY_LIMIT_IS_OVERPOWERING, HttpStatus.NOT_ACCEPTABLE);
+		}
 		
 		// filters
 		List<RepositoryQuery.Filter> filters = new ArrayList<>();
@@ -695,11 +703,11 @@ public class RepositoryQuery<T>
 						case REPOSITORY_QUERY_FILTER_ORDER_ASC:
 							filter.setOrder(Filter.Order.ASC);
 							break;
-							
+						
 						case REPOSITORY_QUERY_FILTER_ORDER_DESC:
 							filter.setOrder(Filter.Order.DESC);
 							break;
-							
+						
 						default:
 							throw new HttpException(EXCEPTION_REPOSITORY_QUERY_FILTER_PARAMETER_ORDER_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE);
 					}
@@ -714,39 +722,39 @@ public class RepositoryQuery<T>
 						case REPOSITORY_QUERY_FILTER_OPERATOR_EQUALS:
 							filter.setOperator(Filter.Operator.EQUALS);
 							break;
-							
+						
 						case REPOSITORY_QUERY_FILTER_OPERATOR_NOT_EQUALS:
 							filter.setOperator(Filter.Operator.NOT_EQUALS);
 							break;
-							
+						
 						case REPOSITORY_QUERY_FILTER_OPERATOR_GREATER:
 							filter.setOperator(Filter.Operator.GREATER);
 							break;
-							
+						
 						case REPOSITORY_QUERY_FILTER_OPERATOR_GREATER_OR_EQUALS:
 							filter.setOperator(Filter.Operator.GREATER_OR_EQUALS);
 							break;
-							
+						
 						case REPOSITORY_QUERY_FILTER_OPERATOR_LESS:
 							filter.setOperator(Filter.Operator.LESS);
 							break;
-							
+						
 						case REPOSITORY_QUERY_FILTER_OPERATOR_LESS_OR_EQUALS:
 							filter.setOperator(Filter.Operator.LESS_OR_EQUALS);
 							break;
-							
+						
 						case REPOSITORY_QUERY_FILTER_OPERATOR_NOT_LIKE:
 							filter.setOperator(Filter.Operator.NOT_LIKE);
 							break;
-							
+						
 						case REPOSITORY_QUERY_FILTER_OPERATOR_LIKE:
 							filter.setOperator(Filter.Operator.LIKE);
 							break;
-							
+						
 						case REPOSITORY_QUERY_FILTER_OPERATOR_ILIKE:
 							filter.setOperator(Filter.Operator.ILIKE);
 							break;
-							
+						
 						default:
 							throw new HttpException(EXCEPTION_REPOSITORY_QUERY_FILTER_PARAMETER_OPERATOR_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE);
 					}
@@ -761,11 +769,11 @@ public class RepositoryQuery<T>
 						case REPOSITORY_QUERY_FILTER_GLUE_OR:
 							filter.setGlue(Filter.Glue.OR);
 							break;
-							
+						
 						case REPOSITORY_QUERY_FILTER_GLUE_AND:
 							filter.setGlue(Filter.Glue.AND);
 							break;
-							
+						
 						default:
 							throw new HttpException(EXCEPTION_REPOSITORY_QUERY_FILTER_PARAMETER_GLUE_NOT_ACCEPTABLE, HttpStatus.NOT_ACCEPTABLE);
 					}
