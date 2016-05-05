@@ -26,6 +26,7 @@ public class Constants
 	public static final String TEXT_PATTERN_CEST = "^[0-9]{7}$";
 	public static final String TEXT_PATTERN_CFOP = "^[0-9]{4}$";
 	public static final String TEXT_PATTERN_NUMERO_FCI = "^[A-F0-9\\-]{36}$";
+	public static final String TEXT_PATTERN_HAS_ACCENT = "[ÆÐƎƏƐƔĲŊŒẞÞǷȜæðǝəɛɣĳŋœĸßþƿȝĄƁÇĐƊĘĦĮƘŁØƠŞȘŢȚŦŲŲ̛Ƴąɓçđɗęħįƙłøơşșţțŧųų̛ƴÁÀÂÄǍĂĀÃÅǺĄÆǼǢƁĆĊĈČÇĎḌĐƊÐÉÈĖÊËĚĔĒĘẸƎƏƐĠĜǦĞĢƔáàâäǎăāãåǻąæǽǣɓćċĉčçďḍđɗðéèėêëěĕēęẹǝəɛġĝǧğģɣĤḤĦÍÌİÎÏǏĬĪĨĮỊĲĴĶƘĹĻŁĽĿʼŃ̈ŇÑŅŊÓÒÔÖǑŎŌÕŐỌØǾƠŒĥḥħıíìîïǐĭīĩįịĳĵķƙĸĺļłľŀŉń̈ňñņŋóòôöǒŏōõőọøǿơœŔŘŖŚŜŠŞȘṢẞŤŢṬŦÞÚÙÛÜǓŬŪŨŰŮŲỤƯẂẀŴẄǷÝỲŶŸȲỸƳŹŻŽẒŕřŗśŝšşșṣßťţṭŧþúùûüǔŭūũűůųụưẃẁŵẅƿýỳŷÿȳỹƴźżžẓ]";
 	
 	// http headers
 	public static final String TEXT_HEADER_USER_CREDENTIALS = "User-Credentials";
