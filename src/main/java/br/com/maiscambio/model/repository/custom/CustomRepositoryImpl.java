@@ -35,6 +35,7 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.jpa.util.Jpa21Utils;
 
 import br.com.maiscambio.model.repository.custom.CustomRepositorySelectorResult.Handmade;
+import br.com.maiscambio.model.repository.custom.CustomRepositorySelectorResult.SelectionWrapper;
 import br.com.maiscambio.util.Constants;
 
 public class CustomRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements CustomRepository<T, ID>
@@ -90,16 +91,21 @@ public class CustomRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
 		Root<T> root = criteriaQuery.from(getDomainClass());
 		
 		CustomRepositorySelectorResult customRepositorySelectorResult = customRepositorySelector.select(root);
-		List<Selection<?>> selections = customRepositorySelectorResult.getSelections();
+		List<SelectionWrapper<?>> selectionWrappers = customRepositorySelectorResult.getSelectionWrappers();
 		
-		criteriaQuery.multiselect(selections);
-		
+		List<Selection<?>> selections = new ArrayList<>();
 		List<String> aliases = new ArrayList<>();
 		
-		for(Selection<?> selection : selections)
+		if(selectionWrappers != null)
 		{
-			aliases.add(selection.getAlias());
+			for(SelectionWrapper<?> selectionWrapper : selectionWrappers)
+			{
+				selections.add(selectionWrapper.getSelection());
+				aliases.add(selectionWrapper.getCustomAlias());
+			}
 		}
+		
+		criteriaQuery.multiselect(selections);
 		
 		if(specification != null)
 		{

@@ -6,23 +6,45 @@ import javax.persistence.criteria.Selection;
 
 public class CustomRepositorySelectorResult
 {
-	private List<Selection<?>> selections = null;
+	private List<SelectionWrapper<?>> selectionWrappers = null;
 	private List<Handmade> handmades = null;
 	
-	public CustomRepositorySelectorResult(List<Selection<?>> selections, List<Handmade> handmades)
+	public CustomRepositorySelectorResult(List<SelectionWrapper<?>> selectionWrappers, List<Handmade> handmades)
 	{
-		this.selections = selections;
+		this.selectionWrappers = selectionWrappers;
 		this.handmades = handmades;
 	}
 	
-	public List<Selection<?>> getSelections()
+	public List<SelectionWrapper<?>> getSelectionWrappers()
 	{
-		return selections;
+		return selectionWrappers;
 	}
 	
 	public List<Handmade> getHandmades()
 	{
 		return handmades;
+	}
+	
+	public static class SelectionWrapper<T>
+	{
+		private String customAlias;
+		private Selection<T> selection;
+		
+		public SelectionWrapper(String customAlias, Selection<T> selection)
+		{
+			this.customAlias = customAlias;
+			this.selection = selection;
+		}
+		
+		public String getCustomAlias()
+		{
+			return customAlias;
+		}
+		
+		public Selection<T> getSelection()
+		{
+			return selection;
+		}
 	}
 	
 	public static class Handmade

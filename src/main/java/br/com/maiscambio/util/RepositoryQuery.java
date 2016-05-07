@@ -18,7 +18,6 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.cassandra.cql3.CQL3Type.Collection;
@@ -36,6 +35,7 @@ import br.com.maiscambio.model.entity.BaseEntity;
 import br.com.maiscambio.model.repository.custom.CustomRepositorySelector;
 import br.com.maiscambio.model.repository.custom.CustomRepositorySelectorResult;
 import br.com.maiscambio.model.repository.custom.CustomRepositorySelectorResult.Handmade;
+import br.com.maiscambio.model.repository.custom.CustomRepositorySelectorResult.SelectionWrapper;
 
 public class RepositoryQuery<T>
 {
@@ -262,7 +262,7 @@ public class RepositoryQuery<T>
 			@Override
 			public CustomRepositorySelectorResult select(Root<T> root)
 			{
-				List<Selection<?>> selections = new ArrayList<>();
+				List<SelectionWrapper<?>> selectionWrappers = new ArrayList<>();
 				List<Handmade> handmades = new ArrayList<>();
 				
 				RepositoryQuery.Filter[] filters = getFromRequest(type, request).getFilters();
@@ -274,7 +274,7 @@ public class RepositoryQuery<T>
 					
 					try
 					{
-						selections.add(getSpecificationPath(root, filters[i].getName(), (filters[i].isNullSuppressed() || filters[i].isEmptySuppressed())).get(fieldName).alias(filters[i].getName() + String.valueOf(Constants.CHAR_UNDERLINE) + i));
+						selectionWrappers.add(new SelectionWrapper<>(filters[i].getName() + String.valueOf(Constants.CHAR_UNDERLINE) + i, getSpecificationPath(root, filters[i].getName(), (filters[i].isNullSuppressed() || filters[i].isEmptySuppressed())).get(fieldName)));
 					}
 					catch(Exception exception)
 					{
@@ -308,7 +308,7 @@ public class RepositoryQuery<T>
 					}
 				}
 				
-				return new CustomRepositorySelectorResult(selections, handmades);
+				return new CustomRepositorySelectorResult(selectionWrappers, handmades);
 			}
 		};
 	}
