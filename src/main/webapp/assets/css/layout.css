@@ -8,6 +8,9 @@ body {
     background-position: center;
     background-attachment: fixed;
 }
+.display-inline-block {
+	display: inline-block;
+}
 .width-30 {
 	width: 30px !important;
 }
@@ -22,6 +25,9 @@ body {
 }
 .margin-bottom-15 {
 	margin-bottom: 15px !important;
+}
+.margin-top-5 {
+	margin-top: 5px !important;
 }
 .margin-top-10 {
 	margin-top: 10px !important;

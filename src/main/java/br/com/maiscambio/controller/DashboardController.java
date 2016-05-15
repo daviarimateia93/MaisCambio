@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import br.com.maiscambio.Autenticacao;
 import br.com.maiscambio.Perfil;
 import br.com.maiscambio.model.entity.Estabelecimento;
+import br.com.maiscambio.model.entity.Iof;
 import br.com.maiscambio.model.entity.Taxa;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.service.UsuarioService;
@@ -35,7 +36,8 @@ public class DashboardController extends BaseController
 		if(UsuarioService.hasPerfil(usuario, Usuario.Perfil.ADMIN))
 		{
 			view.addObject("estabelecimentos", getEstabelecimentoService().findByUsuarioStatusWherePaiIsNullAndUsuariosSizeIsOne(Usuario.Status.INATIVO));
-			view.addObject("iof", getIofService().findLast());
+			view.addObject("iofCompra", getIofService().findLastByFinalidade(Iof.Finalidade.COMPRA));
+			view.addObject("iofVenda", getIofService().findLastByFinalidade(Iof.Finalidade.VENDA));
 		}
 		
 		if(UsuarioService.hasPerfil(usuario, Usuario.Perfil.ESTABELECIMENTO_TAXA_LEITURA) && estabelecimento != null)

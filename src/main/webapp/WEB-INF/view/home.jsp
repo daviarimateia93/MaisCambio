@@ -8,20 +8,7 @@
 <div id="query" class="jumbotron col-md-3 col-sm-4">
 	<form id="query-form" role="form">
 		<fieldset>
-			<legend>Eu quero</legend>
-		</fieldset>
-		<div class="radio">
-	    	<label>
-	    		<input type="radio" name="query-comprar-vender" value="comprar" checked> Comprar
-	    	</label>
-	  	</div>
-	  	<div class="radio">
-	    	<label>
-	    		<input type="radio" name="query-comprar-vender" value="vender"> Vender
-	    	</label>
-	  	</div>
-	  	<fieldset>
-	  		<legend>Preciso de</legend>
+	  		<legend><i class="fa fa-usd fa-fw" aria-hidden="true"></i> Preciso de</legend>
 	  	</fieldset>
 	  	<div class="form-group">
 	  		<select name="query-moeda" class="form-control">
@@ -32,7 +19,7 @@
 			</select>
 	  	</div>
 	  	<fieldset>
-	  		<legend>Estou em</legend>
+	  		<legend><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i> Estou em</legend>
 	  	</fieldset>
 	  	<div class="form-group">
 	  		<select name="query-estado" class="form-control">
@@ -41,6 +28,12 @@
 				    <option value="${fn:escapeXml((estado.estadoId))}">${fn:escapeXml((estado.nome))}</option>
 				</c:forEach>
 			</select>
+	  	</div>
+	  	<div class="form-group text-center">
+	  		<div class="btn-group" role="group">
+				<button type="button" name="query-comprar-comprar" class="btn btn-green">Comprar</button>
+				<button type="button" name="query-comprar-vender" class="btn btn-green">Vender</button>
+			</div>
 	  	</div>
 	</form>
 </div>

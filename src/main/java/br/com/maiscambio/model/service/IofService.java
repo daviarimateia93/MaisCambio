@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.maiscambio.model.entity.Iof;
+import br.com.maiscambio.model.entity.Iof.Finalidade;
 import br.com.maiscambio.model.entity.Iof.Status;
 import br.com.maiscambio.model.repository.IofRepository;
 import br.com.maiscambio.util.HttpException;
@@ -23,6 +24,7 @@ public class IofService implements GlobalBaseEntityService<Iof, Long>
 	public static final String EXCEPTION_IOF_VALOR_CARTAO_TOO_LARGE = "IOF_VALOR_CARTAO_TOO_LARGE";
 	public static final String EXCEPTION_IOF_DATA_MUST_NOT_BE_NULL = "IOF_DATA_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_IOF_STATUS_MUST_NOT_BE_NULL = "IOF_STATUS_MUST_NOT_BE_NULL";
+	public static final String EXCEPTION_IOF_FINALIDADE_MUST_NOT_BE_NULL = "IOF_FINALIDADE_MUST_NOT_BE_NULL";
 	public static final String EXCEPTION_IOF_IOF_ID_MUST_BE_NULL = "IOF_IOF_ID_MUST_BE_NULL";
 	
 	@Autowired
@@ -35,9 +37,9 @@ public class IofService implements GlobalBaseEntityService<Iof, Long>
 	}
 	
 	@Transactional(readOnly = true)
-	public Iof findLast()
+	public Iof findLastByFinalidade(Finalidade finalidade)
 	{
-		return iofRepository.findLast();
+		return iofRepository.findLastByFinalidade(finalidade);
 	}
 	
 	@Transactional(readOnly = true)
@@ -56,7 +58,7 @@ public class IofService implements GlobalBaseEntityService<Iof, Long>
 	{
 		validateAsInsert(iof);
 		
-		Iof foundIof = findLast();
+		Iof foundIof = findLastByFinalidade(iof.getFinalidade());
 		
 		if(foundIof != null)
 		{
@@ -121,6 +123,11 @@ public class IofService implements GlobalBaseEntityService<Iof, Long>
 		if(iof.getStatus() == null)
 		{
 			throw new HttpException(EXCEPTION_IOF_STATUS_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		if(iof.getFinalidade() == null)
+		{
+			throw new HttpException(EXCEPTION_IOF_FINALIDADE_MUST_NOT_BE_NULL, HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 }

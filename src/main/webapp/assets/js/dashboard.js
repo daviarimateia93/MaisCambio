@@ -1,6 +1,6 @@
 $(function()
 {
-    $(document).on('ajaxsubmit', '#taxa-form', function(e, action)
+    $(document).on('ajaxsubmit', '#taxa-form, #iof-compra-form, #iof-venda-form', function(e, action)
     {
 	var $form = $(action.form);
 	

@@ -27,6 +27,11 @@ public class Iof extends BaseEntity
 		ATIVO, INATIVO
 	}
 	
+	public static enum Finalidade
+	{
+		COMPRA, VENDA
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID_IOF")
@@ -45,6 +50,10 @@ public class Iof extends BaseEntity
 	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS")
 	private Status status;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "FINALIDADE")
+	private Finalidade finalidade;
 	
 	public Long getIofId()
 	{
@@ -94,5 +103,15 @@ public class Iof extends BaseEntity
 	public void setStatus(Status status)
 	{
 		this.status = status;
+	}
+	
+	public Finalidade getFinalidade()
+	{
+		return finalidade;
+	}
+	
+	public void setFinalidade(Finalidade finalidade)
+	{
+		this.finalidade = finalidade;
 	}
 }

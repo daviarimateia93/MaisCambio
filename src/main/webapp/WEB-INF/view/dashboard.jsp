@@ -52,23 +52,49 @@
 						<thead>
 							<tr>
 								<th>Ativo</th>
+								<th>Finalidade</th>
 								<th>Espécie</th>
 								<th>Cartão</th>
 								<th>Alterar</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr data-form data-form-id="taxa-form" data-form-action="${__contextPath__}/iof" data-form-method="post" class="danger">
+							<tr data-form data-form-id="iof-compra-form" data-form-action="${__contextPath__}/iof" data-form-method="post" class="danger">
 								<td>
-									<input class="margin-left-10 margin-top-10" name="status" value="ATIVO" type="checkbox" ${iof != null ? iof.status == 'ATIVO' ? 'checked' : '' : ''} />
+									<input class="margin-left-10 margin-top-10" name="status" value="ATIVO" type="checkbox" ${iofCompra != null ? iofCompra.status == 'ATIVO' ? 'checked' : '' : ''} />
 								</td>
 								<td>
-									<input type="text" class="form-control" name="valorEspecie" value="${iof.valorEspecie}" data-mask-money data-suffix=" %" data-precision="2" data-allow-zero="true" data-allow-null="true" data-mask-money />
+									<span class="margin-top-5 display-inline-block" data-replace="iof.finalidade.COMPRA">COMPRA</span>
+									<input type="hidden" name="finalidade" value="COMPRA" />
 								</td>
 								<td>
-									<input type="text" class="form-control" name="valorCartao" value="${iof.valorCartao}" data-mask-money data-suffix=" %" data-precision="2" data-allow-zero="true" data-allow-null="true" data-mask-money />
+									<input type="text" class="form-control" name="valorEspecie" value="${iofCompra.valorEspecie}" data-mask-money data-suffix=" %" data-precision="2" data-allow-zero="true" data-allow-null="true" data-mask-money />
 								</td>
 								<td>
+									<input type="text" class="form-control" name="valorCartao" value="${iofCompra.valorCartao}" data-mask-money data-suffix=" %" data-precision="2" data-allow-zero="true" data-allow-null="true" data-mask-money />
+								</td>
+								<td>
+									<a href="javascript: void(0);" data-form-submit class="margin-left-10 color-red">
+										<i class="fa fa-check fa-2x"></i>
+									</a>
+								</td>
+							</tr>
+							<tr data-form data-form-id="iof-venda-form" data-form-action="${__contextPath__}/iof" data-form-method="post" class="danger">
+								<td>
+									<input class="margin-left-10 margin-top-10" name="status" value="ATIVO" type="checkbox" ${iofVenda != null ? iofVenda.status == 'ATIVO' ? 'checked' : '' : ''} />
+								</td>
+								<td>
+									<span class="margin-top-5 display-inline-block" data-replace="iof.finalidade.VENDA">VENDA</span>
+									<input type="hidden" name="finalidade" value="VENDA" />
+								</td>
+								<td>
+									<input type="text" class="form-control" name="valorEspecie" value="${iofVenda.valorEspecie}" data-mask-money data-suffix=" %" data-precision="2" data-allow-zero="true" data-allow-null="true" data-mask-money />
+								</td>
+								<td>
+									<input type="text" class="form-control" name="valorCartao" value="${iofVenda.valorCartao}" data-mask-money data-suffix=" %" data-precision="2" data-allow-zero="true" data-allow-null="true" data-mask-money />
+								</td>
+								<td>
+									<input type="hidden" name="finalidade" value="VENDA" />
 									<a href="javascript: void(0);" data-form-submit class="margin-left-10 color-red">
 										<i class="fa fa-check fa-2x"></i>
 									</a>

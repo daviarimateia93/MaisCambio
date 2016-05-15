@@ -15,6 +15,12 @@ Utils.replace({
 	    INATIVO: 'Inativo'
 	}
     },
+    iof: {
+	finalidade: {
+	    COMPRA: 'Compra',
+	    VENDA: 'Venda'
+	}
+    },
     taxa: {
 	moeda: {
 	    USD: 'Dólar Americano',
@@ -104,6 +110,7 @@ Utils.replace({
 	IOF_VALOR_CARTAO_TOO_LARGE: 'Valor cartão muito grande',
 	IOF_DATA_MUST_NOT_BE_NULL: 'Data não deve ser nula',
 	IOF_STATUS_MUST_NOT_BE_NULL: 'Status não deve ser nulo',
+	IOF_FINALIDADE_MUST_NOT_BE_NULL: 'Finalidade não deve ser nula',
 	IOF_IOF_ID_MUST_BE_NULL: 'Código deve ser nulo',
 	
 	// LicencaService
