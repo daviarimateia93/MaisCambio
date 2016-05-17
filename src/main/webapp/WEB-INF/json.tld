@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
-    <tlib-version>1.0</tlib-version>
-    <uri>/json</uri>
-    <function>
-        <name>toString</name>
-        <function-class>br.com.maiscambio.util.JsonHelper</function-class>
-        <function-signature>String toString(java.lang.Object)</function-signature>
-    </function>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+	<tlib-version>1.0</tlib-version>
+	<short-name>json</short-name>
+	<uri>/json</uri>
+	<function>
+		<name>toString</name>
+		<function-class>br.com.maiscambio.util.JsonHelper</function-class>
+		<function-signature>String toString(java.lang.Object)</function-signature>
+	</function>
 </taglib>

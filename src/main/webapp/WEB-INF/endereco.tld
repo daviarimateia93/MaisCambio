@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
-    <tlib-version>1.0</tlib-version>
-    <uri>/endereco</uri>
-    <function>
-        <name>format</name>
-        <function-class>br.com.maiscambio.model.service.EnderecoService</function-class>
-        <function-signature>String format(br.com.maiscambio.model.entity.Endereco)</function-signature>
-    </function>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+	<tlib-version>1.0</tlib-version>
+	<short-name>endereco</short-name>
+	<uri>/endereco</uri>
+	<function>
+		<name>format</name>
+		<function-class>br.com.maiscambio.model.service.EnderecoService</function-class>
+		<function-signature>String
+			format(br.com.maiscambio.model.entity.Endereco)</function-signature>
+	</function>
 </taglib>
