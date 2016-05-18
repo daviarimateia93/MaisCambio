@@ -40,324 +40,324 @@ import br.com.maiscambio.util.View;
 
 public class BaseController
 {
-	private static final String EXCEPTION_YOU_CAN_NOT_DO_THIS = "YOU_CAN_NOT_DO_THIS";
-	
-	@Autowired
-	private HttpServletRequest request;
-	
-	@Autowired
-	private AutenticacaoService autenticacaoService;
-	
-	@Autowired
-	private UsuarioService usuarioService;
-	
-	@Autowired
-	private EstadoService estadoService;
-	
-	@Autowired
-	private CidadeService cidadeService;
-	
-	@Autowired
-	private EnderecoService enderecoService;
-	
-	@Autowired
-	private EstabelecimentoService estabelecimentoService;
-	
-	@Autowired
-	private LicencaService licencaService;
-	
-	@Autowired
-	private EmailService emailService;
-	
-	@Autowired
-	private TaxaService taxaService;
-	
-	@Autowired
-	private IofService iofService;
-	
-	protected HttpServletRequest getRequest()
-	{
-		return request;
-	}
-	
-	protected AutenticacaoService getAutenticacaoService()
-	{
-		return autenticacaoService;
-	}
-	
-	protected UsuarioService getUsuarioService()
-	{
-		return usuarioService;
-	}
-	
-	protected EstadoService getEstadoService()
-	{
-		return estadoService;
-	}
-	
-	protected CidadeService getCidadeService()
-	{
-		return cidadeService;
-	}
-	
-	protected EnderecoService getEnderecoService()
-	{
-		return enderecoService;
-	}
-	
-	protected EstabelecimentoService getEstabelecimentoService()
-	{
-		return estabelecimentoService;
-	}
-	
-	protected LicencaService getLicencaService()
-	{
-		return licencaService;
-	}
-	
-	protected EmailService getEmailService()
-	{
-		return emailService;
-	}
-	
-	protected TaxaService getTaxaService()
-	{
-		return taxaService;
-	}
-	
-	protected IofService getIofService()
-	{
-		return iofService;
-	}
-	
-	@Transactional(readOnly = true)
-	public void authenticate()
-	{
-		autenticacaoService.authenticate(request);
-	}
-	
-	@Transactional(readOnly = true)
-	public void authenticate(Autenticacao autenticacao)
-	{
-		if(autenticacao.value().length == 0)
-		{
-			authenticate();
-		}
-		else
-		{
-			for(Perfil perfil : autenticacao.value())
-			{
-				authenticate(perfil.value());
-			}
-		}
-	}
-	
-	@Transactional(readOnly = true)
-	public void authenticate(Usuario.Perfil... usuarioPerfis)
-	{
-		autenticacaoService.authenticate(request, usuarioPerfis);
-	}
-	
-	@Transactional(readOnly = true)
-	public void authenticateByUsuarioId(Long usuarioId)
-	{
-		Usuario usuario = new Usuario();
-		usuario.setUsuarioId(usuarioId);
-		
-		autenticacaoService.authenticate(request, usuario);
-	}
-	
-	protected View redirect(String path)
-	{
-		return View.redirect(path);
-	}
-	
-	protected View view(String viewName)
-	{
-		return view(viewName, null);
-	}
-	
-	protected View view(String viewName, String title)
-	{
-		return view(null, viewName, title);
-	}
-	
-	protected View view(String layoutName, String partialViewName, String title)
-	{
-		Date currentDate = AutenticacaoService.isLoggedIn(request) ? EstabelecimentoService.now(estabelecimentoService.getFromRequest(request)) : new Date();
-		
-		View view = new View(layoutName, partialViewName, title);
-		view.addObject("sid", ControllerHelper.getSid(request));
-		view.addObject("currentFormattedDate", DateHelper.format(currentDate));
-		view.addObject("currentDate", currentDate);
-		
-		return view;
-	}
-	
-	private String fixAutenticacaoUrl(String autenticacaoUrl)
-	{
-		if(autenticacaoUrl != null)
-		{
-			String contextPath = "/" + WebMvcConfig.APP_NAME;
-			
-			if(autenticacaoUrl.startsWith(contextPath))
-			{
-				autenticacaoUrl = autenticacaoUrl.replaceFirst("\\" + contextPath, Constants.TEXT_EMPTY);
-			}
-		}
-		
-		return autenticacaoUrl;
-	}
-	
-	private String encodeAutenticacaoUrl(String autenticacaoUrl)
-	{
-		return autenticacaoUrl != null ? StringHelper.urlEncode(StringHelper.base64Encode(autenticacaoUrl)) : null;
-	}
-	
-	private String decodeAutenticacaoUrl(String autenticacaoUrl)
-	{
-		return autenticacaoUrl != null ? StringHelper.urlDecode(StringHelper.base64Decode(autenticacaoUrl)) : null;
-	}
-	
-	protected String getAutenticacaoUrl()
-	{
-		return decodeAutenticacaoUrl(fixAutenticacaoUrl(request.getParameter(AutenticacaoController.PARAMETER_URL)));
-	}
-	
-	protected View autenticacao()
-	{
-		return autenticacao(null);
-	}
-	
-	protected View autenticacao(HttpServletResponse response)
-	{
-		String url = request.getRequestURI();
-		
-		if(request.getQueryString() != null)
-		{
-			url += "?" + request.getQueryString();
-		}
-		
-		String path = "/autenticacao?" + AutenticacaoController.PARAMETER_URL + String.valueOf(Constants.CHAR_EQUALS) + encodeAutenticacaoUrl(fixAutenticacaoUrl(url));
-		
-		if(response == null)
-		{
-			return redirect(path);
-		}
-		else
-		{
-			try
-			{
-				response.sendRedirect(WebMvcConfig.getServletContext().getContextPath() + path);
-			}
-			catch(Exception ioException)
-			{
-				
-			}
-			
-			return null;
-		}
-	}
-	
-	public View handleHttpException(HttpException httpException)
-	{
-		return handleHttpException(httpException, null);
-	}
-	
-	public View handleHttpException(HttpException httpException, HttpServletResponse response)
-	{
-		if(httpException.getHttpStatus() == HttpStatus.FORBIDDEN)
-		{
-			return autenticacao(response);
-		}
-		else
-		{
-			throw httpException;
-		}
-	}
-	
-	protected Estabelecimento getEstabelecimentoFromRequest()
-	{
-		return getEstabelecimentoFromRequest(false);
-	}
-	
-	protected Estabelecimento getEstabelecimentoFromRequest(boolean trowable)
-	{
-		Estabelecimento estabelecimento = estabelecimentoService.getFromRequest(request);
-		
-		if(estabelecimento == null && trowable)
-		{
-			throw new HttpException(EXCEPTION_YOU_CAN_NOT_DO_THIS, HttpStatus.NOT_ACCEPTABLE);
-		}
-		
-		return estabelecimento;
-	}
-	
-	protected <T> RepositoryQuery<T> getRepositoryQuery(Class<T> type)
-	{
-		return RepositoryQuery.getFromRequest(type, request);
-	}
-	
-	protected String loadEmailTemplate(String emailTemplateFileName) throws IOException
-	{
-		StringBuilder stringBuilder = new StringBuilder();
-		
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(WebMvcConfig.getServletContext().getRealPath("/WEB-INF/template/" + emailTemplateFileName)), Constants.TEXT_CHARSET_UTF_8));
-		
-		int character;
-		
-		while((character = bufferedReader.read()) != -1)
-		{
-			stringBuilder.append((char) character);
-		}
-		
-		bufferedReader.close();
-		
-		return stringBuilder.toString();
-	}
-	
-	protected String setVariablesToEmailTemplate(String emailTemplate, Map<String, String> variables)
-	{
-		for(Entry<String, String> variable : variables.entrySet())
-		{
-			emailTemplate = emailTemplate.replace(variable.getKey(), variable.getValue());
-		}
-		
-		return emailTemplate;
-	}
-	
-	protected String loadEmailTemplateWithVariables(String emailTemplateFileName, Map<String, String> variables) throws IOException
-	{
-		return setVariablesToEmailTemplate(loadEmailTemplate(emailTemplateFileName), variables);
-	}
-	
-	@Transactional(readOnly = true)
-	protected boolean canEdit(Long pessoaId, Usuario.Perfil... usuarioPerfis)
-	{
-		Usuario usuario = getUsuarioService().getFromRequest(getRequest());
-		Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
-		Estabelecimento foundEstabelecimento = getEstabelecimentoService().findOne(pessoaId);
-		
-		if(foundEstabelecimento == null)
-		{
-			throw new HttpException(EstabelecimentoService.EXCEPTION_ESTABELECIMENTO_NOT_FOUND, HttpStatus.NOT_FOUND);
-		}
-		
-		boolean hasPerfis = true;
-		
-		for(Usuario.Perfil usuarioPerfil : usuarioPerfis)
-		{
-			if(!UsuarioService.hasPerfil(usuario, usuarioPerfil))
-			{
-				hasPerfis = false;
-				
-				break;
-			}
-		}
-		
-		boolean canEdit = usuario != null ? hasPerfis : false;
-		canEdit = canEdit ? estabelecimento != null ? foundEstabelecimento.getPessoaId().equals(estabelecimento.getPessoaId()) || (foundEstabelecimento.getPai() != null ? foundEstabelecimento.getPai().getPessoaId().equals(estabelecimento.getPessoaId()) : false) : UsuarioService.hasPerfil(usuario, Usuario.Perfil.ADMIN) : false;
-		
-		return canEdit;
-	}
+    private static final String EXCEPTION_YOU_CAN_NOT_DO_THIS = "YOU_CAN_NOT_DO_THIS";
+    
+    @Autowired
+    private HttpServletRequest request;
+    
+    @Autowired
+    private AutenticacaoService autenticacaoService;
+    
+    @Autowired
+    private UsuarioService usuarioService;
+    
+    @Autowired
+    private EstadoService estadoService;
+    
+    @Autowired
+    private CidadeService cidadeService;
+    
+    @Autowired
+    private EnderecoService enderecoService;
+    
+    @Autowired
+    private EstabelecimentoService estabelecimentoService;
+    
+    @Autowired
+    private LicencaService licencaService;
+    
+    @Autowired
+    private EmailService emailService;
+    
+    @Autowired
+    private TaxaService taxaService;
+    
+    @Autowired
+    private IofService iofService;
+    
+    protected HttpServletRequest getRequest()
+    {
+        return request;
+    }
+    
+    protected AutenticacaoService getAutenticacaoService()
+    {
+        return autenticacaoService;
+    }
+    
+    protected UsuarioService getUsuarioService()
+    {
+        return usuarioService;
+    }
+    
+    protected EstadoService getEstadoService()
+    {
+        return estadoService;
+    }
+    
+    protected CidadeService getCidadeService()
+    {
+        return cidadeService;
+    }
+    
+    protected EnderecoService getEnderecoService()
+    {
+        return enderecoService;
+    }
+    
+    protected EstabelecimentoService getEstabelecimentoService()
+    {
+        return estabelecimentoService;
+    }
+    
+    protected LicencaService getLicencaService()
+    {
+        return licencaService;
+    }
+    
+    protected EmailService getEmailService()
+    {
+        return emailService;
+    }
+    
+    protected TaxaService getTaxaService()
+    {
+        return taxaService;
+    }
+    
+    protected IofService getIofService()
+    {
+        return iofService;
+    }
+    
+    @Transactional(readOnly = true)
+    public void authenticate()
+    {
+        autenticacaoService.authenticate(request);
+    }
+    
+    @Transactional(readOnly = true)
+    public void authenticate(Autenticacao autenticacao)
+    {
+        if(autenticacao.value().length == 0)
+        {
+            authenticate();
+        }
+        else
+        {
+            for(Perfil perfil : autenticacao.value())
+            {
+                authenticate(perfil.value());
+            }
+        }
+    }
+    
+    @Transactional(readOnly = true)
+    public void authenticate(Usuario.Perfil... usuarioPerfis)
+    {
+        autenticacaoService.authenticate(request, usuarioPerfis);
+    }
+    
+    @Transactional(readOnly = true)
+    public void authenticateByUsuarioId(Long usuarioId)
+    {
+        Usuario usuario = new Usuario();
+        usuario.setUsuarioId(usuarioId);
+        
+        autenticacaoService.authenticate(request, usuario);
+    }
+    
+    protected View redirect(String path)
+    {
+        return View.redirect(path);
+    }
+    
+    protected View view(String viewName)
+    {
+        return view(viewName, null);
+    }
+    
+    protected View view(String viewName, String title)
+    {
+        return view(null, viewName, title);
+    }
+    
+    protected View view(String layoutName, String partialViewName, String title)
+    {
+        Date currentDate = AutenticacaoService.isLoggedIn(request) ? EstabelecimentoService.now(estabelecimentoService.getFromRequest(request)) : new Date();
+        
+        View view = new View(layoutName, partialViewName, title);
+        view.addObject("sid", ControllerHelper.getSid(request));
+        view.addObject("currentFormattedDate", DateHelper.format(currentDate));
+        view.addObject("currentDate", currentDate);
+        
+        return view;
+    }
+    
+    private String fixAutenticacaoUrl(String autenticacaoUrl)
+    {
+        if(autenticacaoUrl != null)
+        {
+            String contextPath = "/" + WebMvcConfig.APP_NAME;
+            
+            if(autenticacaoUrl.startsWith(contextPath))
+            {
+                autenticacaoUrl = autenticacaoUrl.replaceFirst("\\" + contextPath, Constants.TEXT_EMPTY);
+            }
+        }
+        
+        return autenticacaoUrl;
+    }
+    
+    private String encodeAutenticacaoUrl(String autenticacaoUrl)
+    {
+        return autenticacaoUrl != null ? StringHelper.urlEncode(StringHelper.base64Encode(autenticacaoUrl)) : null;
+    }
+    
+    private String decodeAutenticacaoUrl(String autenticacaoUrl)
+    {
+        return autenticacaoUrl != null ? StringHelper.urlDecode(StringHelper.base64Decode(autenticacaoUrl)) : null;
+    }
+    
+    protected String getAutenticacaoUrl()
+    {
+        return decodeAutenticacaoUrl(fixAutenticacaoUrl(ControllerHelper.getParameter(AutenticacaoController.PARAMETER_URL, request)));
+    }
+    
+    protected View autenticacao()
+    {
+        return autenticacao(null);
+    }
+    
+    protected View autenticacao(HttpServletResponse response)
+    {
+        String url = request.getRequestURI();
+        
+        if(request.getQueryString() != null)
+        {
+            url += "?" + request.getQueryString();
+        }
+        
+        String path = "/autenticacao?" + AutenticacaoController.PARAMETER_URL + String.valueOf(Constants.CHAR_EQUALS) + encodeAutenticacaoUrl(fixAutenticacaoUrl(url));
+        
+        if(response == null)
+        {
+            return redirect(path);
+        }
+        else
+        {
+            try
+            {
+                response.sendRedirect(WebMvcConfig.getServletContext().getContextPath() + path);
+            }
+            catch(Exception ioException)
+            {
+                
+            }
+            
+            return null;
+        }
+    }
+    
+    public View handleHttpException(HttpException httpException)
+    {
+        return handleHttpException(httpException, null);
+    }
+    
+    public View handleHttpException(HttpException httpException, HttpServletResponse response)
+    {
+        if(httpException.getHttpStatus() == HttpStatus.FORBIDDEN)
+        {
+            return autenticacao(response);
+        }
+        else
+        {
+            throw httpException;
+        }
+    }
+    
+    protected Estabelecimento getEstabelecimentoFromRequest()
+    {
+        return getEstabelecimentoFromRequest(false);
+    }
+    
+    protected Estabelecimento getEstabelecimentoFromRequest(boolean trowable)
+    {
+        Estabelecimento estabelecimento = estabelecimentoService.getFromRequest(request);
+        
+        if(estabelecimento == null && trowable)
+        {
+            throw new HttpException(EXCEPTION_YOU_CAN_NOT_DO_THIS, HttpStatus.NOT_ACCEPTABLE);
+        }
+        
+        return estabelecimento;
+    }
+    
+    protected <T> RepositoryQuery<T> getRepositoryQuery(Class<T> type)
+    {
+        return RepositoryQuery.getFromRequest(type, request);
+    }
+    
+    protected String loadEmailTemplate(String emailTemplateFileName) throws IOException
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(WebMvcConfig.getServletContext().getRealPath("/WEB-INF/template/" + emailTemplateFileName)), Constants.TEXT_CHARSET_UTF_8));
+        
+        int character;
+        
+        while((character = bufferedReader.read()) != -1)
+        {
+            stringBuilder.append((char) character);
+        }
+        
+        bufferedReader.close();
+        
+        return stringBuilder.toString();
+    }
+    
+    protected String setVariablesToEmailTemplate(String emailTemplate, Map<String, String> variables)
+    {
+        for(Entry<String, String> variable : variables.entrySet())
+        {
+            emailTemplate = emailTemplate.replace(variable.getKey(), variable.getValue());
+        }
+        
+        return emailTemplate;
+    }
+    
+    protected String loadEmailTemplateWithVariables(String emailTemplateFileName, Map<String, String> variables) throws IOException
+    {
+        return setVariablesToEmailTemplate(loadEmailTemplate(emailTemplateFileName), variables);
+    }
+    
+    @Transactional(readOnly = true)
+    protected boolean canEdit(Long pessoaId, Usuario.Perfil... usuarioPerfis)
+    {
+        Usuario usuario = getUsuarioService().getFromRequest(getRequest());
+        Estabelecimento estabelecimento = getEstabelecimentoFromRequest();
+        Estabelecimento foundEstabelecimento = getEstabelecimentoService().findOne(pessoaId);
+        
+        if(foundEstabelecimento == null)
+        {
+            throw new HttpException(EstabelecimentoService.EXCEPTION_ESTABELECIMENTO_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+        
+        boolean hasPerfis = true;
+        
+        for(Usuario.Perfil usuarioPerfil : usuarioPerfis)
+        {
+            if(!UsuarioService.hasPerfil(usuario, usuarioPerfil))
+            {
+                hasPerfis = false;
+                
+                break;
+            }
+        }
+        
+        boolean canEdit = usuario != null ? hasPerfis : false;
+        canEdit = canEdit ? estabelecimento != null ? foundEstabelecimento.getPessoaId().equals(estabelecimento.getPessoaId()) || (foundEstabelecimento.getPai() != null ? foundEstabelecimento.getPai().getPessoaId().equals(estabelecimento.getPessoaId()) : false) : UsuarioService.hasPerfil(usuario, Usuario.Perfil.ADMIN) : false;
+        
+        return canEdit;
+    }
 }
