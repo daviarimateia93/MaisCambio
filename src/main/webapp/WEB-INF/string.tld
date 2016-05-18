@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
-	<tlib-version>1.0</tlib-version>
-	<short-name>string</short-name>
-	<uri>/string</uri>
-	<function>
-		<name>base64Encode</name>
-		<function-class>br.com.maiscambio.util.StringHelper</function-class>
-		<function-signature>String base64Encode(java.lang.String)</function-signature>
-	</function>
-	<function>
-		<name>base64Decode</name>
-		<function-class>br.com.maiscambio.util.StringHelper</function-class>
-		<function-signature>String base64Decode(java.lang.String)</function-signature>
-	</function>
-	<function>
-		<name>urlEncode</name>
-		<function-class>br.com.maiscambio.util.StringHelper</function-class>
-		<function-signature>String urlEncode(java.lang.String)</function-signature>
-	</function>
-	<function>
-		<name>urlDecode</name>
-		<function-class>br.com.maiscambio.util.StringHelper</function-class>
-		<function-signature>String urlDecode(java.lang.String)</function-signature>
-	</function>
-	<function>
-		<name>format</name>
-		<function-class>br.com.maiscambio.util.StringHelper</function-class>
-		<function-signature>String format(java.lang.String, java.lang.String)</function-signature>
-	</function>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+    <tlib-version>1.0</tlib-version>
+    <short-name>string</short-name>
+    <uri>/string</uri>
+    <function>
+        <name>base64Encode</name>
+        <function-class>br.com.maiscambio.util.StringHelper</function-class>
+        <function-signature>String base64Encode(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>base64Decode</name>
+        <function-class>br.com.maiscambio.util.StringHelper</function-class>
+        <function-signature>String base64Decode(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>urlEncode</name>
+        <function-class>br.com.maiscambio.util.StringHelper</function-class>
+        <function-signature>String urlEncode(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>urlDecode</name>
+        <function-class>br.com.maiscambio.util.StringHelper</function-class>
+        <function-signature>String urlDecode(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>format</name>
+        <function-class>br.com.maiscambio.util.StringHelper</function-class>
+        <function-signature>String format(java.lang.String, java.lang.String)</function-signature>
+    </function>
 </taglib>
