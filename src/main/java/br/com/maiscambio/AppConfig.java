@@ -16,10 +16,11 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Controller;
 
 @Configuration
-@ComponentScan(basePackages = { "br.com.maiscambio" }, excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "br\\.com\\.maiscambio\\.controller\\..*"))
 @PropertySource(value = { "classpath:application.properties" })
+@ComponentScan(basePackages = "${scan.basePackage}", excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class))
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableCaching
