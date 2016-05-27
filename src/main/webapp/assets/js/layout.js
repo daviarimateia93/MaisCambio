@@ -948,6 +948,20 @@ function sessionRenew()
     })
 }
 
+function getSortedKeys(object)
+{
+    var keys = [];
+    
+    for( var key in object)
+    {
+        keys[keys.length] = key;
+    }
+    
+    keys.sort();
+    
+    return keys;
+}
+
 function pdf(selectorOrElement, options)
 {
     var $content = $(selectorOrElement).clone();
