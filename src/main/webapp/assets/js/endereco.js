@@ -45,7 +45,7 @@ $(function()
         {
             Utils.searchByCep(cep, function(endereco)
             {
-                if(endereco.cidade != null)
+                if(endereco.cidade !== null)
                 {
                     if(endereco.cidade.estado.estadoId !== $this.parents('.form-group').parent().find('#sltEstado, .sltEstado').val())
                     {
