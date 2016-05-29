@@ -42,7 +42,7 @@ import br.com.maiscambio.util.View;
 
 public class BaseController
 {
-    protected static ThreadLocal<List<Runnable>> preHandleRunnables = new ThreadLocal<List<Runnable>>()
+    private static ThreadLocal<List<Runnable>> preHandleRunnables = new ThreadLocal<List<Runnable>>()
     {
         @Override
         protected List<Runnable> initialValue()
@@ -51,7 +51,7 @@ public class BaseController
         }
     };
     
-    protected static ThreadLocal<List<Runnable>> postHandleRunnables = new ThreadLocal<List<Runnable>>()
+    private static ThreadLocal<List<Runnable>> postHandleRunnables = new ThreadLocal<List<Runnable>>()
     {
         @Override
         protected List<Runnable> initialValue()
@@ -86,6 +86,16 @@ public class BaseController
             
             postHandleRunnables.get().clear();
         }
+    }
+    
+    protected static void addPreHandleRunnable(Runnable runnable)
+    {
+        preHandleRunnables.get().add(runnable);
+    }
+    
+    protected static void addPostHandleRunnable(Runnable runnable)
+    {
+        postHandleRunnables.get().add(runnable);
     }
     
     private static final String EXCEPTION_YOU_CAN_NOT_DO_THIS = "YOU_CAN_NOT_DO_THIS";
