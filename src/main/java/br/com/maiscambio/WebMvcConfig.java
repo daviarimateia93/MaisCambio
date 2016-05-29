@@ -135,7 +135,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport
     public RequestMappingHandlerMapping requestMappingHandlerMapping()
     {
         List<Object> interceptors = getInterceptorsAsList();
-        interceptors.add(new AutenticacaoInterceptor());
+        interceptors.add(new CustomHandlerInterceptorAdapter());
         
         RequestMappingHandlerMapping requestMappingHandlerMapping = super.requestMappingHandlerMapping();
         requestMappingHandlerMapping.setInterceptors(interceptors.toArray(new Object[interceptors.size()]));

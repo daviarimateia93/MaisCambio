@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -40,6 +42,52 @@ import br.com.maiscambio.util.View;
 
 public class BaseController
 {
+    protected static ThreadLocal<List<Runnable>> preHandleRunnables = new ThreadLocal<List<Runnable>>()
+    {
+        @Override
+        protected List<Runnable> initialValue()
+        {
+            return new ArrayList<>();
+        }
+    };
+    
+    protected static ThreadLocal<List<Runnable>> postHandleRunnables = new ThreadLocal<List<Runnable>>()
+    {
+        @Override
+        protected List<Runnable> initialValue()
+        {
+            return new ArrayList<>();
+        }
+    };
+    
+    protected static class PreHandleRunnablesExecutor implements Runnable
+    {
+        @Override
+        public synchronized void run()
+        {
+            for(Runnable runnable : preHandleRunnables.get())
+            {
+                runnable.run();
+            }
+            
+            preHandleRunnables.get().clear();
+        }
+    }
+    
+    public static class PostHandleRunnablesExecutor implements Runnable
+    {
+        @Override
+        public synchronized void run()
+        {
+            for(Runnable runnable : postHandleRunnables.get())
+            {
+                runnable.run();
+            }
+            
+            postHandleRunnables.get().clear();
+        }
+    }
+    
     private static final String EXCEPTION_YOU_CAN_NOT_DO_THIS = "YOU_CAN_NOT_DO_THIS";
     
     @Autowired
