@@ -32,6 +32,8 @@ public class CustomHandlerInterceptorAdapter extends HandlerInterceptorAdapter
                     try
                     {
                         baseController.authenticate(autenticacao);
+                        
+                        return true;
                     }
                     catch(HttpException httpException)
                     {
@@ -48,6 +50,25 @@ public class CustomHandlerInterceptorAdapter extends HandlerInterceptorAdapter
                     }
                 }
             }
+        }
+        
+        return super.preHandle(request, response, handler);
+    }
+    
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
+    {
+        super.postHandle(request, response, handler, modelAndView);
+    }
+    
+    @Override
+    public void afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
+    {
+        super.afterConcurrentHandlingStarted(request, response, handler);
+        
+        if(handler instanceof HandlerMethod)
+        {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
             
             PreHandle preHandle = handlerMethod.getMethodAnnotation(PreHandle.class);
             
@@ -61,14 +82,12 @@ public class CustomHandlerInterceptorAdapter extends HandlerInterceptorAdapter
                 }
             }
         }
-        
-        return super.preHandle(request, response, handler);
     }
     
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception
     {
-        super.postHandle(request, response, handler, modelAndView);
+        super.afterCompletion(request, response, handler, ex);
         
         if(handler instanceof HandlerMethod)
         {
