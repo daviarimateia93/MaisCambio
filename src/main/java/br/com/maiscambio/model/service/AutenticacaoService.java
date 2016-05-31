@@ -299,7 +299,7 @@ public class AutenticacaoService implements BaseService
     @Transactional(readOnly = true)
     public Usuario testEncrypted(String usuarioApelido, String usuarioSenhaEncrypted)
     {
-        Usuario usuario = usuarioService.findByApelido(usuarioApelido);
+        Usuario usuario = usuarioApelido != null ? usuarioService.findByApelido(usuarioApelido) : null;
         
         if(usuario == null)
         {
