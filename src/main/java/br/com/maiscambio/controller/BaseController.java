@@ -40,7 +40,7 @@ import br.com.maiscambio.util.RepositoryQuery;
 import br.com.maiscambio.util.StringHelper;
 import br.com.maiscambio.util.View;
 
-public class BaseController
+public abstract class BaseController
 {
     private static ThreadLocal<List<Runnable>> preHandleRunnables = new ThreadLocal<List<Runnable>>()
     {

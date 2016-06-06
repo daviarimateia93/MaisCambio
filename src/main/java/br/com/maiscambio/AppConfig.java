@@ -15,6 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Controller;
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableCaching
+@EnableAsync
 public class AppConfig
 {
 	@Autowired
