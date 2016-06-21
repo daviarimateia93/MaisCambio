@@ -3,7 +3,67 @@ var loadCidadesDefaultCallback = null;
 
 function loadCidades(estadoId, successCallback, $sltEstado)
 {
-    var $sltCidade = $sltEstado !== undefined && $sltEstado !== null ? $($sltEstado).parents('.form-group').find('#sltCidade, .sltCidade') : $('#sltCidade, .sltCidade');
+    var $sltCidade = $('#sltCidade, .sltCidade');
+    
+    if($sltEstado !== null && $sltEstado !== undefined)
+    {
+        $sltEstado = $($sltEstado);
+        
+        function findClosestSltCidade($current)
+        {
+            var $result;
+            
+            if($current.hasClass('sltCidade') || $current.attr('id') === 'sltCidade')
+            {
+                return $current;
+            }
+            else if(($result = $current.siblings('#sltCidade, .sltCidade')).length > 0)
+            {
+                return $result;
+            }
+            else
+            {
+                $current.nextAll().each(function()
+                {
+                    $(this).children().each(function()
+                    {
+                        var $found = findClosestSltCidade($(this));
+                        
+                        if($found !== null)
+                        {
+                            if($found.length > 0)
+                            {
+                                $result = $found;
+                                
+                                return false;
+                            }
+                        }
+                    });
+                    
+                    if($result.length > 0)
+                    {
+                        return false;
+                    }
+                });
+                
+                return $result.length > 0 ? $result : null;
+            }
+        }
+        
+        var $current = $sltEstado;
+        var $found = null;
+        
+        while(($found = findClosestSltCidade($current)) === null)
+        {
+            $current = $current.parent();
+        }
+        
+        if($found.hasClass('sltCidade') || $found.attr('id') === 'sltCidade')
+        {
+            $sltCidade = $found;
+        }
+    }
+    
     var $iptPais = $('#iptPais').length > 0 ? $('#iptPais') : $('.iptPais');
     var $emptyOption = $sltCidade.find('option:first').clone();
     var $selectedOption = $sltCidade.find('option:selected').clone();
@@ -19,7 +79,7 @@ function loadCidades(estadoId, successCallback, $sltEstado)
                 optionsHTML += '<option value="' + Utils.format.html(cidades[i].cidadeId) + '">' + Utils.format.html(cidades[i].nome) + '</option>\r\n';
             }
             
-            $sltCidade.empty().append($emptyOption).append(optionsHTML).val($selectedOption.val());
+            $sltCidade.empty().append($emptyOption).append(optionsHTML).val($selectedOption.val()).change();
             
             if(typeof loadCidadesDefaultCallback === 'function')
             {
@@ -36,7 +96,7 @@ function loadCidades(estadoId, successCallback, $sltEstado)
 
 $(function()
 {
-    $('#iptCep, .iptCep').blur(function()
+    $(document).on('blur', '#iptCep, .iptCep', function()
     {
         var $this = $(this);
         var cep = $this.val();
@@ -74,7 +134,7 @@ $(function()
         }
     });
     
-    $('#sltEstado, .sltEstado').change(function()
+    $(document).on('change', '#sltEstado, .sltEstado', function()
     {
         var $this = $(this);
         
