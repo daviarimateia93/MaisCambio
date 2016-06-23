@@ -27,10 +27,11 @@ import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Pessoa;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.repository.EstabelecimentoRepository;
-import br.com.maiscambio.model.repository.custom.CustomRepositorySelector;
-import br.com.maiscambio.util.DateHelper;
-import br.com.maiscambio.util.HttpException;
-import br.com.maiscambio.util.StringHelper;
+import me.gerenciar.util.CustomRepositorySelector;
+import me.gerenciar.util.DateHelper;
+import me.gerenciar.util.GlobalBaseEntityService;
+import me.gerenciar.util.HttpException;
+import me.gerenciar.util.StringHelper;
 
 @Service
 public class EstabelecimentoService extends PessoaService implements GlobalBaseEntityService<Estabelecimento, Long>

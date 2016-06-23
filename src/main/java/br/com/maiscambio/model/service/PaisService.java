@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.maiscambio.model.entity.Pais;
 import br.com.maiscambio.model.repository.PaisRepository;
+import me.gerenciar.util.GlobalBaseEntityService;
 
 @Service
 public class PaisService implements GlobalBaseEntityService<Pais, String>

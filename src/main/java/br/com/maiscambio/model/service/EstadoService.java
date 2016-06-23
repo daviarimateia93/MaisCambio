@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.maiscambio.model.entity.Estado;
 import br.com.maiscambio.model.entity.primarykey.EstadoPrimaryKey;
 import br.com.maiscambio.model.repository.EstadoRepository;
+import me.gerenciar.util.GlobalBaseEntityService;
 
 @Service
 public class EstadoService implements GlobalBaseEntityService<Estado, EstadoPrimaryKey>

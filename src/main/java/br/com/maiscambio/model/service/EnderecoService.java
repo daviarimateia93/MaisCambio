@@ -18,9 +18,10 @@ import br.com.maiscambio.model.entity.Endereco;
 import br.com.maiscambio.model.entity.MetaLogradouro;
 import br.com.maiscambio.model.entity.Pessoa;
 import br.com.maiscambio.model.repository.EnderecoRepository;
-import br.com.maiscambio.util.Constants;
-import br.com.maiscambio.util.HttpException;
-import br.com.maiscambio.util.StringHelper;
+import me.gerenciar.util.Constants;
+import me.gerenciar.util.GlobalBaseEntityService;
+import me.gerenciar.util.HttpException;
+import me.gerenciar.util.StringHelper;
 
 @Service
 public class EnderecoService implements GlobalBaseEntityService<Endereco, Long>

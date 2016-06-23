@@ -18,9 +18,10 @@ import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Pessoa;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.entity.Usuario.Status;
-import br.com.maiscambio.util.Constants;
-import br.com.maiscambio.util.ControllerHelper;
-import br.com.maiscambio.util.HttpException;
+import me.gerenciar.util.BaseService;
+import me.gerenciar.util.Constants;
+import me.gerenciar.util.ControllerHelper;
+import me.gerenciar.util.HttpException;
 
 @Service
 public class AutenticacaoService implements BaseService

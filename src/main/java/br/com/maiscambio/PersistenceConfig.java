@@ -25,7 +25,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import br.com.maiscambio.model.repository.custom.CustomRepositoryFactoryBean;
+import me.gerenciar.util.CustomRepositoryFactoryBean;
 
 @Configuration
 @EnableTransactionManagement

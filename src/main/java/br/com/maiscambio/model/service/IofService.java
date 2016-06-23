@@ -11,7 +11,8 @@ import br.com.maiscambio.model.entity.Iof;
 import br.com.maiscambio.model.entity.Iof.Finalidade;
 import br.com.maiscambio.model.entity.Iof.Status;
 import br.com.maiscambio.model.repository.IofRepository;
-import br.com.maiscambio.util.HttpException;
+import me.gerenciar.util.GlobalBaseEntityService;
+import me.gerenciar.util.HttpException;
 
 @Service
 public class IofService implements GlobalBaseEntityService<Iof, Long>

@@ -1,6 +1,6 @@
 package br.com.maiscambio.model.entity.primarykey;
 
-import br.com.maiscambio.model.entity.BaseEntity;
+import me.gerenciar.util.BaseEntity;
 
 public class EstadoPrimaryKey extends BaseEntity
 {

@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import me.gerenciar.util.BaseEntity;
+
 @Entity
 @Table(name = "PAIS", schema = "public")
 public class Pais extends BaseEntity

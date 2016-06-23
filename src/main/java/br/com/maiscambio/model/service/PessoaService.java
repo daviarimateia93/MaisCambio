@@ -10,9 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.maiscambio.model.entity.Pessoa;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.repository.PessoaRepository;
-import br.com.maiscambio.util.Constants;
-import br.com.maiscambio.util.HttpException;
-import br.com.maiscambio.util.StringHelper;
+import me.gerenciar.util.BaseService;
+import me.gerenciar.util.Constants;
+import me.gerenciar.util.HttpException;
+import me.gerenciar.util.StringHelper;
 
 @Service
 public class PessoaService implements BaseService

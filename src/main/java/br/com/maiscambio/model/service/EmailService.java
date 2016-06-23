@@ -12,7 +12,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import br.com.maiscambio.util.Constants;
+import me.gerenciar.util.BaseService;
+import me.gerenciar.util.Constants;
 
 @Service
 public class EmailService implements BaseService

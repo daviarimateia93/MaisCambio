@@ -17,10 +17,11 @@ import com.sun.syndication.io.impl.Base64;
 
 import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Usuario;
-import br.com.maiscambio.util.Constants;
-import br.com.maiscambio.util.DateHelper;
-import br.com.maiscambio.util.HttpException;
-import br.com.maiscambio.util.RsaHelper;
+import me.gerenciar.util.BaseService;
+import me.gerenciar.util.Constants;
+import me.gerenciar.util.DateHelper;
+import me.gerenciar.util.HttpException;
+import me.gerenciar.util.RsaHelper;
 
 @Service
 public class LicencaService implements BaseService

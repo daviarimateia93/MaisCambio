@@ -19,7 +19,7 @@
     </filter-mapping>
     <filter>
         <filter-name>CustomFilter</filter-name>
-        <filter-class>br.com.maiscambio.util.CustomFilter</filter-class>
+        <filter-class>me.gerenciar.util.CustomFilter</filter-class>
         <async-supported>true</async-supported>
     </filter>
     <filter-mapping>

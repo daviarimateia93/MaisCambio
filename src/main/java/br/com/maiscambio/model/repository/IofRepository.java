@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.maiscambio.model.entity.Iof;
 import br.com.maiscambio.model.entity.Iof.Finalidade;
-import br.com.maiscambio.model.repository.custom.CustomRepository;
+import me.gerenciar.util.CustomRepository;
 
 @Repository
 public interface IofRepository extends CustomRepository<Iof, Long>

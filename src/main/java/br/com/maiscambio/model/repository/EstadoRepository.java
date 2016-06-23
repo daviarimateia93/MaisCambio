@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.maiscambio.model.entity.Estado;
 import br.com.maiscambio.model.entity.primarykey.EstadoPrimaryKey;
-import br.com.maiscambio.model.repository.custom.CustomRepository;
+import me.gerenciar.util.CustomRepository;
 
 @Repository
 public interface EstadoRepository extends CustomRepository<Estado, EstadoPrimaryKey>

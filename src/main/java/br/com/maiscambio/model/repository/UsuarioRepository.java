@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.com.maiscambio.model.entity.Usuario;
-import br.com.maiscambio.model.repository.custom.CustomRepository;
+import me.gerenciar.util.CustomRepository;
 
 @Repository
 public interface UsuarioRepository extends CustomRepository<Usuario, Long>

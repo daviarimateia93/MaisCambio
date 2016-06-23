@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import br.com.maiscambio.util.Constants;
-import br.com.maiscambio.util.HttpException;
+import me.gerenciar.util.BaseService;
+import me.gerenciar.util.Constants;
+import me.gerenciar.util.HttpException;
 
 @Service
 public class GatewayService implements BaseService

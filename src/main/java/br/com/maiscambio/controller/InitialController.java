@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import br.com.maiscambio.WebMvcConfig;
-import br.com.maiscambio.util.View;
+import me.gerenciar.util.View;
 
 @Controller
 @RequestMapping("/")
@@ -16,7 +16,7 @@ public class InitialController extends BaseController
 	{
 		View view = view("full", "home", "Home");
 		view.addObject("moedas", getTaxaService().getMoedasAsStringList());
-		view.addObject("estados", getEstadoService().findByPaisIdSortedAscByNome(WebMvcConfig.getEnvironment().getProperty("paisId")));
+		view.addObject("estados", getEstadoService().findByPaisIdSortedAscByNome(WebMvcConfig.getInstance().getEnvironment().getProperty("paisId")));
 		
 		return view;
 	}

@@ -8,7 +8,7 @@ import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import br.com.maiscambio.util.Constants;
+import me.gerenciar.util.Constants;
 
 public class SpringWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer
 {
