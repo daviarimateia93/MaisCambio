@@ -21,9 +21,8 @@ import br.com.maiscambio.model.entity.Taxa.Finalidade;
 import br.com.maiscambio.model.entity.Taxa.Moeda;
 import br.com.maiscambio.model.entity.Taxa.Status;
 import br.com.maiscambio.model.repository.TaxaRepository;
-import me.gerenciar.util.BaseEntityService;
-import me.gerenciar.util.HttpException;
-import me.gerenciar.util.ReflectionHelper;
+import br.com.maiscambio.util.HttpException;
+import br.com.maiscambio.util.ReflectionHelper;
 
 @Service
 public class TaxaService implements BaseEntityService<Taxa, Long>

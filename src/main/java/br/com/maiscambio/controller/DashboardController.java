@@ -17,7 +17,7 @@ import br.com.maiscambio.model.entity.Iof;
 import br.com.maiscambio.model.entity.Taxa;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.service.UsuarioService;
-import me.gerenciar.util.View;
+import br.com.maiscambio.util.View;
 
 @Controller
 @RequestMapping("/dashboard")

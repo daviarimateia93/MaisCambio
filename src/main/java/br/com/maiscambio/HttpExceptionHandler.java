@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import me.gerenciar.util.HttpException;
+import br.com.maiscambio.util.HttpException;
 
 @ControllerAdvice
 public class HttpExceptionHandler extends ResponseEntityExceptionHandler

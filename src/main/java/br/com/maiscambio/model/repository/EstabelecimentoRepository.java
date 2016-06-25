@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Usuario;
-import me.gerenciar.util.CustomRepository;
+import br.com.maiscambio.model.repository.custom.CustomRepository;
 
 @Repository
 public interface EstabelecimentoRepository extends CustomRepository<Estabelecimento, Long>

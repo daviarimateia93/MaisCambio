@@ -5,7 +5,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.com.maiscambio.model.entity.Pessoa;
-import me.gerenciar.util.CustomRepository;
+import br.com.maiscambio.model.repository.custom.CustomRepository;
 
 @Repository
 public interface PessoaRepository extends CustomRepository<Pessoa, Long>

@@ -32,13 +32,13 @@ import br.com.maiscambio.model.service.IofService;
 import br.com.maiscambio.model.service.LicencaService;
 import br.com.maiscambio.model.service.TaxaService;
 import br.com.maiscambio.model.service.UsuarioService;
-import me.gerenciar.util.Constants;
-import me.gerenciar.util.ControllerHelper;
-import me.gerenciar.util.DateHelper;
-import me.gerenciar.util.HttpException;
-import me.gerenciar.util.RepositoryQuery;
-import me.gerenciar.util.StringHelper;
-import me.gerenciar.util.View;
+import br.com.maiscambio.util.Constants;
+import br.com.maiscambio.util.ControllerHelper;
+import br.com.maiscambio.util.DateHelper;
+import br.com.maiscambio.util.HttpException;
+import br.com.maiscambio.util.RepositoryQuery;
+import br.com.maiscambio.util.StringHelper;
+import br.com.maiscambio.util.View;
 
 public abstract class BaseController
 {
@@ -227,7 +227,7 @@ public abstract class BaseController
     
     protected View redirect(String path)
     {
-        return View.redirect(WebMvcConfig.getInstance(), path);
+        return View.redirect(path);
     }
     
     protected View view(String viewName)
@@ -244,7 +244,7 @@ public abstract class BaseController
     {
         Date currentDate = AutenticacaoService.isLoggedIn(request) ? EstabelecimentoService.now(estabelecimentoService.getFromRequest(request)) : new Date();
         
-        View view = new View(WebMvcConfig.getInstance(), layoutName, partialViewName, title);
+        View view = new View(layoutName, partialViewName, title);
         view.addObject("sid", ControllerHelper.getSid(request));
         view.addObject("currentFormattedDate", DateHelper.format(currentDate));
         view.addObject("currentDate", currentDate);
@@ -256,7 +256,7 @@ public abstract class BaseController
     {
         if(autenticacaoUrl != null)
         {
-            String contextPath = "/" + WebMvcConfig.getInstance().getName();
+            String contextPath = "/" + WebMvcConfig.APP_NAME;
             
             if(autenticacaoUrl.startsWith(contextPath))
             {
@@ -306,7 +306,7 @@ public abstract class BaseController
         {
             try
             {
-                response.sendRedirect(WebMvcConfig.getInstance().getServletContext().getContextPath() + path);
+                response.sendRedirect(WebMvcConfig.getServletContext().getContextPath() + path);
             }
             catch(Exception ioException)
             {
@@ -360,7 +360,7 @@ public abstract class BaseController
     {
         StringBuilder stringBuilder = new StringBuilder();
         
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(WebMvcConfig.getInstance().getServletContext().getRealPath("/WEB-INF/template/" + emailTemplateFileName)), Constants.TEXT_CHARSET_UTF_8));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(WebMvcConfig.getServletContext().getRealPath("/WEB-INF/template/" + emailTemplateFileName)), Constants.TEXT_CHARSET_UTF_8));
         
         int character;
         

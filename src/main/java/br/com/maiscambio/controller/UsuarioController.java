@@ -19,9 +19,9 @@ import br.com.maiscambio.Perfil;
 import br.com.maiscambio.model.entity.Estabelecimento;
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.service.UsuarioService;
-import me.gerenciar.util.HttpException;
-import me.gerenciar.util.RepositoryQuery;
-import me.gerenciar.util.View;
+import br.com.maiscambio.util.HttpException;
+import br.com.maiscambio.util.RepositoryQuery;
+import br.com.maiscambio.util.View;
 
 @Controller
 @RequestMapping("/usuario")

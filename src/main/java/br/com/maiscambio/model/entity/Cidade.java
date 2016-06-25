@@ -10,8 +10,6 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import me.gerenciar.util.BaseEntity;
-
 @Entity
 @Table(name = "CIDADE", schema = "public")
 public class Cidade extends BaseEntity

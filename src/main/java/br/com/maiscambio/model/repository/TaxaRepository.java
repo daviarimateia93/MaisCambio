@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import br.com.maiscambio.model.entity.Taxa;
 import br.com.maiscambio.model.entity.Taxa.Finalidade;
 import br.com.maiscambio.model.entity.Taxa.Moeda;
-import me.gerenciar.util.CustomRepository;
+import br.com.maiscambio.model.repository.custom.CustomRepository;
 
 @Repository
 public interface TaxaRepository extends CustomRepository<Taxa, Long>

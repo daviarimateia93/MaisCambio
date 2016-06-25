@@ -8,8 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import me.gerenciar.util.BaseEntity;
-
 @Entity
 @Table(name = "META_LOGRADOURO", schema = "public")
 public class MetaLogradouro extends BaseEntity

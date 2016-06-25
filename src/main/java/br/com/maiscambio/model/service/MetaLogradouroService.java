@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.maiscambio.model.entity.MetaLogradouro;
 import br.com.maiscambio.model.repository.MetaLogradouroRepository;
-import me.gerenciar.util.GlobalBaseEntityService;
 
 @Service
 public class MetaLogradouroService implements GlobalBaseEntityService<MetaLogradouro, String>

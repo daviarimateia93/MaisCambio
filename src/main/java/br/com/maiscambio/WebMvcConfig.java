@@ -29,14 +29,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import me.gerenciar.util.Constants;
-import me.gerenciar.util.CustomFilter;
-import me.gerenciar.util.JsonHelper;
-import me.gerenciar.util.WebApp;
+import br.com.maiscambio.util.Constants;
+import br.com.maiscambio.util.CustomFilter;
+import br.com.maiscambio.util.JsonHelper;
 
 @Configuration
 @ComponentScan(basePackages = "${scan.controllerPackage}")
-public class WebMvcConfig extends WebMvcConfigurationSupport implements WebApp
+public class WebMvcConfig extends WebMvcConfigurationSupport
 {
     @Autowired
     private ServletContext servletContext;
@@ -44,72 +43,32 @@ public class WebMvcConfig extends WebMvcConfigurationSupport implements WebApp
     @Autowired
     private Environment environment;
     
-    private static final String APP_NAME = "MaisCambio";
-    private static final String APP_VERSION = "1.4.3";
-    private static final String VIEW_RESOLVER_PREFIX = "/WEB-INF/view/";
-    private static final String VIEW_RESOLVER_SUFFIX = ".jsp";
-    private static final String LAYOUT_RESOLVER_PREFIX = "/WEB-INF/layout/";
-    private static final String LAYOUT_RESOLVER_SUFFIX = ".jsp";
+    public static final String APP_NAME = "MaisCambio";
+    public static final String APP_VERSION = "1.4.3";
+    public static final String VIEW_RESOLVER_PREFIX = "/WEB-INF/view/";
+    public static final String VIEW_RESOLVER_SUFFIX = ".jsp";
+    public static final String LAYOUT_RESOLVER_PREFIX = "/WEB-INF/layout/";
+    public static final String LAYOUT_RESOLVER_SUFFIX = ".jsp";
     
-    private static WebMvcConfig instance;
+    private static ServletContext globalServletContext;
+    private static Environment globalEnvironment;
     
-    public static final WebMvcConfig getInstance()
+    public static final ServletContext getServletContext()
     {
-        return instance;
+        return globalServletContext;
     }
     
-    @Override
-    public ServletContext getServletContext()
+    public static final Environment getEnvironment()
     {
-        return servletContext;
-    }
-    
-    @Override
-    public Environment getEnvironment()
-    {
-        return environment;
-    }
-    
-    @Override
-    public String getName()
-    {
-        return APP_NAME;
-    }
-    
-    @Override
-    public String getVersion()
-    {
-        return APP_VERSION;
-    }
-    
-    @Override
-    public String getLayoutResolverPrefix()
-    {
-        return LAYOUT_RESOLVER_PREFIX;
-    }
-    
-    @Override
-    public String getLayoutResolverSuffix()
-    {
-        return LAYOUT_RESOLVER_SUFFIX;
-    }
-    
-    @Override
-    public String getViewResolverPrefix()
-    {
-        return VIEW_RESOLVER_PREFIX;
-    }
-    
-    @Override
-    public String getViewResolverSuffix()
-    {
-        return VIEW_RESOLVER_SUFFIX;
+        return globalEnvironment;
     }
     
     @PostConstruct
     public void contextInitialized()
     {
-        instance = this;
+        globalServletContext = servletContext;
+        
+        globalEnvironment = environment;
     }
     
     @Override

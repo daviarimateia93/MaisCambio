@@ -38,11 +38,6 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>gerenciarme</groupId>
-            <artifactId>gerenciarme-util</artifactId>
-            <version>1.0.0</version>
-        </dependency>
         <!-- Logging dependencies -->
         <dependency>
             <groupId>org.slf4j</groupId>

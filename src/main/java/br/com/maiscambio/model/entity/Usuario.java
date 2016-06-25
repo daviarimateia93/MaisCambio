@@ -20,8 +20,6 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import me.gerenciar.util.BaseEntity;
-
 @Entity
 @Table(name = "USUARIO")
 public class Usuario extends BaseEntity

@@ -10,8 +10,8 @@ import javax.servlet.http.HttpSessionListener;
 
 import br.com.maiscambio.model.entity.Usuario;
 import br.com.maiscambio.model.service.AutenticacaoService;
-import me.gerenciar.util.Constants;
-import me.gerenciar.util.ControllerHelper;
+import br.com.maiscambio.util.Constants;
+import br.com.maiscambio.util.ControllerHelper;
 
 // we are not using singleton pattern because of HttpSessionListener (web.xml)
 // that forces a public constructor :-( so we are using an static concurrent map

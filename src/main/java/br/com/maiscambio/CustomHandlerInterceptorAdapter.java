@@ -8,8 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import br.com.maiscambio.controller.BaseController;
-import me.gerenciar.util.HttpException;
-import me.gerenciar.util.View;
+import br.com.maiscambio.util.HttpException;
+import br.com.maiscambio.util.View;
 
 public class CustomHandlerInterceptorAdapter extends HandlerInterceptorAdapter
 {

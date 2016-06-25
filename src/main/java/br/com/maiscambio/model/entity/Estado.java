@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.maiscambio.model.entity.primarykey.EstadoPrimaryKey;
-import me.gerenciar.util.BaseEntity;
 
 @Entity
 @IdClass(EstadoPrimaryKey.class)

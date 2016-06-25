@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.maiscambio.model.entity.Cidade;
 import br.com.maiscambio.model.repository.CidadeRepository;
-import me.gerenciar.util.GlobalBaseEntityService;
 
 @Service
 public class CidadeService implements GlobalBaseEntityService<Cidade, Long>

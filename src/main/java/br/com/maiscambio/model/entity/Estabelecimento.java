@@ -21,7 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import me.gerenciar.util.DateHelper;
+import br.com.maiscambio.util.DateHelper;
 
 @Entity
 @Table(name = "ESTABELECIMENTO")
