@@ -962,6 +962,59 @@ function getSortedKeys(object)
     return keys;
 }
 
+function findClosest($currentElement, elementId, elementClass)
+{
+    function find($current)
+    {
+        var $result;
+        
+        if($current.attr('id') === elementId || $current.hasClass(elementClass))
+        {
+            return $current;
+        }
+        else if(($result = $current.siblings('#' + elementId + ', .' + elementClass)).length > 0)
+        {
+            return $result;
+        }
+        else
+        {
+            $current.nextAll().each(function()
+            {
+                $(this).children().each(function()
+                {
+                    var $found = find($(this));
+                    
+                    if($found !== null)
+                    {
+                        if($found.length > 0)
+                        {
+                            $result = $found;
+                            
+                            return false;
+                        }
+                    }
+                });
+                
+                if($result.length > 0)
+                {
+                    return false;
+                }
+            });
+            
+            return $result.length > 0 ? $result : null;
+        }
+    }
+    
+    var $found = null;
+    
+    while(($found = find($currentElement, elementId, elementClass)) === null)
+    {
+        $currentElement = $currentElement.parent();
+    }
+    
+    return $found;
+}
+
 function pdf(selectorOrElement, options)
 {
     var $content = $(selectorOrElement).clone();
